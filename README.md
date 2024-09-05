@@ -8,6 +8,9 @@
 ## Description
 This repository contains the coursework for CS 3300 at the University of Colorado Colorado Springs, developed during the Fall 2024 semester. With all code implemented in Python.
 
+## Requirements
+Bullet points of requirements/basic overview of problem
+
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE.md) file for details.
 
