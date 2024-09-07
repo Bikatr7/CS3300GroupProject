@@ -1,24 +1,46 @@
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 **Table of Contents**
 
-- [**Overview** ](#overview-)
-- [**To Build** ](#to-build-)
-  - [**Setting Up A Local Build** ](#setting-up-a-local-build-)
-- [**TODO** ](#todo-)
-  - [Start ](#start-)
+- [**Overview**](#overview)
+- [**To Build**](#to-build)
+  - [**Requirements**](#requirements)
+    - [**Venv**](#venv)
+  - [**Setting Up A Local Build**](#setting-up-a-local-build)
+- [**TODO**](#todo)
+  - [**Structural**](#structural)
+  - [Start](#start)
+  - [Cleanup](#cleanup)
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 
-## **Overview** <a name="overview"></a>
+## **Overview**<a name="overview"></a>
+
 Bullet points of requirements/basic overview of problem
 
 Problem Statement: 
 A new hotel needs a booking and management system to keep track of bookings. Management needs a front end for customers to book a hotel room, and a database containing all booking information, including dates/customer information. It can block out dates that are unavailable and (potentially) handle changing/cancelling bookings.
 
-## **To Build** <a name="to-build"></a>
+## **To Build**<a name="to-build"></a>
 
+### **Requirements**<a name="requirements"></a>
 
-### **Setting Up A Local Build** <a name="setting-up-a-local-build"></a>
+- Docker Desktop
+- Python 3.11+
+
+#### **Venv**
+
+It is recommended to use a virtual environment to manage dependencies. This can be done with the following commands:
+
+```bash
+python -m venv venv
+source venv/Scripts/activate
+cd backend
+pip install -r requirements.txt
+```
+
+VScode will also prompt you to use that
+
+### **Setting Up A Local Build**<a name="setting-up-a-local-build"></a>
 
 These steps must be followed _in order_.
 
@@ -32,10 +54,18 @@ These steps must be followed _in order_.
 
 Default login is admin:password
 
-## **TODO** <a name="todo"></a>
+## **TODO**<a name="todo"></a>
+
+### **Structural**<a name="structural"></a>
 
 We can deal with assignments later and actual things like task assignment later.
 
-### Start <a name="start"></a>
+We need to decide on a license for the project. Currently a modified version of the MIT license. (I'd like to use something heavily copyleft like the AGPL)
+
+### Start<a name="start"></a>
 
 Copy over the files from the example project. (I'm going to take from my own website project)
+
+### Cleanup<a name="cleanup"></a>
+
+Requirements.txt was copied over, i'm not sure if we need all of these.
