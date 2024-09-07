@@ -45,12 +45,13 @@ VScode will also prompt you to use that
 These steps must be followed _in order_.
 
 1. Clone the repo, make sure you are using the correct branch (currently `development`)
-2. Navigate to the `backend` directory. `cd backend`. Inside is the python backend.
-3. Run the setup script with the local argument. This will install all requirements and setup the local env `python setup.py local`.
-4. Run the server. For local `uvicorn main:app --reload --port 5000`
-5. Open a new terminal and navigate to the `frontend` directory. `cd frontend`. Inside is the react (vite) frontend.
-6. First install all required packages, these are in `package.json`. Do `npm i`. Then run the dev server with `npm run dev`
-7. Website will be on localhost:5173 (frontend) and localhost:5000 (backend)
+2. Navigate to the project directory. `cd untitled-hotel-manager`
+3. Navigate to the `backend` directory. `cd backend`. Inside is the python backend.
+4. Run the setup script with the local argument. This will install all requirements and setup the local env `python setup.py local`.
+5. Run the server. For local `uvicorn main:app --reload --port 5000`
+6. Open a new terminal and navigate to the `frontend` directory. `cd frontend`. Inside is the react (vite) frontend.
+7. First install all required packages, these are in `package.json`. Do `npm i`. Then run the dev server with `npm run dev`
+8. Website will be on localhost:5173 (frontend) and localhost:5000 (backend)
 
 Default login is admin:password
 
