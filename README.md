@@ -8,12 +8,6 @@
 ## Description
 This repository contains the coursework for CS 3300 at the University of Colorado Colorado Springs, developed during the Fall 2024 semester. With all code implemented in Python.
 
-## Requirements
-Bullet points of requirements/basic overview of problem
-
-Problem Statement: 
-A new hotel needs a booking and management system to keep track of bookings. Management needs a front end for customers to book a hotel room, and a database containing all booking information, including dates/customer information. It can block out dates that are unavailable and (potentially) handle changing/cancelling bookings.
-
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE.md) file for details.
 
