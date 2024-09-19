@@ -97,3 +97,8 @@ animations/commonAnimations.tsx has some common animations that are used through
 #### Assets
 
 assets/images has all the images used in the app. Add new ones as you see fit.
+
+### Resources
+
+https://github.com/Kakusui/kakusui.org/tree/development/frontend
+https://github.com/Bikatr7/kadenbilyeu.com/tree/development/frontend

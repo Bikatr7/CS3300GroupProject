@@ -54,3 +54,8 @@ db/models.py (this is where the database models are defined) (this is the actual
 routes/auth.py (this is where the auth routes are defined) (login, logout) etc, we may have to add more routes here related to authentication, but im not sure yet
 auth/func.py (this is where the authentication functions are defined) (login, logout, register, etc)
 auth/util.py (this is where the authentication utility functions are defined) (hash passwords, verify passwords, etc)
+
+
+### Resources
+
+https://github.com/Kakusui/kakusui.org/tree/development/backend

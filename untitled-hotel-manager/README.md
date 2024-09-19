@@ -2,13 +2,11 @@
 **Table of Contents**
 
 - [**Overview**](#overview)
-  - [To Do (Architectural wise](#to-do-architectural-wise)
-- [**To Build**](#to-build)
+  - [**To Do (Architectural wise)**](#to-do-architectural-wise)
   - [**Requirements**](#requirements)
     - [**Venv**](#venv)
   - [**Setting Up A Local Build**](#setting-up-a-local-build)
-- [**TODO**](#todo)
-  - [**Structural**](#structural)
+- [**Resources**](#resources)
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -21,9 +19,14 @@ Bullet points of requirements/basic overview of problem
 Problem Statement: 
 A new hotel needs a booking and management system to keep track of bookings. Management needs a front end for customers to book a hotel room, and a database containing all booking information, including dates/customer information. It can block out dates that are unavailable and (potentially) handle changing/cancelling bookings.
 
-### To Do (Architectural wise 
+### **To Do (Architectural wise)**<a name="to-do-architectural-wise"></a>
 
-## **To Build**<a name="to-build"></a>
+Basic overview of what needs to be done.
+
+- Login for admin (only admin) (should be able to see all bookings, and have the ability to cancel/change)
+- Interface for user, user can check in/out and also register, date time, room etc, these can be hardcoded options
+- We need a name. one word something " {x} Booking"
+- having actual occupancies can be dealt with later, just assume unlimited
 
 ### **Requirements**<a name="requirements"></a>
 
@@ -41,11 +44,12 @@ It is recommended to use a virtual environment to manage dependencies. This can 
 ```bash
 python -m venv venv
 source venv/Scripts/activate
+cd untitled-hotel-manager
 cd backend
 pip install -r requirements.txt
 ```
 
-VScode will also prompt you to use that
+VScode will also prompt you to use that. I also reccomend using type checking for python.
 
 ### **Setting Up A Local Build**<a name="setting-up-a-local-build"></a>
 
@@ -62,6 +66,19 @@ These steps must be followed _in order_.
 
 Default login is admin:password
 
-## **TODO**<a name="todo"></a>
+## **Resources**
 
-### **Structural**<a name="structural"></a>
+Technologies:
+
+- [React](https://react.dev/)
+- [React Router](https://reactrouter.com/en/main)
+- [Vite](https://vitejs.dev/)
+- [Tailwind](https://tailwindcss.com/)
+- [Python](https://www.python.org/)
+- [FastAPI](https://fastapi.tiangolo.com/)
+- [Uvicorn](https://www.uvicorn.org/)
+
+Model Templates:
+
+  https://github.com/bikatr7/kadenbilyeu.com
+  https://github.com/kakusui/kakusui.org
