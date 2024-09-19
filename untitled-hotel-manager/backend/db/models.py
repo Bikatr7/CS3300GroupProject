@@ -12,7 +12,7 @@ from sqlalchemy.dialects.postgresql import UUID as modelUUID
 ## custom imports
 from db.base import Base
 
-## going to need a lot of work
+## going to need a lot of work as we add more functionality
 
 class User(Base):
     __tablename__ = "users"

@@ -19,7 +19,7 @@ from fastapi.security import OAuth2PasswordBearer, HTTPBasicCredentials
 ## custom imports
 from routes.models import TokenData
 
-from constants import ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET, TOKEN_ALGORITHM, ADMIN_USER, ADMIN_PASS_HASH, TOKEN_EXPIRE_MINUTES
+from constants import ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET, TOKEN_ALGORITHM, ADMIN_USER, ADMIN_PASS_HASH
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
