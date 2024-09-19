@@ -30,15 +30,17 @@ REFRESH_TOKEN_SECRET = os.environ.get("REFRESH_TOKEN_SECRET")
 ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
 
 TOKEN_ALGORITHM = "HS256"
+TOKEN_EXPIRE_MINUTES = 30 * 24 * 60  ## 30 days in minutes
 
-DATABASE_URL:str = "sqlite:///./database/kakusui.db"
-DATABASE_PATH:str = "database/kakusui.db"
+DATABASE_URL:str = "sqlite:///./database/database.db"
+DATABASE_PATH:str = "database/database.db"
 
 __all__ = ["ADMIN_USER", 
            "ADMIN_PASS_HASH", 
            "ACCESS_TOKEN_SECRET", 
            "REFRESH_TOKEN_SECRET", 
            "ENVIRONMENT", 
-           "TOKEN_ALGORITHM", 
+           "TOKEN_ALGORITHM",
+           "TOKEN_EXPIRE_MINUTES",
            "DATABASE_URL", 
            "DATABASE_PATH"]

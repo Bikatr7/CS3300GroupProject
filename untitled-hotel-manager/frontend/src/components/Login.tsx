@@ -8,7 +8,8 @@
 import { useState } from 'react';
 
 // chakra-ui
-import { Box, Button, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Text, useDisclosure, Spinner, Flex, useToast } from "@chakra-ui/react";
+import { Button, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Flex, useDisclosure, Spinner, useToast, InputGroup, InputRightElement, IconButton } from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 // util
 import { getURL } from '../utils';
@@ -26,17 +27,15 @@ const Login: React.FC = () =>
 {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [email, setEmail] = useState('');
-    const [loginCode, setLoginCode] = useState('');
-    const [isLoginStep, setIsLoginStep] = useState(false);
-    const [isSignUp, setIsSignUp] = useState(false);
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const toast = useToast();
     const { isLoggedIn, login, logout, isLoading } = useAuth();
 
     const handleClose = () => 
     {
         setEmail('');
-        setLoginCode('');
-        setIsLoginStep(false);
+        setPassword('');
         onClose();
     };
 
@@ -51,88 +50,18 @@ const Login: React.FC = () =>
         });
     };
 
-    const handleEmailSubmit = async () => 
-    {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if(!email || !emailRegex.test(email)) 
-        {
-            showToast("Invalid Email", "Please enter a valid email address", "error");
-            return;
-        }
-
-        try 
-        {
-            const checkUserResponse = await fetch(getURL('/auth/check-email-registration'), 
-            {
-                method: 'POST',
-                headers: 
-                {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email })
-            });
-
-            if(checkUserResponse.ok) 
-            {
-                const userData = await checkUserResponse.json();
-                if(!userData.registered && !isSignUp)
-                {
-                    showToast("Not Registered", "This email is not registered. Please sign up first.", "error");
-                    setIsLoginStep(false);
-                    return;
-                }
-                if(userData.registered && isSignUp)
-                {
-                    setIsLoginStep(false);
-                    showToast("Already Registered", "This email is already registered. Please log in instead.", "error");
-                    return;
-                }
-
-                setIsLoginStep(true);
-
-                const response = await fetch(getURL('/auth/send-verification-email'), 
-                {
-                    method: 'POST',
-                    headers: 
-                    {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, clientID: 'web-client' })
-                });
-
-                if(!response.ok) 
-                {
-                    const errorData = await response.json();
-                    showToast("Error", errorData.message || 'Failed to send login code', "error");
-                    setIsLoginStep(false);
-                }
-            } 
-            else 
-            {
-                showToast("Error", "Failed to check user registration", "error");
-                setIsLoginStep(false);
-            }
-        } 
-        catch (error) 
-        {
-            showToast("Error", "An error occurred. Please try again.", "error");
-            setIsLoginStep(false);
-        }
-    };
-
     const handleSubmit = async () => 
     {
         try 
         {
-            const endpoint = isSignUp ? '/auth/signup' : '/auth/login';
-            const response = await fetch(getURL(endpoint), 
+            const response = await fetch(getURL('/auth/login'), 
             {
                 method: 'POST',
                 headers: 
                 {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email, verification_code: loginCode })
+                body: JSON.stringify({ username: email, password })
             });
 
             if (response.ok) 
@@ -142,7 +71,7 @@ const Login: React.FC = () =>
                 {
                     await login(data.access_token);
                     handleClose();
-                    showToast("Success", `Successfully ${isSignUp ? "signed up" : "logged in"}`, "success");
+                    showToast("Success", "Successfully logged in", "success");
                 } 
                 else 
                 {
@@ -161,26 +90,11 @@ const Login: React.FC = () =>
         }
     };
 
-    const toggleSignUp = () => 
-    {
-        setIsSignUp(!isSignUp);
-        setIsLoginStep(false);
-        setEmail('');
-        setLoginCode('');
-    };
-
     const handleKeyPress = (event: React.KeyboardEvent) => 
     {
         if (event.key === 'Enter') 
         {
-            if (isLoginStep) 
-            {
-                handleSubmit();
-            } 
-            else 
-            {
-                handleEmailSubmit();
-            }
+            handleSubmit();
         }
     };
 
@@ -212,68 +126,50 @@ const Login: React.FC = () =>
                     borderRadius="xl"
                     boxShadow="xl"
                 >
-                    <ModalHeader color="orange.400">{isSignUp ? "Sign Up" : "Login"}</ModalHeader>
+                    <ModalHeader color="orange.400">Login</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Flex direction="column" gap={4}>
-                            {isLoginStep ? (
-                                <>
-                                    <Text>A {isSignUp ? "signup" : "login"} code has been sent to {email}. Please enter the code below:</Text>
-                                    <Input
-                                        placeholder="Enter code"
-                                        value={loginCode}
-                                        onChange={(e) => setLoginCode(e.target.value)}
-                                        onKeyPress={handleKeyPress}
-                                        bg="whiteAlpha.200"
-                                        border="none"
-                                        _focus={{ bg: "whiteAlpha.300" }}
+                            <Input
+                                placeholder="Enter your email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                onKeyPress={handleKeyPress}
+                                bg="whiteAlpha.200"
+                                border="none"
+                                _focus={{ bg: "whiteAlpha.300" }}
+                            />
+                            <InputGroup>
+                                <Input
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="Enter your password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    onKeyPress={handleKeyPress}
+                                    bg="whiteAlpha.200"
+                                    border="none"
+                                    _focus={{ bg: "whiteAlpha.300" }}
+                                />
+                                <InputRightElement>
+                                    <IconButton
+                                        aria-label={showPassword ? "Hide password" : "Show password"}
+                                        icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        variant="ghost"
+                                        colorScheme="whiteAlpha"
                                     />
-                                </>
-                            ) : (
-                                <>
-                                    <Input
-                                        placeholder="Enter your email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        onKeyPress={handleKeyPress}
-                                        bg="whiteAlpha.200"
-                                        border="none"
-                                        _focus={{ bg: "whiteAlpha.300" }}
-                                    />
-                                </>
-                            )}
+                                </InputRightElement>
+                            </InputGroup>
                         </Flex>
                     </ModalBody>
                     <ModalFooter>
-                        <Flex width="100%" justify="space-between" direction="column" align="center">
-                            <Flex width="100%" justify="space-between" mb={4}>
-                                <Box>
-                                    <Button variant="ghost" mr={3} onClick={handleClose} _hover={{ bg: "whiteAlpha.200" }}>
-                                        Close
-                                    </Button>
-                                    {isLoginStep && (
-                                        <Button variant="ghost" onClick={() => setIsLoginStep(false)} _hover={{ bg: "whiteAlpha.200" }}>
-                                            Back
-                                        </Button>
-                                    )}
-                                </Box>
-                                <Box>
-                                    {isLoginStep ? (
-                                        <Button colorScheme="orange" onClick={handleSubmit}>
-                                            {isSignUp ? "Sign Up" : "Login"}
-                                        </Button>
-                                    ) : (
-                                        <Button colorScheme="orange" onClick={handleEmailSubmit}>
-                                            Send Code
-                                        </Button>
-                                    )}
-                                </Box>
-                            </Flex>
-                            {!isLoginStep && (
-                                <Button variant="link" color="orange.400" onClick={toggleSignUp}>
-                                    {isSignUp ? "Already have an account? Login" : "Don't have an account? Sign Up"}
-                                </Button>
-                            )}
+                        <Flex width="100%" justify="space-between">
+                            <Button variant="ghost" mr={3} onClick={handleClose} _hover={{ bg: "whiteAlpha.200" }}>
+                                Close
+                            </Button>
+                            <Button colorScheme="orange" onClick={handleSubmit}>
+                                Login
+                            </Button>
                         </Flex>
                     </ModalFooter>
                 </ModalContent>
