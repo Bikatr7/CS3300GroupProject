@@ -13,12 +13,16 @@ const config: ThemeConfig =
     useSystemColorMode: false,
 }
 
-const theme = extendTheme({
+const theme = extendTheme(
+{
     config,
-    styles: {
-        global: {
-            'html, body': {
-                bg: 'black',
+    styles: 
+    {
+        global: 
+        {
+            'html, body': 
+            {
+                bg: '#14192b',
             },
         },
     },

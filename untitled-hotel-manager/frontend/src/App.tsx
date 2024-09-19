@@ -10,6 +10,9 @@ import { ChakraProvider, Box, Container} from "@chakra-ui/react";
 // helmet
 import { HelmetProvider } from 'react-helmet-async';
 
+// react-router-dom
+import { BrowserRouter } from 'react-router-dom';
+
 // root components
 import theme from "./theme.ts";
 
@@ -17,19 +20,26 @@ import theme from "./theme.ts";
 import Navbar from "./components/Navbar.tsx";
 import Footer from "./components/Footer.tsx";
 import Router from './Router.tsx';
+import { AuthProvider } from "./contexts/AuthContext.tsx";
+
+// the below should be fine but if we run into an issue, contact me - Kaden
 
 function App() 
 {
     return (
         <HelmetProvider>
             <ChakraProvider theme={theme}>
-                <Box bg="black">
-                    <Navbar/>
-                    <Container maxW="6xl">
-                        <Router />
-                    </Container>
-                    <Footer/>
-                </Box>
+                <AuthProvider>
+                    <BrowserRouter>
+                        <Box bg="black">
+                            <Navbar isHomePage={false}/>
+                            <Container maxW="6xl">
+                                <Router />
+                            </Container>
+                            <Footer/>
+                        </Box>
+                    </BrowserRouter>
+                </AuthProvider>
             </ChakraProvider>
         </HelmetProvider>
     );

@@ -1,4 +1,4 @@
-# CS3300GroupProject
+# CS3080ClassCode
 
 ## Class Information
 - **Class Name:** CS 3300
@@ -6,14 +6,13 @@
 - **Semester:** Fall 2024
 
 ## Description
-This repository contains the coursework for CS 3300 at the University of Colorado Colorado Springs, developed during the Fall 2024 semester. With all code implemented in Python.
+This repository contains the coursework for CS 3300 at the University of Colorado Colorado Springs, developed during the Fall 2024 semester. With all code implemented in Python and TypeScript.
 
 ## License
-This project (CS3300GroupProject) is licensed under the GNU Affero General Public License (AGPLv3). You can find the full text of the license in the [LICENSE](License.md) file.
+This project is licensed under the AGPL-3.0 License. See the [LICENSE](LICENSE.md) file for details.
 
-The AGPLv3 is a copyleft license that promotes the principles of open-source software. It ensures that any derivative works based on this project, as well as any software that interacts with users over a network, must also be distributed under the same AGPLv3 license. This license grants you the freedom to use, modify, and distribute the software.
-
-Please note that this information is a brief summary of the AGPLv3. For a detailed understanding of your rights and obligations under this license, please refer to the full license text.
+**Additional Clause:**  
+This software is provided for educational purposes only. Users of this software must credit the original authors (Kaden Bilyeu (Bikatr7) & Group Members (Names Pending)) and must not use this software in a way that violates academic integrity policies, such as submitting it as their own work for academic assignments or any similar violation such as plagiarism.
 
 ## Contact
-For any questions or suggestions, please create an issue on GitHub.
+For any questions or suggestions, please contact me at [Bikatr7@proton.me](mailto:Bikatr7@proton.me).

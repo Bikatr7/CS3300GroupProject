@@ -2,6 +2,7 @@
 **Table of Contents**
 
 - [**Overview**](#overview)
+  - [To Do (Architecture)](#to-do-architecture)
 - [**To Build**](#to-build)
   - [**Requirements**](#requirements)
     - [**Venv**](#venv)
@@ -20,12 +21,18 @@ Bullet points of requirements/basic overview of problem
 Problem Statement: 
 A new hotel needs a booking and management system to keep track of bookings. Management needs a front end for customers to book a hotel room, and a database containing all booking information, including dates/customer information. It can block out dates that are unavailable and (potentially) handle changing/cancelling bookings.
 
+### To Do (Architecture)
+
 ## **To Build**<a name="to-build"></a>
 
 ### **Requirements**<a name="requirements"></a>
 
+![TIP] These are rough versions, as in what I currently use. It may work with other versions, but I can't guarantee it.
+
 - Docker Desktop
 - Python 3.11+
+- Node.js v20.13.1
+- NPM 10.8.1
 
 #### **Venv**
 

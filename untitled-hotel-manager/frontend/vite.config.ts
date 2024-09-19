@@ -1,3 +1,9 @@
+// Copyright [name placeholder] (https://github.com/Bikatr7/CS3300GroupProject) ([url placeholder])
+// Use of this source code is governed by an GNU Affero General Public License v3.0
+// license that can be found in the LICENSE file.
+
+// maintain allman bracket style for consistency
+
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 
@@ -16,10 +22,12 @@ export default defineConfig(({ mode }) =>
 
   return {
     plugins: [react()],
-    build: {
+    build: 
+    {
       sourcemap: true,
     },
-    server: {
+    server: 
+    {
       port: 5173, 
     },
   }
