@@ -30,41 +30,35 @@ def install_dependencies() -> None:
     except AssertionError:
         print("Error: requirements.txt file not found")
         sys.exit(1)
-
 ##-------------------start-of-setup_local_environment()---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def setup_local_environment() -> None:
 
     env_to_key_local = {
-        "ADMIN_USER": "admin",
+        "ADMIN_USER": "admin@admin.com",
         "ADMIN_PASS_HASH": "$2b$12$MlPMcgDvVCU.s10xcB2fneIjZ/ymgz5O52yH5pshAFF5.bwPq4SMq",
-        "TOTP_SECRET": "JBSWY3DPEHPK3PXP",
         "ACCESS_TOKEN_SECRET": "secret",
         "REFRESH_TOKEN_SECRET": "secret",
-        "NODE_ENV": "development",
+        "ENVIRONMENT": "development",
+        "NODE_ENV": "development"
     }
 
-
     try:
-
         if(len(sys.argv) > 1 and sys.argv[1] == 'local'):
-
             print("Setting up local environment...")
 
-            to_write_frontend = env_to_key_local["NODE_ENV"] + "\n"
+            to_write_frontend = f"NODE_ENV={env_to_key_local['NODE_ENV']}\n"
             to_write_backend = (
-                "ADMIN_USER=" + env_to_key_local["ADMIN_USER"] + "\n" +
-                "ADMIN_PASS_HASH=" + env_to_key_local["ADMIN_PASS_HASH"] + "\n" +
-                "TOTP_SECRET=" + env_to_key_local["TOTP_SECRET"] + "\n" +
-                "ACCESS_TOKEN_SECRET=" + env_to_key_local["ACCESS_TOKEN_SECRET"] + "\n" +
-                "REFRESH_TOKEN_SECRET=" + env_to_key_local["REFRESH_TOKEN_SECRET"] + "\n" +
-                "NODE_ENV=" + env_to_key_local["NODE_ENV"] + "\n"
+                f"ADMIN_USER={env_to_key_local['ADMIN_USER']}\n"
+                f"ADMIN_PASS_HASH={env_to_key_local['ADMIN_PASS_HASH']}\n"
+                f"ENVIRONMENT={env_to_key_local['ENVIRONMENT']}\n"
+                f"ACCESS_TOKEN_SECRET={env_to_key_local['ACCESS_TOKEN_SECRET']}\n"
+                f"REFRESH_TOKEN_SECRET={env_to_key_local['REFRESH_TOKEN_SECRET']}\n"
             )
-          
         else:
-
             print("Setting up production environment...")
 
             to_write_frontend = 'NODE_ENV=production\n'
+            to_write_backend = ''
         
         os.makedirs(os.path.dirname(FRONTEND_ENV), exist_ok=True)
 
@@ -85,6 +79,6 @@ def setup_local_environment() -> None:
 def main():
     install_dependencies()
     setup_local_environment()
-
+    
 if(__name__ == "__main__"):
     main()

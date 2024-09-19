@@ -2,26 +2,26 @@
 **Table of Contents**
 
 - [**Overview**](#overview)
-  - [To Do (Architecture)](#to-do-architecture)
+  - [To Do (Architectural wise](#to-do-architectural-wise)
 - [**To Build**](#to-build)
   - [**Requirements**](#requirements)
     - [**Venv**](#venv)
   - [**Setting Up A Local Build**](#setting-up-a-local-build)
 - [**TODO**](#todo)
   - [**Structural**](#structural)
-  - [Start](#start)
-  - [Cleanup](#cleanup)
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## **Overview**<a name="overview"></a>
+
+Need to deal with this later
 
 Bullet points of requirements/basic overview of problem
 
 Problem Statement: 
 A new hotel needs a booking and management system to keep track of bookings. Management needs a front end for customers to book a hotel room, and a database containing all booking information, including dates/customer information. It can block out dates that are unavailable and (potentially) handle changing/cancelling bookings.
 
-### To Do (Architecture)
+### To Do (Architectural wise 
 
 ## **To Build**<a name="to-build"></a>
 
@@ -65,15 +65,3 @@ Default login is admin:password
 ## **TODO**<a name="todo"></a>
 
 ### **Structural**<a name="structural"></a>
-
-We can deal with assignments later and actual things like task assignment later.
-
-We need to decide on a license for the project. Currently a modified version of the MIT license. (I'd like to use something heavily copyleft like the AGPL)
-
-### Start<a name="start"></a>
-
-Copy over the files from the example project. (I'm going to take from my own website project)
-
-### Cleanup<a name="cleanup"></a>
-
-Requirements.txt was copied over, i'm not sure if we need all of these.
