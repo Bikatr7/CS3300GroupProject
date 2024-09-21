@@ -4,7 +4,7 @@ Assigned Roles:
 
 - Architect (Kaden)
 - Integrator (Ethan)
-- Frontend Developer (Madison)
+- Frontend Developer (Maddison)
 
 ## To run the frontend:
 
