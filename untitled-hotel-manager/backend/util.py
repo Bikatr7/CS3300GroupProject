@@ -14,4 +14,4 @@ def get_url() -> str:
         return "http://api.localhost:5000"
     
     ## needs to be changed later
-    raise NotImplementedError("Environment not set")
+    raise NotImplementedError("Not implemented yet (Kaden needs to decide if we want to do a production build)")
