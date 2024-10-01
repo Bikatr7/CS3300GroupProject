@@ -60,7 +60,7 @@ These steps must be followed _in order_.
 3. Navigate to the `backend` directory. `cd backend`. Inside is the python backend.
 4. Run the setup script with the local argument. This will install all requirements and setup the local env `python setup.py local`.
 5. Run the server. For local `uvicorn main:app --reload --port 5000`
-6. Open a new terminal and navigate to the `frontend` directory. `cd frontend`. Inside is the react (vite) frontend.
+6. Open a new terminal and navigate to the `untitled-hotel-manager/frontend` directory. `cd untitled-hotel-manager/frontend`. Inside is the react (vite) frontend.
 7. First install all required packages, these are in `package.json`. Do `npm i`. Then run the dev server with `npm run dev`
 8. Website will be on localhost:5173 (frontend) and localhost:5000 (backend)
 

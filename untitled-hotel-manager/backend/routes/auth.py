@@ -11,10 +11,10 @@ from fastapi.responses import JSONResponse
 from fastapi.security import HTTPBasicCredentials
 
 ## custom imports
-from db.base import SessionLocal
-from db.common import get_db
+from db.base import get_db
 
 from routes.models import LoginModel, LoginToken
+
 
 from auth.func import create_access_token, create_refresh_token, func_verify_token, get_current_user, verify_credentials
 from auth.util import check_internal_request

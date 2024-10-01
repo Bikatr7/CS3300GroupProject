@@ -34,7 +34,7 @@ def install_dependencies() -> None:
 def setup_local_environment() -> None:
 
     env_to_key_local = {
-        "ADMIN_USER": "admin@admin.com",
+        "ADMIN_USER": "admin",
         "ADMIN_PASS_HASH": "$2b$12$MlPMcgDvVCU.s10xcB2fneIjZ/ymgz5O52yH5pshAFF5.bwPq4SMq",
         "ACCESS_TOKEN_SECRET": "secret",
         "REFRESH_TOKEN_SECRET": "secret",

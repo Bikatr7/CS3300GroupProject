@@ -24,22 +24,3 @@ def create_tables_if_not_exist(engine:Engine, base:DeclarativeMeta) -> None:
 
         except OperationalError:
             print(f"Tried creating table {table_name}, but failed. SAFE TO IGNORE")
-
-def get_db(SessionLocal:sessionmaker) -> typing.Generator[Session, None, None]:
-    
-    """
-
-    Get the database session.
-
-    Returns:
-    typing.Generator[Session, None, None]: The database session
-
-    """
-
-    db:Session = SessionLocal()
-    
-    try:
-        yield db
-    
-    finally:
-        db.close()
