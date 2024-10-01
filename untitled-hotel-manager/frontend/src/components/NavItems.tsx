@@ -30,11 +30,11 @@ interface NavItem {
 const NAV_ITEMS: Array<NavItem> = [
     {
         label: 'Home',
-        href: '/home',
+        href: '/',
     },
     {
         // can define nested items here
-        label: 'Empty',
+        label: 'Booking',
         children: [
             {
                 label: 'Empty',
@@ -42,6 +42,28 @@ const NAV_ITEMS: Array<NavItem> = [
                 href: '/empty',
             },
         ],
+    },
+    {
+        label: 'Amenities',
+        children: [
+            {
+                label: 'Rooms',
+                href: '/rooms',
+            },
+            {
+                label: 'Indoor Pool',
+                href: '/pool',
+            },
+            {
+                label: 'Food and Room Service',
+                href: '/foodprogram',
+            },
+        ]
+        
+    },
+    {
+        label: 'The Sunset Bar',
+        href: '/sunsetbar',
     },
 ];
 

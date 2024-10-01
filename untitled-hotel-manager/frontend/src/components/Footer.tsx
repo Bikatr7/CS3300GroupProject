@@ -45,7 +45,7 @@ function Footer()
                         bg="transparent"
                         _hover={{ bg: 'whiteAlpha.200' }}
                     />
-                    <Text textAlign="center">© Whatever the fuck we want it to be All rights reserved</Text>
+                    <Text textAlign="center">© HHG International. All rights reserved.</Text>
                     <Link href="/">
                         <Image src={logo} boxSize='30px' alt='Kakusui Logo' />
                     </Link>
@@ -54,7 +54,7 @@ function Footer()
                     <Link href="/">
                         <Image src={logo} boxSize='30px' alt='Kakusui Logo' />
                     </Link>
-                    <Text textAlign="center" flex="1">© Whatever the fuck we want it to be All rights reserved</Text>
+                    <Text textAlign="center" flex="1"> HHG International. All rights reserved.</Text>
                     <IconButton 
                         as='a' 
                         href='https://github.com/Bikatr7' 
