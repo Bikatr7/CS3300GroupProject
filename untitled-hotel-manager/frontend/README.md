@@ -45,6 +45,19 @@ You will probably not have to change the following files
 
 - index.html (favicon and root styles need to be decided)
 - theme.ts (colors and fonts need to be decided)
+<img width="604" alt="Screen Shot 2024-10-06 at 11 00 44 AM" src="https://github.com/user-attachments/assets/bd0e3c9a-4bd8-4c64-9655-e67825393ad0">
+
+- Color Scheme hex codes (from left to right)
+- #a46048
+- App background: #2e343c
+- #de7c47
+- #5c4b4a
+- Text color: #fbe9b4
+- #44545a
+- Header/footer color: #512316
+- #7d341b
+- #99837c
+- Nav bar drop down: #c18c6a
 
 #### Routing
 
