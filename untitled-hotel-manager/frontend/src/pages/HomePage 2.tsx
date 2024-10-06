@@ -16,7 +16,7 @@ import {
 
 function HomePage() {
   return (
-    <Container maxW="container.xl" py={10} style={{backgroundColor: "#2f575d"}}>
+    <Container maxW="container.xl" py={10}>
       <VStack spacing={8} align="stretch">
         <Heading as="h1" size="2xl" textAlign="center" style={{color: "red"}}>
           Welcome to Our Home Page

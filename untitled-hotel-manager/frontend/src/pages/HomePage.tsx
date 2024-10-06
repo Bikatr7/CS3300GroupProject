@@ -12,8 +12,7 @@ import {
   Button,
   Container,
 } from "@chakra-ui/react";
-//background photo
-import bkgd from '../assets/images/SunsetBkgd.jpg';
+
 
 function HomePage() {
   return (

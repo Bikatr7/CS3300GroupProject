@@ -167,7 +167,7 @@ const Login: React.FC = () =>
                             <Button variant="ghost" mr={3} onClick={handleClose} _hover={{ bg: "whiteAlpha.200" }}>
                                 Close
                             </Button>
-                            <Button colorScheme="#c18c6a" onClick={handleSubmit}>
+                            <Button colorScheme="orange" onClick={handleSubmit}>
                                 Login
                             </Button>
                         </Flex>
