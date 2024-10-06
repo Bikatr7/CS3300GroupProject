@@ -12,26 +12,33 @@ import {
   Button,
   Container,
 } from "@chakra-ui/react";
+//background photo
+import bkgd from '../assets/images/SunsetBkgd.jpg';
 
 function HomePage() {
   return (
     <Container maxW="container.xl" py={10}>
+
       <VStack spacing={8} align="stretch">
-        <Heading as="h1" size="2xl" textAlign="center">
-          Welcome to Our Home Page
+
+        
+        <Heading as="h1" className="mainHeader" size="2xl" textAlign="center">
+          Luxury, rest, and relaxation.
+
         </Heading>
         
         <Text fontSize="xl" textAlign="center">
-          This is a basic home page structure using Chakra UI.
+          Plan your getaway today
         </Text>
         
         <Button 
-          colorScheme="blue" 
+          colorScheme="orange" 
           size="lg" 
           alignSelf="center"
         >
-          Get Started
+          Book Now
         </Button>
+        
       </VStack>
     </Container>
   );

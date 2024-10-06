@@ -39,7 +39,7 @@ export default function Navbar({ isHomePage }: NavbarProps)
 
     const navItems = isPrivilegedUser ? [...NAV_ITEMS, { label: 'Admin', href: '/admin' }] : NAV_ITEMS;
 
-    const bgColor = isHomePage ? 'transparent' : '#14192b';
+    const bgColor = isHomePage ? 'transparent' : '#512316';
     const borderColor = isHomePage ? 'transparent' : 'rgba(255, 255, 255, 0.1)';
     const boxShadow = isHomePage ? 'none' : '0 1px 2px 0 rgba(0, 0, 0, 0.05)';
 

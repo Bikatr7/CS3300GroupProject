@@ -37,9 +37,9 @@ const NAV_ITEMS: Array<NavItem> = [
         label: 'Booking',
         children: [
             {
-                label: 'Empty',
-                subLabel: 'BLANK',
-                href: '/empty',
+                label: 'Book a Stay',
+                subLabel: 'Rooms and Suites',
+                href: '/booking',
             },
         ],
     },
@@ -69,9 +69,9 @@ const NAV_ITEMS: Array<NavItem> = [
 
 const DesktopNav = ({ items }: { items: Array<NavItem> }) => 
 {
-    const linkColor = 'gray.300';
+    const linkColor = '#fbe9b4';
     const linkHoverColor = 'white';
-    const popoverContentBgColor = '#14192b';
+    const popoverContentBgColor = '#c18c6a';
 
     return (
         <Stack direction={'row'} spacing={4}>
@@ -155,7 +155,7 @@ const MobileNav = ({ items }: { items: Array<NavItem> }) =>
 {
     return (
         <Stack
-            bg="#14192b"
+            bg="#fbe9b4"
             p={4}
             display={{md: 'none'}}>
             {items.map((navItem) => (

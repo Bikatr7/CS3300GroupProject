@@ -17,7 +17,7 @@ function Footer()
 {
     return (
         <Box
-            bg="#14192b"
+            bg="#512316"
             color="gray.300"
             borderTop="1px"
             borderColor="rgba(255, 255, 255, 0.1)"
@@ -54,7 +54,7 @@ function Footer()
                     <Link href="/">
                         <Image src={logo} boxSize='30px' alt='Kakusui Logo' />
                     </Link>
-                    <Text textAlign="center" flex="1"> HHG International. All rights reserved.</Text>
+                    <Text textAlign="center" flex="1" color="#fbe9b4"> HHG International. All rights reserved.</Text>
                     <IconButton 
                         as='a' 
                         href='https://github.com/Bikatr7' 

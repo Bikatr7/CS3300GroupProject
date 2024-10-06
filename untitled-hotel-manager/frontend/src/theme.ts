@@ -5,7 +5,8 @@
 // maintain allman bracket style for consistency
 
 // chakra-ui
-import { extendTheme, type ThemeConfig } from '@chakra-ui/react'
+import { background, extendTheme, type ThemeConfig } from '@chakra-ui/react'
+import { color } from 'framer-motion'
 
 const config: ThemeConfig = 
 {
@@ -18,13 +19,22 @@ const theme = extendTheme(
     config,
     styles: 
     {
+        
         global: 
         {
             'html, body': 
             {
-                bg: '#14192b',
+                color: '#fbe9b4',
+
+
             },
+            '.mainHeader':{
+                color: '#fbe9b4'
+                
+            }
         },
+
+        
     },
 })
 

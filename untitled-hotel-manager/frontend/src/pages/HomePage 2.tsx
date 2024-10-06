@@ -11,13 +11,14 @@ import {
   Text,
   Button,
   Container,
+  background,
 } from "@chakra-ui/react";
 
 function HomePage() {
   return (
-    <Container maxW="container.xl" py={10}>
+    <Container maxW="container.xl" py={10} style={{backgroundColor: "#2f575d"}}>
       <VStack spacing={8} align="stretch">
-        <Heading as="h1" size="2xl" textAlign="center">
+        <Heading as="h1" size="2xl" textAlign="center" style={{color: "red"}}>
           Welcome to Our Home Page
         </Heading>
         
