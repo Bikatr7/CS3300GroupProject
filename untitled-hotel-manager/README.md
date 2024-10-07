@@ -25,8 +25,7 @@ Basic overview of what needs to be done.
 
 - Login for admin (only admin) (should be able to see all bookings, and have the ability to cancel/change)
 - Interface for user, user can check in/out and also register, date time, room etc, these can be hardcoded options
-- We need a name. one word something " {x} Booking"
-- having actual occupancies can be dealt with later, just assume unlimited
+- having actual occupancies can be dealt with later, just assume unlimited, booking should be simple. I just want standard like pay, at the counter (imagine cash insertion or something we're not going to deal with cards, just simulate a cash insertion feature and have it always succeed)
 
 ### **Requirements**<a name="requirements"></a>
 
@@ -49,7 +48,7 @@ cd backend
 pip install -r requirements.txt
 ```
 
-VScode will also prompt you to use that. I also reccomend using type checking for python.
+VScode will also prompt you to use that. I also recommend using type checking for python via pylance.
 
 ### **Setting Up A Local Build**<a name="setting-up-a-local-build"></a>
 

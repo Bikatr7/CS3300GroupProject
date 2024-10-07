@@ -8,7 +8,7 @@ Assigned Roles:
 
 ## To run the frontend:
 
-1. Ensure you are in the frontend directory
+1. Ensure you are in the frontend directory `cd frontend`
 2. Run `npm i` to install the dependencies
 3. Run `npm run dev` to start the development server
 4. Go to the url `http://localhost:5173/` to view the website

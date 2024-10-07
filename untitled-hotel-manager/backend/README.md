@@ -8,8 +8,10 @@ Assigned Roles:
 
 ## To run the frontend:
 
+> ![TIP] Make sure you created a venv as instructed in the root [README.md](https://github.com/Bikatr7/CS3300GroupProject/blob/development/untitled-hotel-manager/README.md)
+
 1. Ensure you are in the backend directory
-2. Run `python setup.py local` to start the development server
+2. Run `python setup.py local` to install requirements and setup envs.
 3. Run `uvicorn main:app --reload --port 5000` to start the uvicorn server
 4. Go to the url `http://localhost:5000/` to view the API
 
