@@ -40,6 +40,9 @@ Basic overview of what needs to be done.
 
 It is recommended to use a virtual environment to manage dependencies. This can be done with the following commands:
 
+You may need these to install the requirements:
+https://visualstudio.microsoft.com/visual-cpp-build-tools/
+
 ```bash
 python -m venv venv
 source venv/Scripts/activate
@@ -62,7 +65,7 @@ These steps must be followed _in order_.
 6. Open a new terminal and navigate to the `untitled-hotel-manager/frontend` directory. `cd untitled-hotel-manager/frontend`. Inside is the react (vite) frontend.
 7. First install all required packages, these are in `package.json`. Do `npm i`. Then run the dev server with `npm run dev`
 8. Website will be on localhost:5173 (frontend) and localhost:5000 (backend)
-
+so
 Default login is admin:password
 
 ## **Resources**
