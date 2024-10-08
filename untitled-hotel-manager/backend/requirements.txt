@@ -2,7 +2,7 @@ fastapi==0.110.3
 uvicorn==0.30.0
 httpx==0.25.1
 passlib==1.7.4
-bcrypt==3.1.7
+bcrypt
 sqlalchemy==2.0.31
 python-gnupg==0.5.2
 pyjwt==2.8.0
