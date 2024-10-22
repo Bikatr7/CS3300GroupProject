@@ -12,9 +12,19 @@ import {
   Button,
   Container,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+
+  
+
 
 
 function HomePage() {
+
+  let navigate = useNavigate();
+  const pageChange = () =>{
+    let path = `booking`;
+    navigate(path);
+  }
   return (
     <Container maxW="container.xl" py={10}>
 
@@ -34,7 +44,9 @@ function HomePage() {
           colorScheme="orange" 
           size="lg" 
           alignSelf="center"
+          onClick={pageChange}
         >
+ 
           Book Now
         </Button>
         

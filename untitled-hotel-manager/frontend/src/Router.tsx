@@ -14,12 +14,14 @@ import { Spinner, Center } from "@chakra-ui/react";
 
 // pages
 import HomePage from "./pages/HomePage.tsx";
+import BookingPage from './pages/BookingPage.tsx';
 
 // auth
 import { useAuth } from './contexts/AuthContext.tsx';
 
 // util
 import { getURL } from './utils';
+import SunsetBarPage from './pages/SunsetBarPage.tsx';
 
 // unused but we'll use it later
 const ProtectedAdminRoute = ({ children }: { children: ReactNode }) => 
@@ -103,6 +105,14 @@ function Router()
     if (path === '/') 
     {
         return <HomePage />;
+    }
+    if(path === '/booking')
+    {
+        return <BookingPage />
+    }
+    if (path === '/sunsetbar')
+    {
+        return <SunsetBarPage />
     }
 
     // TODO: Add admin panel back in
