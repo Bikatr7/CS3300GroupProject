@@ -20,7 +20,7 @@ import BookingPage from './pages/BookingPage.tsx';
 import { useAuth } from './contexts/AuthContext.tsx';
 
 // util
-import { getURL } from './utils';
+import { getURL } from './utils/index.ts';
 import SunsetBarPage from './pages/SunsetBarPage.tsx';
 
 // unused but we'll use it later
