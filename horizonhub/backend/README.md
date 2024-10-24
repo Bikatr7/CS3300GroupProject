@@ -8,7 +8,7 @@ Assigned Roles:
 
 ## To run the frontend:
 
-> ![TIP] Make sure you created a venv as instructed in the root [README.md](https://github.com/Bikatr7/CS3300GroupProject/blob/development/untitled-hotel-manager/README.md)
+> ![TIP] Make sure you created a venv as instructed in the root [README.md](https://github.com/Bikatr7/CS3300GroupProject/blob/development/horizonhub/README.md)
 
 1. Ensure you are in the backend directory
 2. Run `python setup.py local` to install requirements and setup envs.
