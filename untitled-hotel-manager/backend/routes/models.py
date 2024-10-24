@@ -4,6 +4,7 @@
 
 ## third-party imports
 from pydantic import BaseModel
+from datetime import datetime
 
 class LoginModel(BaseModel):
     username:str
@@ -16,3 +17,19 @@ class LoginToken(BaseModel):
 
 class TokenData(BaseModel):
     email:str
+
+class BookingVerification(BaseModel):
+    email:str
+    code:str
+
+## Add these new models
+class VerificationCode(BaseModel):
+    email:str
+    code:str
+    created_at:datetime
+    expires_at:datetime
+    used:bool = False
+
+class VerifyCodeRequest(BaseModel):
+    email:str
+    code:str

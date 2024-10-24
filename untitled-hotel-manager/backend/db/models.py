@@ -4,9 +4,10 @@
 
 ## built-in imports
 from uuid import uuid4
+from datetime import datetime, timedelta
 
 ## third-party imports
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean
 from sqlalchemy.dialects.postgresql import UUID as modelUUID
 
 ## custom imports
@@ -19,3 +20,21 @@ class User(Base):
     id = Column(modelUUID(as_uuid=True), primary_key=True, index=True, default=uuid4)
     email = Column(String, unique=True, index=True)
     credits = Column(Integer, default=0)
+
+class Booking(Base):
+    __tablename__ = "bookings"
+    id = Column(modelUUID(as_uuid=True), primary_key=True, index=True, default=uuid4)
+    user_id = Column(modelUUID(as_uuid=True), ForeignKey("users.id"))
+    room_id = Column(modelUUID(as_uuid=True), ForeignKey("rooms.id"))
+    check_in = Column(DateTime)
+    check_out = Column(DateTime)
+
+
+class VerificationCode(Base):
+    __tablename__ = "verification_codes"
+    
+    email = Column(String, primary_key=True)
+    code = Column(String, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    expires_at = Column(DateTime, nullable=False)
+    used = Column(Boolean, default=False)

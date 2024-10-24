@@ -3,7 +3,8 @@
 ## license that can be found in the LICENSE file.
 
 ## built-in imports
-from datetime import timedelta
+from datetime import timedelta, datetime
+import random
 
 ## third-party imports
 from fastapi import APIRouter, HTTPException, Request, status, Cookie, Depends
@@ -12,8 +13,9 @@ from fastapi.security import HTTPBasicCredentials
 
 ## custom imports
 from db.base import get_db
+from db.models import VerificationCode
 
-from routes.models import LoginModel, LoginToken
+from routes.models import LoginModel, LoginToken, VerifyCodeRequest
 
 
 from auth.func import create_access_token, create_refresh_token, func_verify_token, get_current_user, verify_credentials
@@ -132,3 +134,71 @@ async def check_admin(request: Request, current_user:str = Depends(get_current_u
     is_admin = current_user == ADMIN_USER
 
     return JSONResponse(status_code=status.HTTP_200_OK, content={"result": is_admin})
+
+@router.post("/auth/generate-verification-code")
+async def generate_verification_code(request:Request, email:str, db = Depends(get_db)):
+    """
+    Generate a 6-digit verification code for the given email
+    """
+
+    origin = request.headers.get('origin')
+    check_internal_request(origin)
+
+    code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
+    
+
+    expires_at = datetime.utcnow() + timedelta(minutes=10)
+    
+    ## Delete any existing codes for this email
+    db.query(VerificationCode).filter(VerificationCode.email == email).delete()
+    
+    ## Create new verification code
+    verification = VerificationCode(
+        email=email,
+        code=code,
+        expires_at=expires_at
+    )
+    
+    db.add(verification)
+    db.commit()
+    
+    return {"message": "Verification code generated", "code": code}
+
+@router.post("/auth/verify-code")
+async def verify_code(request:Request, data:VerifyCodeRequest, db = Depends(get_db)):
+    
+    """
+    Verify a 6-digit code for the given email
+    """
+
+    origin = request.headers.get('origin')
+    check_internal_request(origin)
+    
+    verification = db.query(VerificationCode).filter(
+        VerificationCode.email == data.email,
+        VerificationCode.used == False
+    ).first()
+    
+    if(not verification):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No verification code found for this email"
+        )
+    
+    if(verification.expires_at < datetime.utcnow()):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Verification code has expired"
+        )
+    
+    if(verification.code != data.code):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid verification code"
+        )
+    
+    ## Mark code as used
+    verification.used = True
+    db.commit()
+    
+    return {"message": "Code verified successfully"}
