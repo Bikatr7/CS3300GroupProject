@@ -3,6 +3,7 @@
 
 - [**Overview**](#overview)
   - [**To Do (Architectural wise)**](#to-do-architectural-wise)
+  - [Maddison see Readme in frontend](#maddison-see-readme-in-frontend)
   - [**Requirements**](#requirements)
     - [**Venv**](#venv)
   - [**Setting Up A Local Build**](#setting-up-a-local-build)
@@ -12,20 +13,31 @@
 
 ## **Overview**<a name="overview"></a>
 
-Need to deal with this later
-
-Bullet points of requirements/basic overview of problem
-
 Problem Statement: 
-A new hotel needs a booking and management system to keep track of bookings. Management needs a front end for customers to book a hotel room, and a database containing all booking information, including dates/customer information. It can block out dates that are unavailable and (potentially) handle changing/cancelling bookings.
+The Development of a Hotel Management and Booking software that allows customers to schedule, check-in, and check-out of rooms, and enables hotel management to oversee bookings, including creating, modifying, and canceling them. The software aims to minimize the need for hotel owners to manage bookings manually, streamlining the process through automation.
 
 ### **To Do (Architectural wise)**<a name="to-do-architectural-wise"></a>
 
+### Maddison see Readme in frontend
+
 Basic overview of what needs to be done.
 
-- Login for admin (only admin) (should be able to see all bookings, and have the ability to cancel/change)
-- Interface for user, user can check in/out and also register, date time, room etc, these can be hardcoded options
-- having actual occupancies can be dealt with later, just assume unlimited, booking should be simple. I just want standard like pay, at the counter (imagine cash insertion or something we're not going to deal with cards, just simulate a cash insertion feature and have it always succeed)
+- Home Page or main page should have two buttons, one for customers one for admins
+
+Customer Page:
+
+check in (prompt for 6 digit code, accept it, and return some hardcoded response)
+
+check out (prompt for 6 digit code, accept it, return some hardcoded response)
+
+schedule (prompt for first name/last name/email/phone number/) -> go to next window or whatever (ask for date, best way to do this is probably a calender modal, we need that and a time) -> (next ask for room, just assume we have three hardcoded options for now, approve it and output a 6 digit code)
+
+Admin Page:
+
+- Login page FIRST
+- View all bookings (will have a way to cancel/modify bookings later)
+
+you're free to hardcode all these responses on the frontend, i'll design the base of the backend and connect them up later
 
 ### **Requirements**<a name="requirements"></a>
 
@@ -46,7 +58,7 @@ https://visualstudio.microsoft.com/visual-cpp-build-tools/
 ```bash
 python -m venv venv
 source venv/Scripts/activate
-cd untitled-hotel-manager
+cd horizonhub
 cd backend
 pip install -r requirements.txt
 ```
@@ -58,11 +70,11 @@ VScode will also prompt you to use that. I also recommend using type checking fo
 These steps must be followed _in order_.
 
 1. Clone the repo, make sure you are using the correct branch (currently `development`)
-2. Navigate to the project directory. `cd untitled-hotel-manager`
+2. Navigate to the project directory. `cd horizonhub`
 3. Navigate to the `backend` directory. `cd backend`. Inside is the python backend.
 4. Run the setup script with the local argument. This will install all requirements and setup the local env `python setup.py local`.
 5. Run the server. For local `uvicorn main:app --reload --port 5000`
-6. Open a new terminal and navigate to the `untitled-hotel-manager/frontend` directory. `cd untitled-hotel-manager/frontend`. Inside is the react (vite) frontend.
+6. Open a new terminal and navigate to the `horizonhub/frontend` directory. `cd horizonhub/frontend`. Inside is the react (vite) frontend.
 7. First install all required packages, these are in `package.json`. Do `npm i`. Then run the dev server with `npm run dev`
 8. Website will be on localhost:5173 (frontend) and localhost:5000 (backend)
 so

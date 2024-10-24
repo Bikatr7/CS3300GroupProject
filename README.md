@@ -9,7 +9,7 @@
 This repository contains the coursework for CS 3300 at the University of Colorado Colorado Springs, developed during the Fall 2024 semester. With all code implemented in Python and TypeScript.
 
 ## Documentation
-Documentation can be found inside further folders. Inside `untitled-hotel-manager`, `untitled-hotel-manager/frontend`, and `untitled-hotel-manager/backend` you will find their respective READMEs.
+Documentation can be found inside further folders. Inside `horizonhub-hotel-manager`, `horizonhub-hotel-manager/frontend`, and `horizonhub-hotel-manager/backend` you will find their respective READMEs.
 
 ## License
 This project is licensed under the AGPL-3.0 License. See the [LICENSE](LICENSE.md) file for details.

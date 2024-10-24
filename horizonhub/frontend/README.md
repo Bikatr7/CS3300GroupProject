@@ -19,6 +19,34 @@ Assigned Roles:
 - New pages and stuff will need to be added
 - Functionality needs to be added, most data fetches will be done in the backend, but stuff like getting info, forms, selecting stuff etc. will be done here.
 
+## Other pages (Maddison)
+
+Feel free to add/keep those amenity pages as you see fit, they can just be the cherry on top of the overall product. I'd like the main page root (/) to have two buttons, one for customers and one for admins like specified in the requirements.
+
+## Frontend:
+
+
+Basic overview of what needs to be done.
+
+- Home Page or main page should have two buttons, one for customers one for admins
+
+Customer Page:
+
+check in (prompt for 6 digit code, accept it, and return some hardcoded response)
+
+check out (prompt for 6 digit code, accept it, return some hardcoded response)
+
+schedule (prompt for first name/last name/email/phone number/) -> go to next window or whatever (ask for date, best way to do this is probably a calender modal, we need that and a time) -> (next ask for room, just assume we have three hardcoded options for now, approve it and output a 6 digit code)
+
+Admin Page:
+
+- Login page FIRST
+- View all bookings (will have a way to cancel/modify bookings later)
+
+you're free to hardcode all these responses on the frontend, i'll design the base of the backend and connect them up later
+
+## Integrator:
+
 It is up to the integrator to coordinate with the frontend developer to ensure that the frontend is doing what the backend expects it to do. As well as communicate api needs to the backend.
 
 
