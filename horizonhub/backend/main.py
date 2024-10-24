@@ -26,6 +26,7 @@ from db.migration import migrate_database
 
 from routes.warmups import router as warmups_router
 from routes.auth import router as auth_router
+from routes.booking import router as booking_router
 
 ##-----------------------------------------start-of-main----------------------------------------------------------------------------------------------------------------------------------------------------------
 

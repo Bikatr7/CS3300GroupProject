@@ -5,6 +5,7 @@
 ## third-party imports
 from pydantic import BaseModel
 from datetime import datetime
+from uuid import UUID
 
 class LoginModel(BaseModel):
     username:str
@@ -33,3 +34,12 @@ class VerificationCode(BaseModel):
 class VerifyCodeRequest(BaseModel):
     email:str
     code:str
+
+class BookingCreate(BaseModel):
+    room_id:UUID
+    check_in:datetime
+    check_out:datetime
+
+class BookingUpdate(BaseModel):
+    check_in:datetime
+    check_out:datetime
