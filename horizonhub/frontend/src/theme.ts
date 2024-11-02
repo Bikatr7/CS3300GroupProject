@@ -5,9 +5,7 @@
 // maintain allman bracket style for consistency
 
 // chakra-ui
-import { background, extendTheme, Flex, type ThemeConfig } from '@chakra-ui/react'
-import { color } from 'framer-motion'
-import sunset from '../src/assets/images/SunsetBkgd.jpg'
+import { extendTheme, type ThemeConfig } from '@chakra-ui/react'
 
 const config: ThemeConfig = 
 {
@@ -15,33 +13,49 @@ const config: ThemeConfig =
     useSystemColorMode: false,
 }
 
+const colors = 
+{
+    brand: 
+    {
+        primary: '#a46048',
+        background: '#2e343c',
+        accent1: '#de7c47',
+        accent2: '#5c4b4a',
+        text: '#fbe9b4',
+        accent3: '#44545a',
+        headerFooter: '#512316',
+        accent4: '#7d341b',
+        accent5: '#99837c',
+        navbar: '#c18c6a'
+    }
+}
+
 const theme = extendTheme(
 {
     config,
+    colors,
     styles: 
     {
-        
         global: 
         {
             'html, body': 
             {
-                color: '#fbe9b4',
+                color: colors.brand.text,
+                backgroundColor: colors.brand.background,
             },
             '.mainHeader':
             {
-
-                color: '#fbe9b4',
-
+                color: colors.brand.text,
             }
         },
-        dateRangePicker:{
-            '.picker':{
-                padding:20,
+        dateRangePicker:
+        {
+            '.picker':
+            {
+                padding: 20,
                 border: 2 
-
             }
         }
-        
     },
 })
 

@@ -4,9 +4,6 @@
 
 // maintain allman bracket style for consistency
 
-// react
-import { useNavigate } from "react-router-dom";
-
 // chakra-ui
 import {
     VStack,
@@ -27,8 +24,6 @@ import {
 
 function CheckoutPage() 
 {
-    const navigate = useNavigate();
-
     const handleSubmit = () =>
     {
         // TODO: Implement checkout logic
@@ -41,6 +36,7 @@ function CheckoutPage()
                 minH="100vh" 
                 py={20} 
                 direction={{ base: "column", lg: "row" }}
+                bg="brand.background"
             >
                 {/* Customer Details Section */}
                 <VStack 
@@ -49,10 +45,11 @@ function CheckoutPage()
                     p={10} 
                     spacing={10} 
                     align="flex-start"
+                    color="brand.text"
                 >
                     <VStack spacing={3} align="flex-start">
-                        <Heading size="2xl">Your Details</Heading>
-                        <Text>If you already have an account, click here to log in.</Text>
+                        <Heading size="2xl" color="brand.text">Your Details</Heading>
+                        <Text color="brand.text">If you already have an account, click here to log in.</Text>
                     </VStack>
 
                     <SimpleGrid 
@@ -108,7 +105,9 @@ function CheckoutPage()
 
                         <GridItem colSpan={2}>
                             <Button 
-                                colorScheme="orange" 
+                                bg="brand.accent1"
+                                color="brand.text"
+                                _hover={{ bg: 'brand.primary' }}
                                 size="lg" 
                                 w="full"
                                 onClick={handleSubmit}
@@ -126,11 +125,11 @@ function CheckoutPage()
                     p={10} 
                     spacing={10} 
                     align="flex-start" 
-                    bg="gray.50"
+                    bg="brand.accent5"
+                    color="brand.text"
                 >
-                    <Heading size="2xl">Order Summary</Heading>
+                    <Heading size="2xl" color="brand.text">Order Summary</Heading>
                     
-                    {/* TODO: Add booking details summary */}
                     <Box w="full">
                         <Text fontSize="lg" mb={4}>Booking Details:</Text>
                         {/* Add booking details here */}
