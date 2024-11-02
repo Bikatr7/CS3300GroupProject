@@ -38,3 +38,11 @@ class VerificationCode(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     expires_at = Column(DateTime, nullable=False)
     used = Column(Boolean, default=False)
+
+class Room(Base):
+    __tablename__ = "rooms"
+    id = Column(modelUUID(as_uuid=True), primary_key=True, index=True, default=uuid4)
+    name = Column(String, nullable=False)
+    description = Column(String, nullable=False)
+    price = Column(Integer, nullable=False)
+    capacity = Column(Integer, nullable=False)
