@@ -44,8 +44,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 {
                     setIsLoggedIn(true);
                     setUserEmail(decoded.sub as string);
-                    /// can deal with this later
-                    setIsPrivilegedUser(decoded.sub === 'admin@admin.com');
+                    setIsPrivilegedUser(decoded.sub === 'admin');
                 } 
                 else 
                 {

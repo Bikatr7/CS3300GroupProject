@@ -24,8 +24,9 @@ import { useAuth } from './contexts/AuthContext.tsx';
 // util
 import { getURL } from './utils/index.ts';
 
+// components
+import AdminPanel from './components/AdminPanel.tsx';
 
-// unused but we'll use it later
 const ProtectedAdminRoute = ({ children }: { children: ReactNode }) => 
 {
     const { isLoggedIn, isLoading } = useAuth();
@@ -121,17 +122,17 @@ function Router()
         return <CheckoutPage />
     }
 
-    // TODO: Add admin panel back in
-    // if (path === '/admin') 
-    // {
-    //     return (
-    //         <ProtectedAdminRoute>
-    //             <AdminPanel />
-    //         </ProtectedAdminRoute>
-    //     );
-    // }
+    if (path === '/admin') 
+    {
+        return (
+            <ProtectedAdminRoute>
+                <AdminPanel />
+            </ProtectedAdminRoute>
+        );
+    }
 
     // Default case: 404 Not Found
+    // can make some pretty 404 page later
     return <div>404 Not Found</div>;
 }
 

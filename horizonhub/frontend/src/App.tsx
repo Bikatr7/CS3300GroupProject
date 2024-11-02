@@ -27,7 +27,7 @@ import { HelmetProvider } from 'react-helmet-async';
 function AppContent() 
 {
     const location = useLocation();
-    const isFullScreenPage = location.pathname === '/';
+    const isFullScreenPage = location.pathname === '/' || location.pathname === '/admin';
 
     return (
         <>

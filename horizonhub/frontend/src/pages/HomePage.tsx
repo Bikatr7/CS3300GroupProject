@@ -6,6 +6,8 @@
 
 // react
 import { useNavigate } from "react-router-dom";
+import { useToast } from '@chakra-ui/react';
+import { useAuth } from '../contexts/AuthContext';
 
 // chakra-ui
 import {
@@ -26,17 +28,42 @@ import HomeFooter from "../components/HomeFooter";
 
 function HomePage() 
 {
-  let navigate = useNavigate();
-  
+  const navigate = useNavigate();
+  const toast = useToast();
+  const { isLoggedIn, isPrivilegedUser } = useAuth();
+
+  const handleAdminClick = () =>
+  {
+    if(!isLoggedIn)
+    {
+      toast({
+        title: "Access Denied",
+        description: "You must be logged in to access the admin panel.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if(!isPrivilegedUser)
+    {
+      toast({
+        title: "Access Denied",
+        description: "You do not have permission to access the admin panel.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    navigate('/admin');
+  };
+
   const navigateToBooking = () =>
   {
     let path = `booking`;
-    navigate(path);
-  }
-
-  const navigateToAdmin = () =>
-  {
-    let path = `admin`;
     navigate(path);
   }
 
@@ -66,7 +93,7 @@ function HomePage()
                 <Button 
                   colorScheme="blue" 
                   size="lg"
-                  onClick={navigateToAdmin}
+                  onClick={handleAdminClick}
                 >
                   Admin Portal
                 </Button>
