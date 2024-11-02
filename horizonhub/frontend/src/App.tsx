@@ -4,24 +4,47 @@
 
 // maintain allman bracket style for consistency
 
-// chakra-ui
-import { ChakraProvider, Box, Container} from "@chakra-ui/react";
+// react
+import { useLocation } from 'react-router-dom';
 
-// helmet
-import { HelmetProvider } from 'react-helmet-async';
+// chakra-ui
+import { ChakraProvider, Box } from "@chakra-ui/react";
 
 // react-router-dom
 import { BrowserRouter } from 'react-router-dom';
 
-// root components
-import theme from "./theme.ts";
-
-// custom components
+// components
 import Navbar from "./components/Navbar.tsx";
 import Footer from "./components/Footer.tsx";
 import Router from './Router.tsx';
+import theme from "./theme.ts";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
-// the below should be fine but if we run into an issue, contact me - Kaden
+import PageWrapper from './components/PageWrapper.tsx';
+
+// helmet
+import { HelmetProvider } from 'react-helmet-async';
+
+function AppContent() 
+{
+    const location = useLocation();
+    const isFullScreenPage = location.pathname === '/';
+
+    return (
+        <>
+            {!isFullScreenPage && <Navbar isHomePage={false} />}
+            {isFullScreenPage ? (
+                <Router />
+            ) : (
+                <PageWrapper showBackground={false}>
+                    <Box maxWidth="container.xl" margin="0 auto">
+                        <Router />
+                    </Box>
+                </PageWrapper>
+            )}
+            {!isFullScreenPage && <Footer />}
+        </>
+    );
+}
 
 function App() 
 {
@@ -30,13 +53,7 @@ function App()
             <ChakraProvider theme={theme}>
                 <AuthProvider>
                     <BrowserRouter>
-                        <Box bg="black">
-                            <Navbar isHomePage={false}/>
-                            <Container maxW="6xl">
-                                <Router />
-                            </Container>
-                            <Footer/>
-                        </Box>
+                        <AppContent />
                     </BrowserRouter>
                 </AuthProvider>
             </ChakraProvider>

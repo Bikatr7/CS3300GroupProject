@@ -104,15 +104,15 @@ const Login: React.FC = () =>
                 <Button 
                     onClick={isLoggedIn ? async () => { await logout(); showToast("Success", "Successfully logged out", "success"); } : onOpen} 
                     rounded="full"
-                    bg="orange.400"
-                    color="white"
-                    _hover={{ bg: 'orange.500' }}
+                    bg="#de7c47"
+                    color="#fbe9b4"
+                    _hover={{ bg: '#a46048' }}
                     minWidth="70px" 
                     height="40px"    
                     disabled={isLoading}
                 >
                     {isLoading ? (
-                        <Spinner size="sm" color="white" />
+                        <Spinner size="sm" color="#fbe9b4" />
                     ) : (
                         isLoggedIn ? 'Logout' : 'Login'
                     )}
@@ -121,12 +121,12 @@ const Login: React.FC = () =>
             <Modal isOpen={isOpen} onClose={handleClose} isCentered motionPreset="slideInBottom">
                 <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
                 <ModalContent
-                    bg="rgba(20, 25, 43, 0.95)"
-                    color="white"
+                    bg="#2e343c"
+                    color="#fbe9b4"
                     borderRadius="xl"
                     boxShadow="xl"
                 >
-                    <ModalHeader color="orange.400">Login</ModalHeader>
+                    <ModalHeader color="#de7c47">Login</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Flex direction="column" gap={4}>

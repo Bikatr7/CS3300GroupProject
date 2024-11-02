@@ -5,10 +5,7 @@
 // maintain allman bracket style for consistency
 
 // chakra-ui
-import { Box, Flex, IconButton, Image, Text, Link } from '@chakra-ui/react';
-
-// icons
-import { IconBrandGithub } from '@tabler/icons-react';
+import { Box, Flex, Image, Text, Link } from '@chakra-ui/react';
 
 // images
 import logo from '../assets/images/logo.webp';
@@ -36,16 +33,7 @@ function Footer()
                 color="gray.300"
             >
                 <Flex display={{ base: 'flex', md: 'none' }} width="100%" justify="space-between" align="center">
-                    <IconButton 
-                        as='a' 
-                        href='/'
-                        aria-label='Home' 
-                        icon={<IconBrandGithub />} 
-                        color="white"
-                        bg="transparent"
-                        _hover={{ bg: 'whiteAlpha.200' }}
-                    />
-                    <Text textAlign="center">© HHG International. All rights reserved.</Text>
+                    <Text textAlign="center">© Horizon Hotel Group 2024. All rights reserved.</Text>
                     <Link href="/">
                         <Image src={logo} boxSize='30px' alt='Kakusui Logo' />
                     </Link>
@@ -54,16 +42,7 @@ function Footer()
                     <Link href="/">
                         <Image src={logo} boxSize='30px' alt='Kakusui Logo' />
                     </Link>
-                    <Text textAlign="center" flex="1" color="#fbe9b4"> HHG International. All rights reserved.</Text>
-                    <IconButton 
-                        as='a' 
-                        href='https://github.com/Bikatr7' 
-                        aria-label='Github' 
-                        icon={<IconBrandGithub />} 
-                        color="white"
-                        bg="transparent"
-                        _hover={{ bg: 'whiteAlpha.200' }}
-                    />
+                    <Text textAlign="center" flex="1" color="#fbe9b4">© Horizon Hotel Group 2024. All rights reserved.</Text>
                 </Flex>
             </Flex>
         </Box>

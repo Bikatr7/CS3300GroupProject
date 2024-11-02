@@ -70,8 +70,8 @@ const NAV_ITEMS: Array<NavItem> = [
 const DesktopNav = ({ items }: { items: Array<NavItem> }) => 
 {
     const linkColor = '#fbe9b4';
-    const linkHoverColor = 'white';
-    const popoverContentBgColor = '#c18c6a';
+    const linkHoverColor = '#de7c47';
+    const popoverContentBgColor = '#44545a';
 
     return (
         <Stack direction={'row'} spacing={4}>
@@ -155,7 +155,7 @@ const MobileNav = ({ items }: { items: Array<NavItem> }) =>
 {
     return (
         <Stack
-            bg="#fbe9b4"
+            bg="#44545a"
             p={4}
             display={{md: 'none'}}>
             {items.map((navItem) => (
@@ -179,11 +179,11 @@ const MobileNavItem = ({label, children, href}: NavItem) =>
                 align={'center'}
                 _hover={{
                     textDecoration: 'none',
-                }}
-                onClick={(e) => children && e.preventDefault()}>
+                    color: '#de7c47'
+                }}>
                 <Text
                     fontWeight={600}
-                    color="gray.300">
+                    color="#fbe9b4">
                     {label}
                 </Text>
                 {children && (
@@ -193,7 +193,7 @@ const MobileNavItem = ({label, children, href}: NavItem) =>
                         transform={isOpen ? 'rotate(180deg)' : ''}
                         w={6}
                         h={6}
-                        color="gray.300"
+                        color="#fbe9b4"
                     />
                 )}
             </Flex>
@@ -204,11 +204,11 @@ const MobileNavItem = ({label, children, href}: NavItem) =>
                     pl={4}
                     borderLeft={1}
                     borderStyle={'solid'}
-                    borderColor="rgba(255, 255, 255, 0.1)"
+                    borderColor="#fbe9b4"
                     align={'start'}>
                     {children &&
                         children.map((child) => (
-                            <Link key={child.label} py={2} href={child.href} color="gray.400">
+                            <Link key={child.label} py={2} href={child.href} color="#fbe9b4">
                                 {child.label}
                             </Link>
                         ))}

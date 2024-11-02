@@ -4,6 +4,9 @@
 
 // maintain allman bracket style for consistency
 
+// react
+import { useNavigate } from "react-router-dom";
+
 // chakra-ui
 import {
   VStack,
@@ -11,48 +14,69 @@ import {
   Text,
   Button,
   Container,
-  Box,
+  HStack,
+  Center,
+  Flex
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
-import sunset from '../assets/images/SunsetBkgd.jpg';
-  
 
-function HomePage() {
+// components
+import PageWrapper from "../components/PageWrapper";
+import HomeHeader from "../components/HomeHeader";
+import HomeFooter from "../components/HomeFooter";
 
+function HomePage() 
+{
   let navigate = useNavigate();
-  const pageChange = () =>{
+  
+  const navigateToBooking = () =>
+  {
     let path = `booking`;
     navigate(path);
   }
+
+  const navigateToAdmin = () =>
+  {
+    let path = `admin`;
+    navigate(path);
+  }
+
   return (
-    <Container maxW="container.xl" py={10} >
-
-      <VStack spacing={8} align="stretch">
-
-        
-        <Heading as="h1" className="mainHeader" size="2xl" textAlign="center">
-          Luxury, rest, and relaxation.
-
-        </Heading>
-        
-        <Text fontSize="xl" textAlign="center">
-          Plan your getaway today
-        </Text>
-        
-        <Button 
-          colorScheme="orange" 
-          size="lg" 
-          alignSelf="center"
-          onClick={pageChange}
-        >
- 
-          Book Now
-        </Button>
-
-      </VStack>
-    
-    </Container>
-
+    <PageWrapper showBackground={true}>
+      <HomeHeader />
+      <Flex minHeight="100vh" alignItems="center" maxHeight="100vh">
+        <Container maxW="container.xl">
+          <VStack spacing={8} align="center">
+            <Heading as="h1" className="mainHeader" size="2xl" textAlign="center">
+              Luxury, rest, and relaxation.
+            </Heading>
+            
+            <Text fontSize="xl" textAlign="center">
+              Plan your getaway today
+            </Text>
+            
+            <Center>
+              <HStack spacing={4}>
+                <Button 
+                  colorScheme="orange" 
+                  size="lg"
+                  onClick={navigateToBooking}
+                >
+                  Customer Portal
+                </Button>
+                <Button 
+                  colorScheme="blue" 
+                  size="lg"
+                  onClick={navigateToAdmin}
+                >
+                  Admin Portal
+                </Button>
+              </HStack>
+            </Center>
+          </VStack>
+        </Container>
+      </Flex>
+      <HomeFooter />
+    </PageWrapper>
   );
 }
 
