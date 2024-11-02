@@ -5,7 +5,7 @@
 // maintain allman bracket style for consistency
 
 // chakra-ui
-import { background, extendTheme, type ThemeConfig } from '@chakra-ui/react'
+import { background, extendTheme, Flex, type ThemeConfig } from '@chakra-ui/react'
 import { color } from 'framer-motion'
 import sunset from '../src/assets/images/SunsetBkgd.jpg'
 
