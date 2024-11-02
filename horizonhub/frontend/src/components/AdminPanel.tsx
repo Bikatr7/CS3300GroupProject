@@ -13,25 +13,12 @@ import {
   Box,
   Button,
   Heading,
-  Input,
   Textarea,
   useToast,
   Text,
   HStack,
   Divider,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  FormControl,
-  FormLabel,
-  VStack,
-  Icon,
 } from "@chakra-ui/react";
-
-// Icons
-import { ChevronUpIcon } from '@chakra-ui/icons';
 
 // Images
 import landingPageBg from '../assets/images/SunsetBkgd.jpg';
@@ -44,16 +31,10 @@ import theme from '../theme';
 
 function AdminPanel() 
 {
-    const [emailSubject, setEmailSubject] = useState('');
-    const [emailBody, setEmailBody] = useState('');
     const [sqlQuery, setSqlQuery] = useState('');
     const [queryResult, setQueryResult] = useState('');
-    const [backupStatus, setBackupStatus] = useState('');
-    const [replaceFile, setReplaceFile] = useState<File | null>(null);
-    const [replaceStatus, setReplaceStatus] = useState('');
     const toast = useToast();
     const modalRef = useRef<HTMLDivElement>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
     const [modalSize, setModalSize] = useState(() => {
         const savedSize = localStorage.getItem('adminPanelSize');
         return savedSize ? JSON.parse(savedSize) : { width: 800, height: 600 };
@@ -64,52 +45,6 @@ function AdminPanel()
     });
 
     const navigate = useNavigate();
-
-    const handleSendEmail = async () => 
-    {
-        try 
-        {
-            const response = await fetch(getURL('/admin/db/send-email'), 
-            {
-                method: 'POST',
-                headers: 
-                {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-                },
-                body: JSON.stringify({ subject: emailSubject, body: emailBody })
-            });
-
-            if (response.ok) 
-            {
-                toast({
-                    title: "Emails Sent",
-                    description: "The emails have been sent to all users successfully.",
-                    status: "success",
-                    duration: 5000,
-                    isClosable: true,
-                });
-                setEmailSubject('');
-                setEmailBody('');
-            } 
-            else 
-            {
-                const errorData = await response.json();
-                setQueryResult(JSON.stringify(errorData, null, 2));
-                throw new Error(errorData.message || 'Failed to send emails');
-            }
-        } 
-        catch (error) 
-        {
-            toast({
-                title: "Error",
-                description: (error as Error).message || "Failed to send emails. Please try again.",
-                status: "error",
-                duration: 5000,
-                isClosable: true,
-            });
-        }
-    };
 
     const handleRunQuery = async () => 
     {
@@ -150,113 +85,6 @@ function AdminPanel()
             toast({
                 title: "Error",
                 description: (error as Error).message || "Failed to run query. Please try again.",
-                status: "error",
-                duration: 5000,
-                isClosable: true,
-            });
-        }
-    };
-
-    const handleForceBackup = async () => 
-    {
-        try 
-        {
-            setBackupStatus('Starting backup...');
-            const response = await fetch(getURL('/admin/db/force-backup'), 
-            {
-                method: 'POST',
-                headers: 
-                {
-                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-                }
-            });
-
-            if (response.ok) 
-            {
-                setBackupStatus('Backup initiated successfully.');
-                toast({
-                    title: "Backup Initiated",
-                    description: "The backup process has started.",
-                    status: "success",
-                    duration: 5000,
-                    isClosable: true,
-                });
-            } 
-            else 
-            {
-                const errorData = await response.json();
-                setBackupStatus(`Backup failed: ${errorData.message || 'Unknown error'}`);
-                throw new Error(errorData.message || 'Failed to initiate backup');
-            }
-        } 
-        catch (error) 
-        {
-            setBackupStatus(`Backup error: ${(error as Error).message}`);
-            toast({
-                title: "Error",
-                description: (error as Error).message || "Failed to initiate backup. Please try again.",
-                status: "error",
-                duration: 5000,
-                isClosable: true,
-            });
-        }
-    };
-
-    const handleReplaceDatabase = async () => 
-    {
-        if (!replaceFile) 
-        {
-            toast({
-                title: "No File Selected",
-                description: "Please select a backup file to replace the database.",
-                status: "warning",
-                duration: 5000,
-                isClosable: true,
-            });
-            return;
-        }
-
-        try 
-        {
-            setReplaceStatus('Replacing database...');
-            const formData = new FormData();
-            formData.append('file', replaceFile);
-
-            const response = await fetch(getURL('/admin/db/replace-database'), 
-            {
-                method: 'POST',
-                headers: 
-                {
-                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-                },
-                body: formData
-            });
-
-            if (response.ok) 
-            {
-                const result = await response.json();
-                setReplaceStatus(result.message || 'Database replaced successfully.');
-                toast({
-                    title: "Database Replaced",
-                    description: result.message || "The database has been replaced successfully.",
-                    status: "success",
-                    duration: 5000,
-                    isClosable: true,
-                });
-            } 
-            else 
-            {
-                const errorData = await response.json();
-                setReplaceStatus(`Replace failed: ${errorData.message || 'Unknown error'}`);
-                throw new Error(errorData.message || 'Failed to replace database');
-            }
-        } 
-        catch (error) 
-        {
-            setReplaceStatus(`Replace error: ${(error as Error).message}`);
-            toast({
-                title: "Error",
-                description: (error as Error).message || "Failed to replace database. Please try again.",
                 status: "error",
                 duration: 5000,
                 isClosable: true,
@@ -326,34 +154,6 @@ function AdminPanel()
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
     };
-
-    const resetModalSizeAndPosition = () => 
-    {
-        const defaultSize = { width: 800, height: 600 };
-        const defaultPosition = { left: window.innerWidth / 2, top: window.innerHeight / 2 };
-        setModalSize(defaultSize);
-        setModalPosition(defaultPosition);
-        localStorage.removeItem('adminPanelSize');
-        localStorage.removeItem('adminPanelPosition');
-    };
-
-    useEffect(() => 
-    {
-        const handleKeyDown = (e: KeyboardEvent) => 
-        {
-            if (e.altKey && e.key === 'r') 
-            {
-                resetModalSizeAndPosition();
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-
-        return () => 
-        {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, []);
 
     useEffect(() => 
     {
@@ -426,148 +226,56 @@ function AdminPanel()
                     </Text>
                 </HStack>
                 <Divider mb={2} />
-                <Tabs variant="enclosed" colorScheme="orange" flex={1} display="flex" flexDirection="column">
-                    <TabList>
-                        <Tab _selected={{ color: theme.colors.brand.text, bg: theme.colors.brand.accent1 }}>Email</Tab>
-                        <Tab _selected={{ color: theme.colors.brand.text, bg: theme.colors.brand.accent1 }}>Query</Tab>
-                        <Tab _selected={{ color: theme.colors.brand.text, bg: theme.colors.brand.accent1 }}>Force Backup</Tab>
-                        <Tab _selected={{ color: theme.colors.brand.text, bg: theme.colors.brand.accent1 }}>Replace Database</Tab>
-                    </TabList>
-                    <TabPanels flex={1} overflow="hidden">
-                        <TabPanel height="100%" display="flex" flexDirection="column">
-                            <Input
-                                placeholder="Email Subject"
-                                value={emailSubject}
-                                onChange={(e) => setEmailSubject(e.target.value)}
-                                mb={2}
-                                bg={theme.colors.brand.background}
-                                color={theme.colors.brand.text}
-                                _placeholder={{ color: `${theme.colors.brand.text}80` }}
-                            />
-                            <Textarea
-                                placeholder="Email Body"
-                                value={emailBody}
-                                onChange={(e) => setEmailBody(e.target.value)}
-                                mb={2}
-                                flex={1}
-                                resize="none"
-                                bg={theme.colors.brand.background}
-                                color={theme.colors.brand.text}
-                                _placeholder={{ color: `${theme.colors.brand.text}80` }}
-                                sx={{
-                                    '&::-webkit-scrollbar': {
-                                        display: 'none',
-                                    },
-                                    scrollbarWidth: 'none',
-                                    overflow: 'auto',
-                                }}
-                            />
-                            <Button 
-                                onClick={handleSendEmail} 
-                                bg={theme.colors.brand.accent1}
-                                color={theme.colors.brand.text}
-                                _hover={{ bg: theme.colors.brand.accent4 }}
-                            >
-                                Send Email to All
-                            </Button>
-                        </TabPanel>
-                        <TabPanel height="100%" display="flex" flexDirection="column">
-                            <Textarea
-                                placeholder="Enter SQL Query"
-                                value={sqlQuery}
-                                onChange={(e) => setSqlQuery(e.target.value)}
-                                mb={2}
-                                flex={0.5}
-                                resize="none"
-                                bg={theme.colors.brand.background}
-                                color={theme.colors.brand.text}
-                                _placeholder={{ color: `${theme.colors.brand.text}80` }}
-                                sx={{
-                                    '&::-webkit-scrollbar': {
-                                        display: 'none',
-                                    },
-                                    scrollbarWidth: 'none',
-                                    overflow: 'auto',
-                                }}
-                            />
-                            <Button 
-                                onClick={handleRunQuery} 
-                                bg={theme.colors.brand.accent1}
-                                color={theme.colors.brand.text}
-                                _hover={{ bg: theme.colors.brand.accent4 }}
-                                mb={2}
-                            >
-                                Run Query
-                            </Button>
-                            {queryResult && (
-                                <Box
-                                    flex={1}
-                                    p={2}
-                                    bg={`${theme.colors.brand.background}80`}
-                                    borderRadius="md"
-                                    fontSize="sm"
-                                    fontFamily="monospace"
-                                    whiteSpace="pre-wrap"
-                                    overflow="auto"
-                                    color={theme.colors.brand.text}
-                                    sx={{
-                                        '&::-webkit-scrollbar': {
-                                            display: 'none',
-                                        },
-                                        scrollbarWidth: 'none',
-                                    }}
-                                >
-                                    {queryResult}
-                                </Box>
-                            )}
-                        </TabPanel>
-                        <TabPanel height="100%" display="flex" flexDirection="column">
-                            <Button onClick={handleForceBackup} colorScheme="orange" mb={2}>Force Backup</Button>
-                            {backupStatus && (
-                                <Text mt={2} color="whiteAlpha.800">
-                                    {backupStatus}
-                                </Text>
-                            )}
-                        </TabPanel>
-                        <TabPanel height="100%" display="flex" flexDirection="column">
-                            <FormControl mb={2}>
-                                <FormLabel>Upload Backup File</FormLabel>
-                                <input
-                                    type="file"
-                                    accept=".zip,.pgp"
-                                    onChange={(e) => {
-                                        if (e.target.files && e.target.files.length > 0) {
-                                            setReplaceFile(e.target.files[0]);
-                                        }
-                                    }}
-                                    ref={fileInputRef}
-                                    style={{ display: 'none' }}
-                                />
-                                <VStack
-                                    border="2px dashed"
-                                    borderColor="orange.400"
-                                    borderRadius="md"
-                                    p={4}
-                                    spacing={2}
-                                    alignItems="center"
-                                    cursor="pointer"
-                                    onClick={() => fileInputRef.current?.click()}
-                                >
-                                    <Icon as={ChevronUpIcon} w={8} h={8} color="orange.400" />
-                                    <Text color="orange.400">
-                                        {replaceFile ? replaceFile.name : "Click or drag to upload backup file"}
-                                    </Text>
-                                </VStack>
-                            </FormControl>
-                            <Button onClick={handleReplaceDatabase} colorScheme="orange" mb={2}>Replace Database</Button>
-                            {replaceStatus && (
-                                <Text mt={2} color="whiteAlpha.800">
-                                    {replaceStatus}
-                                </Text>
-                            )}
-                        </TabPanel>
-                    </TabPanels>
-                </Tabs>
+                <Box height="100%" display="flex" flexDirection="column">
+                    <Textarea
+                        placeholder="Enter SQL Query"
+                        value={sqlQuery}
+                        onChange={(e) => setSqlQuery(e.target.value)}
+                        mb={2}
+                        flex={0.5}
+                        resize="none"
+                        bg={theme.colors.brand.background}
+                        color={theme.colors.brand.text}
+                        _placeholder={{ color: `${theme.colors.brand.text}80` }}
+                        sx={{
+                            '&::-webkit-scrollbar': {
+                                display: 'none',
+                            },
+                            scrollbarWidth: 'none',
+                            overflow: 'auto',
+                        }}
+                    />
+                    <Button 
+                        onClick={handleRunQuery} 
+                        bg={theme.colors.brand.accent1}
+                        color={theme.colors.brand.text}
+                        _hover={{ bg: theme.colors.brand.accent4 }}
+                        mb={2}
+                    >
+                        Run Query
+                    </Button>
+                    {queryResult && (
+                        <Box
+                            flex={1}
+                            p={2}
+                            bg={`${theme.colors.brand.background}80`}
+                            borderRadius="md"
+                            fontSize="sm"
+                            fontFamily="monospace"
+                            whiteSpace="pre-wrap"
+                            overflow="auto"
+                            color={theme.colors.brand.text}
+                            sx={{
+                                '&::-webkit-scrollbar': {
+                                    display: 'none',
+                                },
+                                scrollbarWidth: 'none',
+                            }}
+                        >
+                            {queryResult}
+                        </Box>
+                    )}
+                </Box>
                 <Box
                     position="absolute"
                     bottom="0"
