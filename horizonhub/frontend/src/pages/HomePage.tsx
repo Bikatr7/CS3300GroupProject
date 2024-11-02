@@ -11,12 +11,11 @@ import {
   Text,
   Button,
   Container,
+  Box,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-
+import sunset from '../assets/images/SunsetBkgd.jpg';
   
-
-
 
 function HomePage() {
 
@@ -26,7 +25,7 @@ function HomePage() {
     navigate(path);
   }
   return (
-    <Container maxW="container.xl" py={10}>
+    <Container maxW="container.xl" py={10} >
 
       <VStack spacing={8} align="stretch">
 
@@ -49,9 +48,11 @@ function HomePage() {
  
           Book Now
         </Button>
-        
+
       </VStack>
+    
     </Container>
+
   );
 }
 

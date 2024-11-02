@@ -7,47 +7,60 @@
 // chakra-ui
 import {
     VStack,
+    HStack,
     Heading,
+    Box,
     Text,
     Button,
     Container,
+    Flex,
+    SimpleGrid,
+    GridItem,
+    FormControl,
+    FormLabel,
+    Input,
+    Select,
+    Checkbox
   } from "@chakra-ui/react";
-  //import { useNavigate } from "react-router-dom";
+  import { DatePicker, Stack } from 'rsuite';
+  //import { ReactDOM } from "react";
+  import { useNavigate } from "react-router-dom";
+  //import * as React from 'react';
+  import { useState } from "react";
+  import { DateRangePicker } from "react-date-range";
+  import "react-date-range/dist/styles.css";
+  import "react-date-range/dist/theme/default.css"
+
 
   function BookingPage() {
-/*
+
     let navigate = useNavigate();
     const pageChange = () =>{
-      let path = `booking`;
+      let path = `checkout`;
       navigate(path);
     }
-      */
+
+    const [date, setDate] = useState(
+      {
+        startDate: new Date(),
+        endDate: new Date(),
+        key: 'selection'
+      }
+    );
+      
     return (
-      <Container maxW="container.xl" py={10}>
-  
-        <VStack spacing={8} align="stretch">
-  
-          
-          <Heading as="h1" className="mainHeader" size="2xl" textAlign="center">
-            Book a Room
-  
-          </Heading>
-          
-          <Text fontSize="xl" textAlign="center">
-            probably remove
-          </Text>
-          
-          <Button 
-            colorScheme="orange" 
-            size="lg" 
-            alignSelf="center"
-            //onClick={pageChange}
+      <Container maxW="container.xl" p={0}>
+
+        <Flex h="60vh" py={20} display="flex">
+          <span className="calendar" color="#2e343c"></span>
+          <DateRangePicker className='picker' ranges={[date]} onChange={()=>{}} 
           >
-   
-            Book Now
-          </Button>
-          
-        </VStack>
+
+          </DateRangePicker>
+        </Flex>
+        <Button colorScheme="orange" size="lg" w="full" alignSelf="center" 
+            onClick={pageChange}>Book Room</Button>
+        
       </Container>
     );
   }

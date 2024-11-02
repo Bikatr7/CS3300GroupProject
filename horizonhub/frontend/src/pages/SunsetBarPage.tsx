@@ -15,13 +15,6 @@ import {
   //import { useNavigate } from "react-router-dom";
 
   function SunsetBarPage() {
-/*
-    let navigate = useNavigate();
-    const pageChange = () =>{
-      let path = `booking`;
-      navigate(path);
-    }
-      */
     return (
       <Container maxW="container.xl" py={10}>
   

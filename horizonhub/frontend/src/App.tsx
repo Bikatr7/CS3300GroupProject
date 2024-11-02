@@ -21,7 +21,6 @@ import Navbar from "./components/Navbar.tsx";
 import Footer from "./components/Footer.tsx";
 import Router from './Router.tsx';
 import { AuthProvider } from "./contexts/AuthContext.tsx";
-
 // the below should be fine but if we run into an issue, contact me - Kaden
 
 function App() 

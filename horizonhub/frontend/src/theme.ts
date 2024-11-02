@@ -7,6 +7,7 @@
 // chakra-ui
 import { background, extendTheme, type ThemeConfig } from '@chakra-ui/react'
 import { color } from 'framer-motion'
+import sunset from '../src/assets/images/SunsetBkgd.jpg'
 
 const config: ThemeConfig = 
 {
@@ -25,15 +26,21 @@ const theme = extendTheme(
             'html, body': 
             {
                 color: '#fbe9b4',
-
-
             },
-            '.mainHeader':{
-                color: '#fbe9b4'
-                
+            '.mainHeader':
+            {
+
+                color: '#fbe9b4',
+
             }
         },
+        dateRangePicker:{
+            '.picker':{
+                padding:20,
+                border: 2 
 
+            }
+        }
         
     },
 })
