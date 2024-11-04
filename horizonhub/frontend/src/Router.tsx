@@ -46,7 +46,6 @@ const ProtectedAdminRoute = ({ children }: { children: ReactNode }) =>
             {
                 try 
                 {
-                    // TODO: adjust this to the correct endpoint
                     const response = await fetch(getURL('/auth/check-if-admin-user'), 
                     {
                         method: 'POST',
@@ -143,6 +142,7 @@ function Router()
 
     // Default case: 404 Not Found
     // can make some pretty 404 page later
+    // Also need 403 and 500's
     return <div>404 Not Found</div>;
 }
 

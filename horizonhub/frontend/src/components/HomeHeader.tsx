@@ -42,8 +42,8 @@ const HomeHeader: React.FC = () =>
     return (
         <Box position="absolute" top={0} left={0} right={0} zIndex={1} mb={4}>
             <Flex
-                bg="#512316"
-                color="#fbe9b4"
+                bg="brand.headerFooter"
+                color="brand.text"
                 minH={'60px'}
                 py={{ base: 2 }}
                 px={{ base: 4 }}
@@ -68,7 +68,7 @@ const HomeHeader: React.FC = () =>
                                 }
                                 variant={'ghost'}
                                 aria-label={'Toggle Navigation'}
-                                color="#fbe9b4"
+                                color="brand.text"
                                 _hover={{ bg: 'rgba(251, 233, 180, 0.1)' }}
                             />
                         </Flex>
@@ -82,7 +82,15 @@ const HomeHeader: React.FC = () =>
                     <Flex align="center">
                         {!isLoading && isLoggedIn && userEmail && (
                             <Flex align="center">
-                                <Link as={RouterLink} to="/profile" fontSize="sm" fontWeight="medium" color="#fbe9b4" mr={4}>
+                                <Link 
+                                    as={RouterLink} 
+                                    to="/profile" 
+                                    fontSize="sm" 
+                                    fontWeight="medium" 
+                                    color="brand.text" 
+                                    mr={4}
+                                    _hover={{ color: 'brand.accent1' }}
+                                >
                                     {userEmail}
                                 </Link>
                             </Flex>
@@ -94,7 +102,7 @@ const HomeHeader: React.FC = () =>
             <Collapse in={isOpen} animateOpacity>
                 <MobileNav items={navItems}/>
             </Collapse>
-            <Divider borderColor="#fbe9b4" opacity={0.3} />
+            <Divider borderColor="brand.text" opacity={0.3} />
         </Box>
     );
 };

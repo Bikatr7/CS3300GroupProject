@@ -72,26 +72,40 @@ function HomePage()
       <Flex minHeight="100vh" alignItems="center" maxHeight="100vh">
         <Container maxW="container.xl">
           <VStack spacing={8} align="center">
-            <Heading as="h1" className="mainHeader" size="2xl" textAlign="center">
+            <Heading 
+              as="h1" 
+              className="mainHeader" 
+              size="2xl" 
+              textAlign="center"
+              color="brand.text"
+            >
               Luxury, rest, and relaxation.
             </Heading>
             
-            <Text fontSize="xl" textAlign="center">
+            <Text 
+              fontSize="xl" 
+              textAlign="center"
+              color="brand.text"
+            >
               Plan your getaway today
             </Text>
             
             <Center>
               <HStack spacing={4}>
                 <Button 
-                  colorScheme="orange" 
+                  bg="brand.accent1"
+                  color="brand.text"
                   size="lg"
+                  _hover={{ bg: 'brand.accent4' }}
                   onClick={navigateToCustomerPortal}
                 >
                   Customer Portal
                 </Button>
                 <Button 
-                  colorScheme="blue" 
+                  bg="brand.accent3"
+                  color="brand.text"
                   size="lg"
+                  _hover={{ bg: 'brand.accent2' }}
                   onClick={handleAdminClick}
                 >
                   Admin Portal

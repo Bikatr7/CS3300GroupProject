@@ -10,6 +10,7 @@ const getURL = (path: string) =>
 
     if(process.env.NODE_ENV === "production") 
     {
+        // if we ever make a production build, we need to change this
         url = ""
     } 
     else if (process.env.NODE_ENV === "development") 

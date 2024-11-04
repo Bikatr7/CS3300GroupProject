@@ -46,7 +46,7 @@ function PageWrapper({ children, showBackground = false, zIndex = 1 }: PageWrapp
                 position="relative"
                 maxWidth="container.xl"
                 margin="0 auto"
-                backgroundColor="#2e343c"
+                backgroundColor="brand.background"
                 minHeight="100vh"
                 px={4}
                 zIndex={zIndex}

@@ -120,15 +120,12 @@ const customStyles = `
   }
 `;
 
-// Update the Value type import
-import { Value } from "@wojtekmaj/react-daterange-picker/dist/esm/shared/types";
-
 function BookingPage() 
 {
     const navigate = useNavigate();
-    const [dateRange, setDateRange] = useState<Value>(null);
+    const [dateRange, setDateRange] = useState<any>(null);
     
-    const handleDateChange = (value: Value) =>
+    const handleDateChange = (value: any) =>
     {
         setDateRange(value);
     };
@@ -144,8 +141,8 @@ function BookingPage()
             <Flex minHeight="calc(100vh - 100px)" alignItems="center">
                 <Container maxW="container.xl">
                     <VStack spacing={8} w="full" py={8}>
-                        <Heading size="xl">Select Your Dates</Heading>
-                        <Text>Choose your check-in and check-out dates</Text>
+                        <Heading size="xl" color="brand.text">Select Your Dates</Heading>
+                        <Text color="brand.text">Choose your check-in and check-out dates</Text>
                         
                         <Flex justifyContent="center" w="full">
                             <DateRangePicker 
@@ -157,10 +154,12 @@ function BookingPage()
                         </Flex>
 
                         <Button 
-                            colorScheme="orange" 
+                            bg="brand.accent1"
+                            color="brand.text"
                             size="lg" 
                             w="full" 
                             maxW="400px"
+                            _hover={{ bg: 'brand.accent4' }}
                             onClick={handleBooking}
                         >
                             Continue to Booking
@@ -171,4 +170,5 @@ function BookingPage()
         </>
     );
 }
+
 export default BookingPage;

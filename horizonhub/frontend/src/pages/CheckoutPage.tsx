@@ -63,12 +63,15 @@ function CheckOutPage()
                     textAlign="center"
                     bg="white"
                     color="brand.accent3"
+                    _placeholder={{ color: 'brand.accent3' }}
                 />
                 
                 <Button
-                    colorScheme="orange"
+                    bg="brand.accent1"
+                    color="brand.text"
                     onClick={handleSubmit}
                     size="lg"
+                    _hover={{ bg: 'brand.accent4' }}
                 >
                     Check Out
                 </Button>

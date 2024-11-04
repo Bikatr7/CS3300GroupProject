@@ -21,13 +21,13 @@ interface FooterContentProps
     color?: string;
 }
 
-const FooterContent: React.FC<FooterContentProps> = ({ color = 'gray.600' }) => 
+const FooterContent: React.FC<FooterContentProps> = () => 
 {
     return (
         <Container as={Stack} maxW={'6xl'}>
             <Flex align="center" justify="center">
                 <Image src={logo} alt="Horizon Hotel Logo" boxSize="30px" mr={3} />
-                <Text fontSize={'sm'} color={color}>
+                <Text fontSize={'sm'} color="brand.text">
                     © Horizon Hotel Group 2024. All rights reserved.
                 </Text>
             </Flex>

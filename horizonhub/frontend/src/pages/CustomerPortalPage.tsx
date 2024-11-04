@@ -64,8 +64,11 @@ function CustomerPortalPage()
                             borderRadius="lg"
                             cursor="pointer"
                             onClick={() => navigate(option.path)}
-                            _hover={{ transform: "translateY(-5px)" }}
-                            transition="transform 0.2s"
+                            _hover={{ 
+                                transform: "translateY(-5px)",
+                                bg: "brand.accent2"
+                            }}
+                            transition="all 0.2s"
                         >
                             <VStack spacing={4}>
                                 <Icon as={option.icon} w={10} h={10} color="brand.text" />
@@ -75,7 +78,11 @@ function CustomerPortalPage()
                                 <Text color="brand.text" textAlign="center">
                                     {option.description}
                                 </Text>
-                                <Button colorScheme="orange">
+                                <Button 
+                                    bg="brand.accent1"
+                                    color="brand.text"
+                                    _hover={{ bg: 'brand.accent4' }}
+                                >
                                     Continue
                                 </Button>
                             </VStack>

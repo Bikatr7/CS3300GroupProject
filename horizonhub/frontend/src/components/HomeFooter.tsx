@@ -21,14 +21,14 @@ const HomeFooter: React.FC = () =>
             bottom={0}
             left={0}
             right={0}
-            bg="#512316"
-            color="white"
+            bg="brand.headerFooter"
+            color="brand.text"
             py={4}
             zIndex={1}
             marginTop={10}
         >
-            <Divider borderColor="#fbe9b4" opacity={0.3} mb={4} />
-            <FooterContent color="#fbe9b4" />
+            <Divider borderColor="brand.text" opacity={0.3} mb={4} />
+            <FooterContent />
         </Box>
     );
 };

@@ -14,8 +14,8 @@ function Footer()
 {
     return (
         <Box
-            bg="#512316"
-            color="gray.300"
+            bg="brand.headerFooter"
+            color="brand.text"
             borderTop="1px"
             borderColor="rgba(255, 255, 255, 0.1)"
             boxShadow="0 -1px 2px 0 rgba(0, 0, 0, 0.05)"
@@ -30,10 +30,9 @@ function Footer()
                 direction={{ base: 'column', md: 'row' }}
                 justify="space-between"
                 align="center"
-                color="gray.300"
             >
                 <Flex display={{ base: 'flex', md: 'none' }} width="100%" justify="space-between" align="center">
-                    <Text textAlign="center">© Horizon Hotel Group 2024. All rights reserved.</Text>
+                    <Text textAlign="center" color="brand.text">© Horizon Hotel Group 2024. All rights reserved.</Text>
                     <Link href="/">
                         <Image src={logo} boxSize='30px' alt='Kakusui Logo' />
                     </Link>
@@ -42,7 +41,7 @@ function Footer()
                     <Link href="/">
                         <Image src={logo} boxSize='30px' alt='Kakusui Logo' />
                     </Link>
-                    <Text textAlign="center" flex="1" color="#fbe9b4">© Horizon Hotel Group 2024. All rights reserved.</Text>
+                    <Text textAlign="center" flex="1" color="brand.text">© Horizon Hotel Group 2024. All rights reserved.</Text>
                 </Flex>
             </Flex>
         </Box>

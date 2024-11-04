@@ -39,7 +39,7 @@ export default function Navbar({ isHomePage }: NavbarProps)
 
     const navItems = isPrivilegedUser ? [...NAV_ITEMS, { label: 'Admin', href: '/admin' }] : NAV_ITEMS;
 
-    const bgColor = isHomePage ? 'transparent' : '#512316';
+    const bgColor = isHomePage ? 'transparent' : 'brand.headerFooter';
     const borderColor = isHomePage ? 'transparent' : 'rgba(255, 255, 255, 0.1)';
     const boxShadow = isHomePage ? 'none' : '0 1px 2px 0 rgba(0, 0, 0, 0.05)';
 
@@ -47,7 +47,7 @@ export default function Navbar({ isHomePage }: NavbarProps)
         <Box>
             <Flex
                 bg={bgColor}
-                color="white"
+                color="brand.text"
                 minH={'60px'}
                 py={{base: 2}}
                 px={{base: 4}}
@@ -76,7 +76,8 @@ export default function Navbar({ isHomePage }: NavbarProps)
                                 }
                                 variant={'ghost'}
                                 aria-label={'Toggle Navigation'}
-                                color="white"
+                                color="brand.text"
+                                _hover={{ bg: 'rgba(251, 233, 180, 0.1)' }}
                             />
                         </Flex>
                         <Link href="/">
@@ -88,7 +89,7 @@ export default function Navbar({ isHomePage }: NavbarProps)
                     </Flex>
                     <Flex align="center">
                         {!isLoading && isLoggedIn && userEmail && (
-                            <Text mr={4} fontSize="sm">{userEmail}</Text>
+                            <Text mr={4} fontSize="sm" color="brand.text">{userEmail}</Text>
                         )}
                         <Login />
                     </Flex>
