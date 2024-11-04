@@ -17,6 +17,8 @@ import HomePage from "./pages/HomePage.tsx";
 import BookingPage from './pages/BookingPage.tsx';
 import SunsetBarPage from './pages/SunsetBarPage.tsx';
 import CheckoutPage from './pages/CheckoutPage.tsx';
+import CheckInPage from './pages/CheckInPage.tsx';
+import CustomerPortalPage from './pages/CustomerPortalPage.tsx';
 
 // auth
 import { useAuth } from './contexts/AuthContext.tsx';
@@ -120,6 +122,14 @@ function Router()
     if (path === '/checkout')
     {
         return <CheckoutPage />
+    }
+    if (path === '/checkin')
+    {
+        return <CheckInPage />
+    }
+    if (path === '/customer')
+    {
+        return <CustomerPortalPage />
     }
 
     if (path === '/admin') 

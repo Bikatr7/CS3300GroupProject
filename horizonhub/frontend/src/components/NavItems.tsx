@@ -41,6 +41,16 @@ const NAV_ITEMS: Array<NavItem> = [
                 subLabel: 'Rooms and Suites',
                 href: '/booking',
             },
+            {
+                label: 'Check In',
+                subLabel: 'Check in to your room',
+                href: '/checkin',
+            },
+            {
+                label: 'Check Out',
+                subLabel: 'Check out of your room',
+                href: '/checkout',
+            },
         ],
     },
     {

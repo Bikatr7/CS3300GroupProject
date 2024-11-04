@@ -61,10 +61,9 @@ function HomePage()
     navigate('/admin');
   };
 
-  const navigateToBooking = () =>
+  const navigateToCustomerPortal = () =>
   {
-    let path = `booking`;
-    navigate(path);
+    navigate('/customer');
   }
 
   return (
@@ -86,7 +85,7 @@ function HomePage()
                 <Button 
                   colorScheme="orange" 
                   size="lg"
-                  onClick={navigateToBooking}
+                  onClick={navigateToCustomerPortal}
                 >
                   Customer Portal
                 </Button>

@@ -18,7 +18,7 @@ import {
     useToast
 } from "@chakra-ui/react";
 
-function CheckOutPage() 
+function CheckInPage() 
 {
     const [code, setCode] = useState("");
     const toast = useToast();
@@ -39,8 +39,8 @@ function CheckOutPage()
 
         // Hardcoded response for now
         toast({
-            title: "Check-out Successful",
-            description: "Thank you for staying with us! We hope to see you again soon.",
+            title: "Check-in Successful",
+            description: "Welcome to Horizon Hotel! Your room is 301.",
             status: "success",
             duration: 5000,
             isClosable: true,
@@ -50,8 +50,8 @@ function CheckOutPage()
     return (
         <Container maxW="container.md" py={10}>
             <VStack spacing={8}>
-                <Heading color="brand.text">Check Out</Heading>
-                <Text color="brand.text">Please enter your 6-digit check-out code</Text>
+                <Heading color="brand.text">Check In</Heading>
+                <Text color="brand.text">Please enter your 6-digit check-in code</Text>
                 
                 <Input
                     placeholder="Enter code"
@@ -70,11 +70,11 @@ function CheckOutPage()
                     onClick={handleSubmit}
                     size="lg"
                 >
-                    Check Out
+                    Check In
                 </Button>
             </VStack>
         </Container>
     );
 }
 
-export default CheckOutPage;
+export default CheckInPage; 
