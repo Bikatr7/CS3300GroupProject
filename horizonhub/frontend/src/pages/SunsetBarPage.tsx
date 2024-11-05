@@ -11,8 +11,11 @@ import {
     Text,
     Button,
     Container,
+    Image,
+    Box
 } from "@chakra-ui/react";
-//import { useNavigate } from "react-router-dom";
+
+import barPhoto from '../assets/images/pexels-pixabay-260922.jpg'
 
 function SunsetBarPage() 
 {
@@ -36,7 +39,15 @@ function SunsetBarPage()
                 >
                     Watch the sunset with one of our signature cocktails
                 </Text>
+                <Box pos="relative" alignContent="center" h="600px" w="900px" >
+                    <Image src={barPhoto} alignSelf="center" opacity="0.5" boxSize="full" />
+                    <Text pos="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" fontSize="20px" fontWeight="bold">
+                        Signature Cocktails
+                        
+                    </Text>
+                </Box>
                 
+
                 <Button 
                     bg="brand.accent1"
                     color="brand.text"
