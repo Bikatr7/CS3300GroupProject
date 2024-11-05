@@ -28,6 +28,7 @@ import { getURL } from './utils/index.ts';
 
 // components
 import AdminPanel from './components/AdminPanel.tsx';
+import AmenitiesPage from './pages/Amenities.tsx';
 
 const ProtectedAdminRoute = ({ children }: { children: ReactNode }) => 
 {
@@ -129,6 +130,10 @@ function Router()
     if (path === '/customer')
     {
         return <CustomerPortalPage />
+    }
+    if(path === '/amenities')
+    {
+        return <AmenitiesPage/>
     }
 
     if (path === '/admin') 
