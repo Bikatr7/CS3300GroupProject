@@ -35,17 +35,18 @@ import {
       <Container maxW="container.xl" py={10}>
        {/*room types*/}
         <Heading textAlign="center">Rooms</Heading>
+
         <VStack justify="space-between" align="center" direction="column" gap="8">
             <Spacer />
 
             {/*king suite*/}
-            <Box w="1000px" bg="transparent" h="600px" 
+            <Box alignContent={"center"} w="1000px" bg="transparent" h="600px" 
               borderRadius="10px" borderWidth="1px" borderColor="#fbe9b4">
               <Text color="#fbe9b4" textAlign="center" fontWeight="bold" fontSize="25">King Suite</Text> 
               <Text color="#fbe9b4" textAlign="center" padding="10px" >
                 Our King Suite is designed for the height of luxury and relaxation for up to two guests.
               </Text>
-              <Image src={kingBed} h="500px"></Image>
+              <Image src={kingBed} h="500px" alignContent="center"></Image>
               </Box> 
               
             {/*double room*/}
@@ -93,6 +94,7 @@ import {
               <Image src={pool} h="400"></Image>
           </Box>
         </VStack>
+
       </Container>
     );
   }
