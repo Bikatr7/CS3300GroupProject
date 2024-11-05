@@ -55,20 +55,7 @@ const NAV_ITEMS: Array<NavItem> = [
     },
     {
         label: 'Amenities',
-        children: [
-            {
-                label: 'Rooms',
-                href: '/rooms',
-            },
-            {
-                label: 'Indoor Pool',
-                href: '/pool',
-            },
-            {
-                label: 'Food and Room Service',
-                href: '/foodprogram',
-            },
-        ]
+        href: '/amenities',
         
     },
     {
