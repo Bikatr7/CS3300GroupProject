@@ -15,7 +15,8 @@ import {
     Flex,
     VStack,
     Text,
-    Heading
+    Heading,
+    Box
 } from "@chakra-ui/react";
 
 // date picker
@@ -120,10 +121,42 @@ const customStyles = `
   }
 `;
 
+// Add this interface after imports
+interface Room 
+{
+    id: number;
+    name: string;
+    price: number;
+    description: string;
+}
+
 function BookingPage() 
 {
     const navigate = useNavigate();
     const [dateRange, setDateRange] = useState<any>(null);
+    const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
+
+    // Hardcoded rooms data
+    const rooms: Room[] = [
+        {
+            id: 1,
+            name: "Ocean View Suite",
+            price: 299.99,
+            description: "Luxurious suite with panoramic ocean views"
+        },
+        {
+            id: 2,
+            name: "Garden Deluxe Room",
+            price: 199.99,
+            description: "Peaceful room overlooking our tropical gardens"
+        },
+        {
+            id: 3,
+            name: "Presidential Suite",
+            price: 499.99,
+            description: "Our finest accommodation with premium amenities"
+        }
+    ];
     
     const handleDateChange = (value: any) =>
     {
@@ -132,38 +165,112 @@ function BookingPage()
 
     const handleBooking = () =>
     {
-        navigate('/payment');
+        if(!dateRange || !selectedRoom)
+        {
+            return;
+        }
+        
+        // Pass booking details through navigation state
+        navigate('/payment', {
+            state: {
+                dateRange,
+                room: selectedRoom
+            }
+        });
     };
       
     return (
         <>
             <style>{customStyles}</style>
-            <Flex minHeight="calc(100vh - 100px)" alignItems="center">
+            <Flex minHeight="calc(100vh - 100px)" alignItems="center" bg="brand.background">
                 <Container maxW="container.xl">
                     <VStack spacing={8} w="full" py={8}>
-                        <Heading size="xl" color="brand.text">Select Your Dates</Heading>
-                        <Text color="brand.text">Choose your check-in and check-out dates</Text>
+                        <Heading size="xl" color="brand.cream">Book Your Stay</Heading>
                         
-                        <Flex justifyContent="center" w="full">
-                            <DateRangePicker 
-                                value={dateRange}
-                                onChange={handleDateChange}
-                                format="y-MM-dd"
-                                minDate={new Date()}
-                            />
-                        </Flex>
+                        <VStack spacing={4} w="full">
+                            <Text color="brand.cream" fontWeight="bold">1. Select Your Dates</Text>
+                            <Flex justifyContent="center" w="full">
+                                <DateRangePicker 
+                                    value={dateRange}
+                                    onChange={handleDateChange}
+                                    format="y-MM-dd"
+                                    minDate={new Date()}
+                                />
+                            </Flex>
 
-                        <Button 
-                            bg="brand.accent1"
-                            color="brand.text"
-                            size="lg" 
-                            w="full" 
-                            maxW="400px"
-                            _hover={{ bg: 'brand.accent4' }}
-                            onClick={handleBooking}
-                        >
-                            Continue to Booking
-                        </Button>
+                            {dateRange && (
+                                <>
+                                    <Text color="brand.cream" fontWeight="bold" mt={6}>2. Select Your Room</Text>
+                                    <VStack spacing={4} w="full" maxW="600px">
+                                        {rooms.map((room) => (
+                                            <Box
+                                                key={room.id}
+                                                w="full"
+                                                bg="brand.accent3"
+                                                p={6}
+                                                borderRadius="lg"
+                                                cursor="pointer"
+                                                onClick={() => setSelectedRoom(room)}
+                                                position="relative"
+                                                transform="translateZ(0)"  // Forces GPU acceleration
+                                                _hover={{ 
+                                                    "&::after": {
+                                                        transform: "translateY(-5px)",
+                                                        opacity: 1
+                                                    }
+                                                }}
+                                                _after={{
+                                                    content: '""',
+                                                    position: "absolute",
+                                                    inset: 0,
+                                                    bg: "brand.accent2",
+                                                    borderRadius: "lg",
+                                                    opacity: 0,
+                                                    transition: "all 0.2s",
+                                                    zIndex: -1
+                                                }}
+                                                border={selectedRoom?.id === room.id ? "2px solid" : "none"}
+                                                borderColor={selectedRoom?.id === room.id ? "brand.accent1" : "transparent"}
+                                            >
+                                                <VStack align="start" w="full" spacing={2}>
+                                                    <Heading 
+                                                        size="md" 
+                                                        color="brand.text"
+                                                    >
+                                                        {room.name}
+                                                    </Heading>
+                                                    <Text 
+                                                        color="brand.text"
+                                                    >
+                                                        {room.description}
+                                                    </Text>
+                                                    <Text 
+                                                        color="brand.text"
+                                                        fontWeight="bold"
+                                                    >
+                                                        ${room.price}/night
+                                                    </Text>
+                                                </VStack>
+                                            </Box>
+                                        ))}
+                                    </VStack>
+
+                                    <Button 
+                                        bg="brand.accent1"
+                                        color="brand.text"
+                                        size="lg" 
+                                        w="full" 
+                                        maxW="400px"
+                                        mt={6}
+                                        _hover={{ bg: 'brand.accent4' }}
+                                        onClick={handleBooking}
+                                        isDisabled={!selectedRoom}
+                                    >
+                                        Continue to Payment
+                                    </Button>
+                                </>
+                            )}
+                        </VStack>
                     </VStack>
                 </Container>
             </Flex>

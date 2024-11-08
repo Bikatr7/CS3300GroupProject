@@ -1,97 +1,128 @@
 // Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject) ([url placeholder])
-  // Use of this source code is governed by an GNU Affero General Public License v3.0
-  // license that can be found in the LICENSE file.
-  // maintain allman bracket style for consistency
-  // chakra-ui
-  import {
-      VStack,
-      Heading,
-      Text,
-      Button,
-      Container,
-      Flex,
-      SimpleGrid,
-      GridItem,
-      FormControl,
-      FormLabel,
-      Input,
-      Select,
-      Checkbox
-    } from "@chakra-ui/react";
-    import { useNavigate } from "react-router-dom";
-    function PaymentPage() {
-      let navigate = useNavigate();
-    const pageChange = () =>{
-    let path = `booking`;
-    navigate(path);
-  }
-    return(
-      <Container  maxW="container.xl" p={0}>
-        <Flex h="100vh" py={20}>
-        <VStack w ="full" h = "full" p={10} spacing={10} align="flex-start">
-          <VStack spacing={3} align={"flex-start"}>
-          <Heading as="h1" className="mainHeader" size="2xl" textAlign="center">
-          Your details
-          </Heading>
-        </VStack>
-        <SimpleGrid columns={2} columnGap={3} rowGap={6} width="full">
-          <GridItem colSpan={1}>
-            <FormControl>
-              <FormLabel>First Name</FormLabel>
-              <Input placeholder="Jane" />
-            </FormControl>
-          </GridItem>
-          <GridItem colSpan={1}>
-            <FormControl>
-              <FormLabel>Last Name</FormLabel>
-              <Input placeholder="Doe" />
-            </FormControl>
-          </GridItem>
-          <GridItem colSpan={2}>
-            <FormControl>
-              <FormLabel>Street Address</FormLabel>
-              <Input placeholder="123 Easy St." />
-            </FormControl>
-          </GridItem>
-          <GridItem colSpan={1}>
-            <FormControl>
-              <FormLabel>City</FormLabel>
-              <Input placeholder="Anytown" />
-            </FormControl>
-          </GridItem>
-          <GridItem colSpan={1}>
-            <FormControl>
-              <FormLabel>Country</FormLabel>
-              <Select>
-                <option value="usa">United States of America</option>
-                <option value="uae">United Arab Emirates</option>
-                <option value="de">Germany</option>
-              </Select>
-            </FormControl>
-          </GridItem>
-          <GridItem colSpan={2}>
-            <Checkbox defaultChecked>Confirm Billing Address is Correct</Checkbox>
-          </GridItem>
-          <GridItem colSpan={2}>
-            <Button colorScheme="orange" size="lg" w="full" alignSelf="center">Continue to Checkout</Button>
-          </GridItem>
-        </SimpleGrid>
-      </VStack>
-  /{/* component2 */}
-  <VStack w ="full" h = "full" p={10} spacing={10} align="flex-start" bg="gray.50">
-    <Heading as="h1" className="mainHeader" size="2xl" textAlign="center">
-    Book a Room
-    </Heading>
-    <Text fontSize="xl" textAlign="center">
-    probably remove
-    </Text>
-    <Button colorScheme="orange" size="lg" alignSelf="center">
-    Book Now
-    </Button>
-  </VStack>
-  </Flex>
-  </Container>
-      );
-      
-  }
-  export default PaymentPage;
+// Use of this source code is governed by an GNU Affero General Public License v3.0
+// license that can be found in the LICENSE file.
+
+// maintain allman bracket style for consistency
+
+// react
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
+// chakra-ui
+import {
+    Button,
+    Container,
+    VStack,
+    Text,
+    Heading,
+    FormControl,
+    FormLabel,
+    Input,
+    useToast
+} from "@chakra-ui/react";
+
+function PaymentPage() 
+{
+    const location = useLocation();
+    const navigate = useNavigate();
+    const toast = useToast();
+    const [isProcessing, setIsProcessing] = useState(false);
+
+    const { dateRange, room } = location.state || {};
+
+    const handleSubmit = (e: React.FormEvent) =>
+    {
+        e.preventDefault();
+        setIsProcessing(true);
+
+        // Simulate payment processing
+        setTimeout(() => 
+        {
+            setIsProcessing(false);
+            toast({
+                title: "Booking Confirmed!",
+                description: "Your room has been successfully booked.",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+            });
+            navigate('/');
+        }, 2000);
+    };
+
+    return (
+        <Container maxW="container.md" py={8} bg="brand.background" minH="100vh">
+            <VStack spacing={8}>
+                <Heading color="brand.cream">Complete Your Booking</Heading>
+                
+                {room && dateRange && (
+                    <VStack align="start" w="full" p={4} bg="brand.cream" borderRadius="md">
+                        <Text fontWeight="bold" color="brand.text">Booking Summary:</Text>
+                        <Text color="brand.text">Room: {room.name}</Text>
+                        <Text color="brand.text">Price per night: ${room.price}</Text>
+                        <Text color="brand.text">Check-in: {dateRange[0].toLocaleDateString()}</Text>
+                        <Text color="brand.text">Check-out: {dateRange[1].toLocaleDateString()}</Text>
+                    </VStack>
+                )}
+
+                <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+                    <VStack spacing={4} w="full">
+                        <FormControl isRequired>
+                            <FormLabel color="brand.cream">Card Number</FormLabel>
+                            <Input 
+                                placeholder="1234 5678 9012 3456" 
+                                bg="brand.cream"
+                                color="brand.text"
+                            />
+                        </FormControl>
+
+                        <FormControl isRequired>
+                            <FormLabel color="brand.cream">Cardholder Name</FormLabel>
+                            <Input 
+                                placeholder="John Doe" 
+                                bg="brand.cream"
+                                color="brand.text"
+                            />
+                        </FormControl>
+
+                        <FormControl isRequired>
+                            <FormLabel color="brand.cream">Expiration Date</FormLabel>
+                            <Input 
+                                placeholder="MM/YY" 
+                                bg="brand.cream"
+                                color="brand.text"
+                            />
+                        </FormControl>
+
+                        <FormControl isRequired>
+                            <FormLabel color="brand.cream">CVV</FormLabel>
+                            <Input 
+                                placeholder="123" 
+                                type="password" 
+                                maxLength={3} 
+                                bg="brand.cream"
+                                color="brand.text"
+                            />
+                        </FormControl>
+
+                        <Button
+                            type="submit"
+                            bg="brand.brown"
+                            color="brand.cream"
+                            size="lg"
+                            w="full"
+                            mt={4}
+                            _hover={{ bg: 'brand.accent4' }}
+                            isLoading={isProcessing}
+                            loadingText="Processing"
+                        >
+                            Complete Booking
+                        </Button>
+                    </VStack>
+                </form>
+            </VStack>
+        </Container>
+    );
+}
+
+export default PaymentPage;
