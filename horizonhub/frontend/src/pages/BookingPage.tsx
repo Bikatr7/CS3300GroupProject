@@ -132,7 +132,7 @@ function BookingPage()
 
     const handleBooking = () =>
     {
-        navigate('/checkout');
+        navigate('/payment');
     };
       
     return (
