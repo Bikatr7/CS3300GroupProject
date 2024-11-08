@@ -5,8 +5,7 @@
 // maintain allman bracket style for consistency
 
 // react
-import { useState, useEffect } from 'react';
-import { ReactNode } from 'react';
+import { useState, useEffect, ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 
 // chakra-ui
@@ -20,81 +19,52 @@ import CheckoutPage from './pages/CheckoutPage.tsx';
 import CheckInPage from './pages/CheckInPage.tsx';
 import CustomerPortalPage from './pages/CustomerPortalPage.tsx';
 import PaymentPage from './pages/PaymentPage.tsx';
-
-// auth
-import { useAuth } from './contexts/AuthContext.tsx';
-
-// util
-import { getURL } from './utils/index.ts';
+import NotFoundPage from './pages/error_pages/404.tsx';
+import ForbiddenPage from './pages/error_pages/403.tsx';
+import InternalErrorPage from './pages/error_pages/500.tsx';
+import AmenitiesPage from './pages/Amenities.tsx';
 
 // components
 import AdminPanel from './components/AdminPanel.tsx';
-import AmenitiesPage from './pages/Amenities.tsx';
+
+// auth & util
+import { useAuth } from './contexts/AuthContext.tsx';
+import { getURL } from './utils/index.ts';
 
 const ProtectedAdminRoute = ({ children }: { children: ReactNode }) => 
 {
     const { isLoggedIn, isLoading } = useAuth();
     const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
-    useEffect(() => {
-        const checkAdminStatus = async () => 
+    useEffect(() => 
+    {
+        if(!isLoading && isLoggedIn)
         {
-            if (isLoading) 
+            fetch(getURL('/auth/check-if-admin-user'), 
             {
-                return;
-            }
-
-            if (isLoggedIn) 
-            {
-                try 
-                {
-                    const response = await fetch(getURL('/auth/check-if-admin-user'), 
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-                        },
-                    });
-                    if (response.ok) 
-                    {
-                        const data = await response.json();
-                        setIsAdmin(data.result);
-                    } 
-                    else 
-                    {
-                        setIsAdmin(false);
-                    }
-                } 
-                catch (error) 
-                {
-                    setIsAdmin(false);
-                }
-            } 
-            else 
-            {
-                setIsAdmin(false);
-            }
-        };
-
-        checkAdminStatus();
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` },
+            })
+            .then(response => response.ok ? response.json() : Promise.reject())
+            .then(data => setIsAdmin(data.result))
+            .catch(() => setIsAdmin(false));
+        }
+        else if(!isLoading)
+        {
+            setIsAdmin(false);
+        }
     }, [isLoggedIn, isLoading]);
 
-    if (isLoading || isAdmin === null) 
+    if(isLoading || isAdmin === null)
     {
         return (
             <Center height="100vh">
-                <Spinner 
-                    thickness="4px"
-                    speed="0.65s"
-                    emptyColor="gray.200"
-                    color="orange.500"
-                    size="xl"
-                />
+                <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="orange.500" size="xl"/>
             </Center>
         );
     }
 
-    if (!isLoggedIn || !isAdmin) 
+    if(!isLoggedIn || !isAdmin)
     {
         window.location.href = '/403';
         return null;
@@ -105,55 +75,22 @@ const ProtectedAdminRoute = ({ children }: { children: ReactNode }) =>
 
 function Router() 
 {
-    const location = useLocation();
-    const path = location.pathname;
+    const routes = {
+        '/': <HomePage />,
+        '/booking': <BookingPage />,
+        '/sunsetbar': <SunsetBarPage />,
+        '/checkout': <CheckoutPage />,
+        '/checkin': <CheckInPage />,
+        '/payment': <PaymentPage />,
+        '/customer': <CustomerPortalPage />,
+        '/amenities': <AmenitiesPage />,
+        '/admin': <ProtectedAdminRoute><AdminPanel /></ProtectedAdminRoute>,
+        '/403': <ForbiddenPage />,
+        '/500': <InternalErrorPage />
+    } as const;
 
-    if (path === '/') 
-    {
-        return <HomePage />;
-    }
-    if(path === '/booking')
-    {
-        return <BookingPage />
-    }
-    if (path === '/sunsetbar')
-    {
-        return <SunsetBarPage />
-    }
-    if (path === '/checkout')
-    {
-        return <CheckoutPage />
-    }
-    if (path === '/checkin')
-    {
-        return <CheckInPage />
-    }
-    if (path === '/payment')
-    {
-        return <PaymentPage />
-    }
-    if (path === '/customer')
-    {
-        return <CustomerPortalPage />
-    }
-    if(path === '/amenities')
-    {
-        return <AmenitiesPage/>
-    }
-
-    if (path === '/admin') 
-    {
-        return (
-            <ProtectedAdminRoute>
-                <AdminPanel />
-            </ProtectedAdminRoute>
-        );
-    }
-
-    // Default case: 404 Not Found
-    // can make some pretty 404 page later
-    // Also need 403 and 500's
-    return <div>404 Not Found</div>;
+    const path = useLocation().pathname;
+    return routes[path as keyof typeof routes] || <NotFoundPage />;
 }
 
 export default Router;
