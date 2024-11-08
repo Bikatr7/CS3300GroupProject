@@ -43,6 +43,7 @@ function SunsetBarPage()
                 >
                     Watch the sunset with one of our signature cocktails
                 </Text>
+
                 {/*Cocktails Menu*/ }
                 <Box pos="relative" alignContent="center" h="600px" w="900px">
                     <Image src={barPhoto} alignSelf="center" opacity="0.5" boxSize="full" 
@@ -64,7 +65,7 @@ function SunsetBarPage()
                         Take a Load Off</Text>
                     <Text pos="absolute" top="47%" left="50%" 
                     transform="translate(-50%,-50%)" fontSize="15px">
-                        Tequila, mezcal, orange juice, walnut bitters
+                        Tequila, mezcal, orange juice, walnut bitters, paper umbrella
                     </Text>
                     <Text pos="absolute" top="55%" left="50%" 
                     transform="translate(-50%,-50%)" fontSize="25px" fontFamily={"Optima, sans-serif"}>

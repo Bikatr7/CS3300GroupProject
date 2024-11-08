@@ -11,19 +11,13 @@ import {
     Text,
     Button,
     Container,
-    SimpleGrid,
-    GridItem,
-    FormControl,
-    Input,
-    FormLabel,
     Box,
-    Flex,
-    Grid,
     Spacer,
-    Image
+    Image,
+    Flex
   } from "@chakra-ui/react";
-  //import { useNavigate } from "react-router-dom";
 
+//room size images
   import kingBed from '../assets/images/pexels-enginakyurt-2725675.jpg'
   import queenBed from '../assets/images/pexels-rosie-c-94104461-14746040.jpg';
   import doubleBed from '../assets/images/pexels-quang-nguyen-vinh-222549-29000313.jpg'
@@ -36,33 +30,40 @@ import {
        {/*room types*/}
         <Heading textAlign="center">Rooms</Heading>
 
+
         <VStack justify="space-between" align="center" direction="column" gap="8">
             <Spacer />
-
+            
             {/*king suite*/}
+
             <Box alignContent={"center"} w="1000px" bg="transparent" h="600px" 
               borderRadius="10px" borderWidth="1px" borderColor="#fbe9b4">
               <Text color="#fbe9b4" textAlign="center" fontWeight="bold" fontSize="25">King Suite</Text> 
-              <Text color="#fbe9b4" textAlign="center" padding="10px" >
+              <Text color="#fbe9b4" textAlign="center" padding="8px" >
                 Our King Suite is designed for the height of luxury and relaxation for up to two guests.
               </Text>
-              <Image src={kingBed} h="500px" alignContent="center"></Image>
+              <Flex justify={"center"}>
+                <Image src={kingBed} h="500px" padding="3"/>
+              </Flex>
+
               </Box> 
-              
+
             {/*double room*/}
               <Box w="1000px" bg="transparent" h="600px" 
               borderRadius="10px" borderWidth="1px" borderColor="#fbe9b4">
               <Text color="#fbe9b4" textAlign="center" fontWeight="bold" fontSize="25">Double Room</Text> 
-              <Text color="#fbe9b4" textAlign="center" padding="10px">
+              <Text color="#fbe9b4" textAlign="center" padding="8px">
                 With two queen size beds, our Double Room is best for friends and families. 
                 Sleeps up to four guests.
               </Text>
               <Spacer />
-              <Image src={doubleBed} h="450px" ></Image>
+              <Flex justify={"center"}>
+                <Image src={doubleBed} h="500px" ></Image>
+              </Flex>
               </Box> 
               
               {/*queen room*/}
-              <Box w="1000px" bg="transparent" h="600px" 
+              <Box w="1000px" bg="transparent" h="630px" 
               borderRadius="10px" borderWidth="1px" borderColor="#fbe9b4" >
               <Text color="#fbe9b4" textAlign="center" fontWeight="bold" fontSize="25">Queen Room</Text> 
               <Text color="#fbe9b4" textAlign="center" padding="10px">
@@ -70,13 +71,18 @@ import {
                 our luxury amenities. Whether it's a quick trip or you're traveling solo, 
                 you'll still experience our high standards of relaxation. Sleeps up to two guests.
               </Text>
-              <Image src={queenBed} h="450px"></Image>
+              <Flex justify={"center"}>
+                <Image src={queenBed} h="500px"></Image>
+              </Flex>
               </Box>
+             
               <Spacer />
+
               <Button colorScheme="orange" size="lg" alignSelf="center">
               Book Now
               </Button>
         </VStack>
+
         {/*pool*/}
         <VStack justify="space-between" align="center" direction="column" gap="8">
           <Spacer />
@@ -91,7 +97,9 @@ import {
                 whether you spent it exploring the local area or hard at work. The pool
                 is heated to be comfortable year-round. Open 7 AM to 10 PM.
               </Text>
-              <Image src={pool} h="400"></Image>
+              <Flex justify={"center"}>
+                <Image src={pool} h="400"></Image>
+              </Flex>
           </Box>
         </VStack>
 
