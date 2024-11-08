@@ -18,6 +18,7 @@ import {
     IconButton,
     useDisclosure,
     Collapse,
+    Text,
 } from '@chakra-ui/react';
 
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
@@ -82,17 +83,14 @@ const HomeHeader: React.FC = () =>
                     <Flex align="center">
                         {!isLoading && isLoggedIn && userEmail && (
                             <Flex align="center">
-                                <Link 
-                                    as={RouterLink} 
-                                    to="/profile" 
+                                <Text
                                     fontSize="sm" 
                                     fontWeight="medium" 
                                     color="brand.text" 
                                     mr={4}
-                                    _hover={{ color: 'brand.accent1' }}
                                 >
                                     {userEmail}
-                                </Link>
+                                </Text>
                             </Flex>
                         )}
                         <Login/>
