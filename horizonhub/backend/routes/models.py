@@ -23,7 +23,6 @@ class BookingVerification(BaseModel):
     email:str
     code:str
 
-## Add these new models
 class VerificationCode(BaseModel):
     email:str
     code:str
@@ -34,6 +33,10 @@ class VerificationCode(BaseModel):
 class VerifyCodeRequest(BaseModel):
     email:str
     code:str
+
+class CheckAvailabilityRequest(BaseModel):
+    check_in:datetime
+    check_out:datetime
 
 class BookingCreate(BaseModel):
     room_id:UUID

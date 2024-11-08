@@ -28,6 +28,7 @@ class Booking(Base):
     room_id = Column(modelUUID(as_uuid=True), ForeignKey("rooms.id"))
     check_in = Column(DateTime)
     check_out = Column(DateTime)
+    confirmation_code = Column(String(6), unique=True, nullable=False)
 
 
 class VerificationCode(Base):
@@ -46,3 +47,4 @@ class Room(Base):
     description = Column(String, nullable=False)
     price = Column(Integer, nullable=False)
     capacity = Column(Integer, nullable=False)
+    quantity = Column(Integer, nullable=False, default=2)

@@ -7,6 +7,7 @@
 // react
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { getURL } from "../utils";
 
 // chakra-ui
 import {
@@ -21,6 +22,9 @@ import {
     useToast
 } from "@chakra-ui/react";
 
+// Add axios import at the top
+import axios from "axios";
+
 function PaymentPage() 
 {
     const location = useLocation();
@@ -30,24 +34,49 @@ function PaymentPage()
 
     const { dateRange, room } = location.state || {};
 
-    const handleSubmit = (e: React.FormEvent) =>
+    const handleSubmit = async (e: React.FormEvent) =>
     {
         e.preventDefault();
         setIsProcessing(true);
 
-        // Simulate payment processing
-        setTimeout(() => 
+        try 
         {
-            setIsProcessing(false);
+            // Create the booking
+            const response = await axios.post(getURL('/booking/create'), {
+                room_id: room.id,
+                check_in: dateRange[0].toISOString(),
+                check_out: dateRange[1].toISOString()
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('access_token')}`
+                }
+            });
+
             toast({
                 title: "Booking Confirmed!",
-                description: "Your room has been successfully booked.",
+                description: `Your booking confirmation code is: ${response.data.booking_id}`,
                 status: "success",
+                duration: 10000,
+                isClosable: true,
+            });
+            
+            navigate('/');
+        } 
+        catch (error) 
+        {
+            console.error('Booking error:', error);
+            toast({
+                title: "Booking Failed",
+                description: "There was an error processing your booking. Please try again.",
+                status: "error",
                 duration: 5000,
                 isClosable: true,
             });
-            navigate('/');
-        }, 2000);
+        }
+        finally 
+        {
+            setIsProcessing(false);
+        }
     };
 
     return (

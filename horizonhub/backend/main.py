@@ -77,3 +77,4 @@ async def maintenance_middleware(request:Request, call_next):
 
 app.include_router(warmups_router)
 app.include_router(auth_router)
+app.include_router(booking_router)

@@ -7,6 +7,8 @@
 // react
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getURL } from "../utils";
+import axios from "axios";
 
 // chakra-ui
 import {
@@ -121,13 +123,13 @@ const customStyles = `
   }
 `;
 
-// Add this interface after imports
-interface Room 
-{
-    id: number;
+interface Room {
+    id: string;
     name: string;
     price: number;
     description: string;
+    capacity: number;
+    available_quantity: number;
 }
 
 function BookingPage() 
@@ -135,32 +137,40 @@ function BookingPage()
     const navigate = useNavigate();
     const [dateRange, setDateRange] = useState<any>(null);
     const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
+    const [availableRooms, setAvailableRooms] = useState<Room[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
-    // Hardcoded rooms data
-    const rooms: Room[] = [
+    const fetchAvailableRooms = async (checkIn:Date, checkOut:Date) =>
+    {
+        setIsLoading(true);
+        setError(null);
+        try 
         {
-            id: 1,
-            name: "Ocean View Suite",
-            price: 299.99,
-            description: "Luxurious suite with panoramic ocean views"
-        },
+            const response = await axios.post(getURL('/booking/check-availability'), {
+                check_in: checkIn.toISOString(),
+                check_out: checkOut.toISOString()
+            });
+            setAvailableRooms(response.data);
+        } 
+        catch (err) 
         {
-            id: 2,
-            name: "Garden Deluxe Room",
-            price: 199.99,
-            description: "Peaceful room overlooking our tropical gardens"
-        },
-        {
-            id: 3,
-            name: "Presidential Suite",
-            price: 499.99,
-            description: "Our finest accommodation with premium amenities"
+            setError("Failed to fetch available rooms. Please try again.");
+            console.error("Error fetching rooms:", err);
         }
-    ];
-    
-    const handleDateChange = (value: any) =>
+        finally 
+        {
+            setIsLoading(false);
+        }
+    };
+
+    const handleDateChange = (value:any) =>
     {
         setDateRange(value);
+        if(value && value[0] && value[1]) 
+        {
+            fetchAvailableRooms(value[0], value[1]);
+        }
     };
 
     const handleBooking = () =>
@@ -201,8 +211,10 @@ function BookingPage()
                             {dateRange && (
                                 <>
                                     <Text color="brand.cream" fontWeight="bold" mt={6}>2. Select Your Room</Text>
+                                    {isLoading && <Text color="brand.cream">Loading available rooms...</Text>}
+                                    {error && <Text color="red.500">{error}</Text>}
                                     <VStack spacing={4} w="full" maxW="600px">
-                                        {rooms.map((room) => (
+                                        {availableRooms.map((room) => (
                                             <Box
                                                 key={room.id}
                                                 w="full"
@@ -212,7 +224,7 @@ function BookingPage()
                                                 cursor="pointer"
                                                 onClick={() => setSelectedRoom(room)}
                                                 position="relative"
-                                                transform="translateZ(0)"  // Forces GPU acceleration
+                                                transform="translateZ(0)"
                                                 _hover={{ 
                                                     "&::after": {
                                                         transform: "translateY(-5px)",
@@ -233,22 +245,20 @@ function BookingPage()
                                                 borderColor={selectedRoom?.id === room.id ? "brand.accent1" : "transparent"}
                                             >
                                                 <VStack align="start" w="full" spacing={2}>
-                                                    <Heading 
-                                                        size="md" 
-                                                        color="brand.text"
-                                                    >
+                                                    <Heading size="md" color="brand.text">
                                                         {room.name}
                                                     </Heading>
-                                                    <Text 
-                                                        color="brand.text"
-                                                    >
+                                                    <Text color="brand.text">
                                                         {room.description}
                                                     </Text>
-                                                    <Text 
-                                                        color="brand.text"
-                                                        fontWeight="bold"
-                                                    >
+                                                    <Text color="brand.text">
+                                                        Capacity: {room.capacity} guests
+                                                    </Text>
+                                                    <Text color="brand.text" fontWeight="bold">
                                                         ${room.price}/night
+                                                    </Text>
+                                                    <Text color="brand.text">
+                                                        {room.available_quantity} rooms available
                                                     </Text>
                                                 </VStack>
                                             </Box>
