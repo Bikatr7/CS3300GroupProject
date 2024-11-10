@@ -19,6 +19,7 @@ from db.base import get_db
 from db.models import Booking, User, Room
 from auth.func import get_current_user
 from auth.util import check_internal_request
+from constants import ADMIN_USER
 from routes.models import BookingCreate, BookingUpdate, CheckAvailabilityRequest, PaymentConfirmation
 
 router = APIRouter()
@@ -30,7 +31,7 @@ async def cleanup_pending_bookings(db: Session):
     """
     Cleanup bookings that have been in pending state for more than 30 minutes
     """
-    timeout = datetime.utcnow() - timedelta(minutes=30)
+    timeout = datetime.utcnow() - timedelta(minutes=5)
     
     pending_bookings = db.query(Booking).filter(
         and_(
@@ -259,22 +260,15 @@ async def confirm_booking_payment(request:Request, data:PaymentConfirmation, db 
                 detail="Payment verification failed"
             )
             
-        # If already processed, just return the confirmation
-        if(session.metadata.get("processed") == "true"):
+        ## If already confirmed, just return success - prevents duplicate confirmations
+        if(booking.status == "confirmed"):
             return {
                 "message": "Booking already confirmed", 
                 "booking_id": data.booking_id
             }
             
-        # If we get here, payment is valid and not yet processed
         booking.status = "confirmed"
         db.commit()
-
-        # Mark Stripe session as processed
-        stripe.checkout.Session.modify(
-            data.session_id,
-            metadata={"processed": "true"}
-        )
 
         return {
             "message": "Booking confirmed successfully", 
@@ -391,14 +385,26 @@ async def check_in(request:Request, db = Depends(get_db)):
         )
 
 @router.post("/booking/cleanup-pending")
-async def manual_cleanup_pending(request:Request, db = Depends(get_db)):
+async def manual_cleanup_pending(request:Request, current_user:str = Depends(get_current_user), db = Depends(get_db)):
     """
     Manually trigger cleanup of pending bookings (admin only)
     """
-    
+
+    try:
+        is_admin = current_user == ADMIN_USER
+
+        assert is_admin
+
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="You are not authorized to perform this action"
+        )
+
     await check_internal_request(request)
     
     await cleanup_pending_bookings(db)
+
     return {"message": "Cleanup completed"}
 
 @router.post("/booking/check-out")

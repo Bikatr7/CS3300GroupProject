@@ -13,5 +13,5 @@ async def api_home():
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,
-        content={"message": "Welcome to the Kakusui API."}
+        content={"message": "Welcome to the HorizonHub API."}
     )

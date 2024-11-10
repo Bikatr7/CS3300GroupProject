@@ -3,14 +3,12 @@
 ## license that can be found in the LICENSE file.
 
 ## third-party imports
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 import stripe
 
 ## custom modules
 from db.base import get_db
-from db.models import User
-from auth.func import get_current_user
 from util import get_frontend_url
 from auth.util import check_internal_request
 router = APIRouter()

@@ -34,6 +34,33 @@ class Booking(Base):
     room_number = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
+    def to_dict(self, db=None):
+        """Convert the booking object to a dictionary with related data"""
+        data = {
+            "id": str(self.id),
+            "confirmation_code": self.confirmation_code,
+            "check_in_date": self.check_in.isoformat() if self.check_in else None,
+            "check_out_date": self.check_out.isoformat() if self.check_out else None,
+            "status": self.status,
+            "room_number": self.room_number,
+            "created_at": self.created_at.isoformat() if self.created_at else None
+        }
+        
+        if db:
+            # Get user email
+            user = db.query(User).filter(User.id == self.user_id).first()
+            if user:
+                data["customer_email"] = user.email
+            
+            # Get room details
+            room = db.query(Room).filter(Room.id == self.room_id).first()
+            if room:
+                data["room_type"] = room.name
+                data["room_description"] = room.description
+                data["room_price"] = room.price
+        
+        return data
+
 class VerificationCode(Base):
     __tablename__ = "verification_codes"
     

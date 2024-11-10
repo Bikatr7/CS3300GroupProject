@@ -13,12 +13,12 @@ from fastapi.security import HTTPBasicCredentials
 
 ## custom imports
 from db.base import get_db
-from db.models import VerificationCode
+from db.models import Booking
 
-from routes.models import LoginModel, LoginToken, VerifyCodeRequest
+from routes.models import LoginModel, LoginToken
 
 
-from auth.func import create_access_token, create_refresh_token, func_verify_token, get_current_user, verify_credentials
+from auth.func import check_if_admin_user, create_access_token, create_refresh_token, func_verify_token, get_current_user, verify_credentials
 from auth.util import check_internal_request
 
 from constants import ADMIN_USER, TOKEN_EXPIRE_MINUTES
@@ -28,7 +28,7 @@ import typing
 router = APIRouter()
 
 @router.post("/auth/login", response_model=LoginToken)
-def login(data:LoginModel, request:Request) -> typing.Dict[str, str]:
+async def login(data:LoginModel, request:Request) -> typing.Dict[str, str]:
     
     """
     
@@ -42,9 +42,7 @@ def login(data:LoginModel, request:Request) -> typing.Dict[str, str]:
 
     """
 
-    origin = request.headers.get('origin')
-
-    check_internal_request(origin)
+    await check_internal_request(request)
 
     credentials = HTTPBasicCredentials(username=data.username, password=data.password)
     verify_credentials(credentials)
@@ -62,7 +60,7 @@ def login(data:LoginModel, request:Request) -> typing.Dict[str, str]:
 
 
 @router.post("/auth/refresh-access-token", response_model=LoginToken)
-def refresh_token(request:Request, refresh_token: str = Cookie(None)) -> JSONResponse:
+async def refresh_token(request:Request, refresh_token: str = Cookie(None)) -> JSONResponse:
     
     """
 
@@ -76,9 +74,7 @@ def refresh_token(request:Request, refresh_token: str = Cookie(None)) -> JSONRes
 
     """
 
-    origin = request.headers.get('origin')
-
-    check_internal_request(origin)
+    await check_internal_request(request)
 
     if(refresh_token is None):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="No refresh token provided")
@@ -107,9 +103,7 @@ def refresh_token(request:Request, refresh_token: str = Cookie(None)) -> JSONRes
 @router.post("/auth/verify-token")
 async def verify_token_endpoint(request: Request):
 
-    origin = request.headers.get('origin')
-
-    check_internal_request(origin)
+    await check_internal_request(request)
 
     auth_header = request.headers.get("Authorization")
     
@@ -127,78 +121,21 @@ async def verify_token_endpoint(request: Request):
 
 @router.post("/auth/check-if-admin-user")
 async def check_admin(request: Request, current_user:str = Depends(get_current_user)):
-    origin = request.headers.get('origin')
 
-    check_internal_request(origin)
+    await check_internal_request(request)
 
     is_admin = current_user == ADMIN_USER
 
     return JSONResponse(status_code=status.HTTP_200_OK, content={"result": is_admin})
 
-@router.post("/auth/generate-verification-code")
-async def generate_verification_code(request:Request, email:str, db = Depends(get_db)):
+
+@router.get("/admin/bookings")
+async def get_all_bookings(request:Request, current_user:str = Depends(check_if_admin_user), db = Depends(get_db)):
     """
-    Generate a 6-digit verification code for the given email
+    Get all bookings (admin only)
     """
-
-    origin = request.headers.get('origin')
-    check_internal_request(origin)
-
-    code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
     
-
-    expires_at = datetime.utcnow() + timedelta(minutes=10)
+    await check_internal_request(request)
     
-    ## Delete any existing codes for this email
-    db.query(VerificationCode).filter(VerificationCode.email == email).delete()
-    
-    ## Create new verification code
-    verification = VerificationCode(
-        email=email,
-        code=code,
-        expires_at=expires_at
-    )
-    
-    db.add(verification)
-    db.commit()
-    
-    return {"message": "Verification code generated", "code": code}
-
-@router.post("/auth/verify-code")
-async def verify_code(request:Request, data:VerifyCodeRequest, db = Depends(get_db)):
-    
-    """
-    Verify a 6-digit code for the given email
-    """
-
-    origin = request.headers.get('origin')
-    check_internal_request(origin)
-    
-    verification = db.query(VerificationCode).filter(
-        VerificationCode.email == data.email,
-        VerificationCode.used == False
-    ).first()
-    
-    if(not verification):
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="No verification code found for this email"
-        )
-    
-    if(verification.expires_at < datetime.utcnow()):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Verification code has expired"
-        )
-    
-    if(verification.code != data.code):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid verification code"
-        )
-    
-    ## Mark code as used
-    verification.used = True
-    db.commit()
-    
-    return {"message": "Code verified successfully"}
+    bookings = db.query(Booking).all()
+    return {"bookings": [booking.to_dict(db) for booking in bookings]}

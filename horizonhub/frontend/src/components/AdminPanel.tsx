@@ -11,13 +11,20 @@ import { useNavigate } from 'react-router-dom';
 // Chakra UI
 import {
   Box,
-  Button,
   Heading,
-  Textarea,
-  useToast,
   Text,
   HStack,
   Divider,
+  Spinner,
+  Center,
+  useToast,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Grid,
+  GridItem,
 } from "@chakra-ui/react";
 
 // Images
@@ -31,8 +38,8 @@ import theme from '../theme';
 
 function AdminPanel() 
 {
-    const [sqlQuery, setSqlQuery] = useState('');
-    const [queryResult, setQueryResult] = useState('');
+    const [bookings, setBookings] = useState([]);
+    const [isLoadingBookings, setIsLoadingBookings] = useState(false);
     const toast = useToast();
     const modalRef = useRef<HTMLDivElement>(null);
     const [modalSize, setModalSize] = useState(() => {
@@ -45,52 +52,6 @@ function AdminPanel()
     });
 
     const navigate = useNavigate();
-
-    const handleRunQuery = async () => 
-    {
-        try 
-        {
-            const response = await fetch(getURL('/admin/db/run-query'), 
-            {
-                method: 'POST',
-                headers: 
-                {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-                },
-                body: JSON.stringify({ sql_query: sqlQuery })
-            });
-
-            if (response.ok) 
-            {
-                const result = await response.json();
-                setQueryResult(JSON.stringify(result, null, 2));
-                toast({
-                    title: "Query Executed",
-                    description: "The query has been executed successfully.",
-                    status: "success",
-                    duration: 5000,
-                    isClosable: true,
-                });
-            } 
-            else 
-            {
-                const errorData = await response.json();
-                setQueryResult(JSON.stringify(errorData, null, 2));
-                throw new Error(errorData.message || 'Failed to run query');
-            }
-        } 
-        catch (error) 
-        {
-            toast({
-                title: "Error",
-                description: (error as Error).message || "Failed to run query. Please try again.",
-                status: "error",
-                duration: 5000,
-                isClosable: true,
-            });
-        }
-    };
 
     const handleDrag = (e: React.MouseEvent<HTMLDivElement>) => 
     {
@@ -155,6 +116,50 @@ function AdminPanel()
         document.addEventListener('mouseup', onMouseUp);
     };
 
+    const fetchBookings = async () => 
+    {
+        setIsLoadingBookings(true);
+        try 
+        {
+            const response = await fetch(getURL('/admin/bookings'), 
+            {
+                headers: 
+                {
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                }
+            });
+
+            if(response.ok) 
+            {
+                const data = await response.json();
+                setBookings(data.bookings);
+            } 
+            else 
+            {
+                throw new Error('Failed to fetch bookings');
+            }
+        } 
+        catch (error) 
+        {
+            toast({
+                title: "Error",
+                description: "Failed to fetch bookings",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+        }
+        finally 
+        {
+            setIsLoadingBookings(false);
+        }
+    };
+
+    useEffect(() => 
+    {
+        fetchBookings();
+    }, []);
+
     useEffect(() => 
     {
         localStorage.setItem('adminPanelSize', JSON.stringify(modalSize));
@@ -176,6 +181,37 @@ function AdminPanel()
             modal.style.top = `${modalPosition.top}px`;
         }
     }, [modalSize, modalPosition]);
+
+    const formatDate = (dateString:string) => 
+    {
+        return new Date(dateString).toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
+    const getStatusColor = (status:string) => 
+    {
+        switch(status.toLowerCase()) 
+        {
+            case 'confirmed':
+                return theme.colors.brand.accent1;
+            case 'pending':
+                return theme.colors.brand.accent4;
+            case 'cancelled':
+                return 'red.500';
+            case 'checked_in':
+                return 'green.500';
+            case 'completed':
+                return 'gray.500';
+            default:
+                return theme.colors.brand.text;
+        }
+    };
 
     return (
         <Box
@@ -226,54 +262,78 @@ function AdminPanel()
                     </Text>
                 </HStack>
                 <Divider mb={2} />
-                <Box height="100%" display="flex" flexDirection="column">
-                    <Textarea
-                        placeholder="Enter SQL Query"
-                        value={sqlQuery}
-                        onChange={(e) => setSqlQuery(e.target.value)}
-                        mb={2}
-                        flex={0.5}
-                        resize="none"
-                        bg={theme.colors.brand.background}
-                        color={theme.colors.brand.text}
-                        _placeholder={{ color: `${theme.colors.brand.text}80` }}
-                        sx={{
-                            '&::-webkit-scrollbar': {
-                                display: 'none',
-                            },
-                            scrollbarWidth: 'none',
-                            overflow: 'auto',
-                        }}
-                    />
-                    <Button 
-                        onClick={handleRunQuery} 
-                        bg={theme.colors.brand.accent1}
-                        color={theme.colors.brand.text}
-                        _hover={{ bg: theme.colors.brand.accent4 }}
-                        mb={2}
-                    >
-                        Run Query
-                    </Button>
-                    {queryResult && (
-                        <Box
-                            flex={1}
-                            p={2}
-                            bg={`${theme.colors.brand.background}80`}
-                            borderRadius="md"
-                            fontSize="sm"
-                            fontFamily="monospace"
-                            whiteSpace="pre-wrap"
-                            overflow="auto"
-                            color={theme.colors.brand.text}
-                            sx={{
-                                '&::-webkit-scrollbar': {
-                                    display: 'none',
-                                },
-                                scrollbarWidth: 'none',
-                            }}
-                        >
-                            {queryResult}
-                        </Box>
+                <Box height="calc(100% - 48px)" overflow="auto" sx={{
+                    '&::-webkit-scrollbar': {
+                        display: 'none',
+                    },
+                    scrollbarWidth: 'none',
+                }}>
+                    {isLoadingBookings ? (
+                        <Center height="100%">
+                            <Spinner />
+                        </Center>
+                    ) : (
+                        <Accordion allowMultiple>
+                            {bookings.map((booking:any) => (
+                                <AccordionItem 
+                                    key={booking.id}
+                                    border="none"
+                                    mb={2}
+                                    bg={`${theme.colors.brand.background}80`}
+                                    borderRadius="md"
+                                >
+                                    <AccordionButton 
+                                        _hover={{ bg: `${theme.colors.brand.background}cc` }}
+                                        borderRadius="md"
+                                    >
+                                        <Box flex="1">
+                                            <Grid templateColumns="repeat(4, 1fr)" gap={4} alignItems="center">
+                                                <GridItem>
+                                                    <Text fontWeight="bold" color={theme.colors.brand.accent1}>
+                                                        #{booking.confirmation_code}
+                                                    </Text>
+                                                </GridItem>
+                                                <GridItem>
+                                                    <Text>{booking.customer_email}</Text>
+                                                </GridItem>
+                                                <GridItem>
+                                                    <Text>{formatDate(booking.check_in_date)}</Text>
+                                                </GridItem>
+                                                <GridItem>
+                                                    <Text 
+                                                        color={getStatusColor(booking.status)}
+                                                        fontWeight="bold"
+                                                    >
+                                                        {booking.status.toUpperCase()}
+                                                    </Text>
+                                                </GridItem>
+                                            </Grid>
+                                        </Box>
+                                        <AccordionIcon />
+                                    </AccordionButton>
+                                    <AccordionPanel pb={4}>
+                                        <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+                                            <GridItem>
+                                                <Text fontWeight="bold" color={theme.colors.brand.accent1}>Room Details</Text>
+                                                <Text>Type: {booking.room_type}</Text>
+                                                <Text>Number: {booking.room_number}</Text>
+                                                <Text>Price: ${booking.room_price}</Text>
+                                                <Text>Description: {booking.room_description}</Text>
+                                            </GridItem>
+                                            <GridItem>
+                                                <Text fontWeight="bold" color={theme.colors.brand.accent1}>Booking Details</Text>
+                                                <Text>Check-in: {formatDate(booking.check_in_date)}</Text>
+                                                <Text>Check-out: {formatDate(booking.check_out_date)}</Text>
+                                                <Text>Created: {formatDate(booking.created_at)}</Text>
+                                                {booking.checkout_code && (
+                                                    <Text>Checkout Code: {booking.checkout_code}</Text>
+                                                )}
+                                            </GridItem>
+                                        </Grid>
+                                    </AccordionPanel>
+                                </AccordionItem>
+                            ))}
+                        </Accordion>
                     )}
                 </Box>
                 <Box
