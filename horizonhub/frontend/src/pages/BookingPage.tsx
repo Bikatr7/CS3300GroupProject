@@ -152,6 +152,15 @@ function BookingPage()
                 check_out: checkOut.toISOString()
             });
             setAvailableRooms(response.data);
+            
+            // Clear selected room when fetching new dates
+            setSelectedRoom(null);
+            
+            // Set error if no rooms available
+            if(response.data.length === 0)
+            {
+                setError("No rooms are available for the selected dates. Please try different dates.");
+            }
         } 
         catch (err) 
         {
@@ -212,72 +221,88 @@ function BookingPage()
                                 <>
                                     <Text color="brand.cream" fontWeight="bold" mt={6}>2. Select Your Room</Text>
                                     {isLoading && <Text color="brand.cream">Loading available rooms...</Text>}
-                                    {error && <Text color="red.500">{error}</Text>}
-                                    <VStack spacing={4} w="full" maxW="600px">
-                                        {availableRooms.map((room) => (
-                                            <Box
-                                                key={room.id}
-                                                w="full"
-                                                bg="brand.accent3"
-                                                p={6}
-                                                borderRadius="lg"
-                                                cursor="pointer"
-                                                onClick={() => setSelectedRoom(room)}
-                                                position="relative"
-                                                transform="translateZ(0)"
-                                                _hover={{ 
-                                                    "&::after": {
-                                                        transform: "translateY(-5px)",
-                                                        opacity: 1
-                                                    }
-                                                }}
-                                                _after={{
-                                                    content: '""',
-                                                    position: "absolute",
-                                                    inset: 0,
-                                                    bg: "brand.accent2",
-                                                    borderRadius: "lg",
-                                                    opacity: 0,
-                                                    transition: "all 0.2s",
-                                                    zIndex: -1
-                                                }}
-                                                border={selectedRoom?.id === room.id ? "2px solid" : "none"}
-                                                borderColor={selectedRoom?.id === room.id ? "brand.accent1" : "transparent"}
-                                            >
-                                                <VStack align="start" w="full" spacing={2}>
-                                                    <Heading size="md" color="brand.text">
-                                                        {room.name}
-                                                    </Heading>
-                                                    <Text color="brand.text">
-                                                        {room.description}
-                                                    </Text>
-                                                    <Text color="brand.text">
-                                                        Capacity: {room.capacity} guests
-                                                    </Text>
-                                                    <Text color="brand.text" fontWeight="bold">
-                                                        ${room.price}/night
-                                                    </Text>
-                                                    <Text color="brand.text">
-                                                        {room.available_quantity} rooms available
-                                                    </Text>
-                                                </VStack>
-                                            </Box>
-                                        ))}
-                                    </VStack>
+                                    {error && (
+                                        <Box 
+                                            p={4} 
+                                            bg="red.500" 
+                                            color="white" 
+                                            borderRadius="md" 
+                                            w="full" 
+                                            maxW="600px"
+                                            textAlign="center"
+                                        >
+                                            {error}
+                                        </Box>
+                                    )}
+                                    {!error && !isLoading && (
+                                        <VStack spacing={4} w="full" maxW="600px">
+                                            {availableRooms.map((room) => (
+                                                <Box
+                                                    key={room.id}
+                                                    w="full"
+                                                    bg="brand.accent3"
+                                                    p={6}
+                                                    borderRadius="lg"
+                                                    cursor="pointer"
+                                                    onClick={() => setSelectedRoom(room)}
+                                                    position="relative"
+                                                    transform="translateZ(0)"
+                                                    _hover={{ 
+                                                        "&::after": {
+                                                            transform: "translateY(-5px)",
+                                                            opacity: 1
+                                                        }
+                                                    }}
+                                                    _after={{
+                                                        content: '""',
+                                                        position: "absolute",
+                                                        inset: 0,
+                                                        bg: "brand.accent2",
+                                                        borderRadius: "lg",
+                                                        opacity: 0,
+                                                        transition: "all 0.2s",
+                                                        zIndex: -1
+                                                    }}
+                                                    border={selectedRoom?.id === room.id ? "2px solid" : "none"}
+                                                    borderColor={selectedRoom?.id === room.id ? "brand.accent1" : "transparent"}
+                                                >
+                                                    <VStack align="start" w="full" spacing={2}>
+                                                        <Heading size="md" color="brand.text">
+                                                            {room.name}
+                                                        </Heading>
+                                                        <Text color="brand.text">
+                                                            {room.description}
+                                                        </Text>
+                                                        <Text color="brand.text">
+                                                            Capacity: {room.capacity} guests
+                                                        </Text>
+                                                        <Text color="brand.text" fontWeight="bold">
+                                                            ${room.price}/night
+                                                        </Text>
+                                                        <Text color="brand.text">
+                                                            {room.available_quantity} rooms available
+                                                        </Text>
+                                                    </VStack>
+                                                </Box>
+                                            ))}
+                                        </VStack>
+                                    )}
 
-                                    <Button 
-                                        bg="brand.accent1"
-                                        color="brand.text"
-                                        size="lg" 
-                                        w="full" 
-                                        maxW="400px"
-                                        mt={6}
-                                        _hover={{ bg: 'brand.accent4' }}
-                                        onClick={handleBooking}
-                                        isDisabled={!selectedRoom}
-                                    >
-                                        Continue to Payment
-                                    </Button>
+                                    {availableRooms.length > 0 && (
+                                        <Button 
+                                            bg="brand.accent1"
+                                            color="brand.text"
+                                            size="lg" 
+                                            w="full" 
+                                            maxW="400px"
+                                            mt={6}
+                                            _hover={{ bg: 'brand.accent4' }}
+                                            onClick={handleBooking}
+                                            isDisabled={!selectedRoom}
+                                        >
+                                            Continue to Payment
+                                        </Button>
+                                    )}
                                 </>
                             )}
                         </VStack>
