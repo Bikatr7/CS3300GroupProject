@@ -58,10 +58,6 @@ const NAV_ITEMS: Array<NavItem> = [
         href: '/amenities',
         
     },
-    {
-        label: 'The Sunset Bar',
-        href: '/sunsetbar',
-    },
 ];
 
 const DesktopNav = ({ items }: { items: Array<NavItem> }) => 

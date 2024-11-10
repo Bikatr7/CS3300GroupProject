@@ -133,9 +133,9 @@ function BookingSuccessPage()
                         maxW="400px"
                         mt={4}
                         _hover={{ bg: 'brand.accent4' }}
-                        onClick={() => navigate('/')}
+                        onClick={() => navigate('/customer')}
                     >
-                        Return to Home
+                        Return to Customer Portal
                     </Button>
                 </VStack>
             </Container>

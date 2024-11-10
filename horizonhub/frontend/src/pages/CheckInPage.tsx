@@ -8,6 +8,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { getURL } from "../utils";
+import { useNavigate } from "react-router-dom";
 
 // chakra-ui
 import {
@@ -29,6 +30,7 @@ function CheckInPage()
     const [isCheckedIn, setIsCheckedIn] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const toast = useToast();
+    const navigate = useNavigate();
 
     const handleSubmit = async () =>
     {
@@ -132,6 +134,15 @@ function CheckInPage()
                                 <Text color="brand.text" fontSize="sm">
                                     Please save this code - you'll need it to check out.
                                 </Text>
+                                <Button
+                                    bg="brand.accent1"
+                                    color="brand.text"
+                                    onClick={() => navigate('/customer')}
+                                    size="lg"
+                                    _hover={{ bg: 'brand.accent4' }}
+                                >
+                                    Return to Customer Portal
+                                </Button>
                             </VStack>
                         </Box>
                     </VStack>

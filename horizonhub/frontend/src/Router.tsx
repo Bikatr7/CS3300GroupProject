@@ -14,7 +14,6 @@ import { Spinner, Center } from "@chakra-ui/react";
 // pages
 import HomePage from "./pages/HomePage.tsx";
 import BookingPage from './pages/BookingPage.tsx';
-import SunsetBarPage from './pages/SunsetBarPage.tsx';
 import CheckoutPage from './pages/CheckoutPage.tsx';
 import CheckInPage from './pages/CheckInPage.tsx';
 import CustomerPortalPage from './pages/CustomerPortalPage.tsx';
@@ -79,7 +78,6 @@ function Router()
     const routes = {
         '/': <HomePage />,
         '/booking': <BookingPage />,
-        '/sunsetbar': <SunsetBarPage />,
         '/checkout': <CheckoutPage />,
         '/checkin': <CheckInPage />,
         '/payment': <PaymentPage />,
