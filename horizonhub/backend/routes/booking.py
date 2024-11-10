@@ -7,10 +7,11 @@ from uuid import UUID
 import random
 import stripe
 import string
+from datetime import datetime
 
 ## third-party imports
 from fastapi import APIRouter, HTTPException, Request, Depends, status
-from sqlalchemy import and_
+from sqlalchemy import and_, String
 
 ## custom imports
 from db.base import get_db
@@ -21,8 +22,7 @@ from routes.models import BookingCreate, BookingUpdate, CheckAvailabilityRequest
 
 router = APIRouter()
 
-def generate_confirmation_code():
-    """Generate a random 6-digit confirmation code"""
+def generate_six_digit_code():
     return ''.join(random.choices(string.digits, k=6))
 
 @router.post("/booking/create")
@@ -33,23 +33,17 @@ async def create_booking(request:Request, booking_data:BookingCreate, db = Depen
     
     await check_internal_request(request)
 
-    
-    ## Convert string UUID to UUID object
     try:
-        room_id = booking_data.room_id if isinstance(booking_data.room_id, UUID) else UUID(booking_data.room_id)
-        room = db.query(Room).filter(Room.id == room_id).first()
-        
-        ## Debug print the actual query
-        print(f"Room query result: {room}")
-        print(f"Room ID type: {type(room_id)}")
-        
-        ## Try direct comparison
-        all_rooms = db.query(Room).all()
-        for r in all_rooms:
-            print(f"Comparing {str(r.id)} ({type(r.id)}) with {str(room_id)} ({type(room_id)})")
-            if str(r.id) == str(room_id):
-                room = r
-                break
+        ## Convert string UUID to UUID object if needed
+        room_id = booking_data.room_id if isinstance(booking_data.room_id, UUID) else UUID(str(booking_data.room_id))
+
+        room = db.query(Room).filter(Room.id.cast(String) == str(room_id)).first()
+
+        if(not room):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Room not found"
+            )
                 
     except ValueError as e:
         print(f"Invalid UUID format: {e}")
@@ -57,20 +51,14 @@ async def create_booking(request:Request, booking_data:BookingCreate, db = Depen
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid room ID format"
         )
-    
-    if(not room):
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Room not found"
-        )
 
     ## Check if room is available for the requested dates
     booking_count = db.query(Booking).filter(
         and_(
-            Booking.room_id == room_id,      ## Use the UUID object here
+            Booking.room_id == room_id,
             Booking.check_out > booking_data.check_in,
             Booking.check_in < booking_data.check_out,
-            Booking.status != "cancelled"  ## Ignore cancelled bookings
+            Booking.status != "cancelled"
         )
     ).count()
 
@@ -82,18 +70,19 @@ async def create_booking(request:Request, booking_data:BookingCreate, db = Depen
 
     ## Generate unique confirmation code
     while True:
-        confirmation_code = generate_confirmation_code()
+        confirmation_code = generate_six_digit_code()
         existing_code = db.query(Booking).filter(Booking.confirmation_code == confirmation_code).first()
         if(not existing_code):
             break
 
     ## Create new booking in pending state
     new_booking = Booking(
-        room_id=room_id,  # Use the UUID object here
+        room_id=room_id,
         check_in=booking_data.check_in,
         check_out=booking_data.check_out,
         confirmation_code=confirmation_code,
-        status="pending"  # Initial state before payment
+        status="pending",
+        room_number=room.number  ## Store the room number at creation
     )
 
     db.add(new_booking)
@@ -117,8 +106,7 @@ async def modify_booking(
     Modify an existing booking
     """
     
-    origin = request.headers.get('origin')
-    check_internal_request(origin)
+    await check_internal_request(request)
 
     ## Get user from database
     user = db.query(User).filter(User.email == current_user).first()
@@ -184,19 +172,21 @@ async def check_availability(request:Request, availability_data:CheckAvailabilit
             and_(
                 Booking.room_id == room.id,
                 Booking.check_out > availability_data.check_in,
-                Booking.check_in < availability_data.check_out
+                Booking.check_in < availability_data.check_out,
+                Booking.status != "cancelled"
             )
         ).count()
 
         ## If bookings are less than room quantity, room is available
         if(booking_count < room.quantity):
             available_rooms.append({
-                "id": str(room.id),
+                "id": str(room.id),  ## Convert UUID to string here
                 "name": room.name,
                 "description": room.description,
                 "price": room.price,
                 "capacity": room.capacity,
-                "available_quantity": room.quantity - booking_count
+                "available_quantity": room.quantity - booking_count,
+                "number": room.number  ## Include room number
             })
 
     return available_rooms
@@ -265,5 +255,103 @@ async def confirm_booking_payment(request:Request, data:PaymentConfirmation, db 
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=str(e)
+        )
+
+@router.post("/booking/check-in")
+async def check_in(request:Request, db = Depends(get_db)):
+    """
+    Process check-in with confirmation code and generate checkout code
+    """
+    
+    await check_internal_request(request)
+    
+    data = await request.json()
+    check_in_code = data.get('check_in_code')
+    
+    if(not check_in_code):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Check-in code is required"
+        )
+    
+    try:
+        ## Find the booking with this confirmation code
+        booking = db.query(Booking).filter(
+            and_(
+                Booking.confirmation_code == check_in_code,
+                Booking.status == "confirmed"
+            )
+        ).first()
+        
+        print(f"Found booking: {booking}")  ## Debug log
+        print(f"Booking room_id: {booking.room_id if booking else 'No booking found'}")  ## Debug log
+        
+        if(not booking):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Invalid check-in code or booking already checked in"
+            )
+        
+        ## Check if it's too early to check in
+        today = datetime.now().date()
+        if(today < booking.check_in.date()):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="It's too early to check in. Please come back on your check-in date."
+            )
+        
+        ## Generate checkout code
+        while True:
+            checkout_code = generate_six_digit_code()
+            existing_code = db.query(Booking).filter(Booking.checkout_code == checkout_code).first()
+            if(not existing_code):
+                break
+        
+        ## Get a fresh session
+        db.expire_all()
+        
+        ## Get room with a new query
+        room = db.query(Room).filter(Room.id.cast(String) == str(booking.room_id)).first()
+        print(f"Room query result: {room}")  ## Debug log
+        
+        if(not room):
+            ## List all rooms for debugging
+            all_rooms = db.query(Room).all()
+            print("All rooms in database:")
+            for r in all_rooms:
+                print(f"Room ID: {r.id}, Number: {r.number}")
+            
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Room not found for this booking. Please contact support."
+            )
+        
+        ## Update booking status and add checkout code
+        booking.status = "checked_in"
+        booking.checkout_code = checkout_code
+        
+        ## Use the room number we already have stored
+        if(not booking.room_number):
+            booking.room_number = room.number
+        
+        ## Commit the changes
+        db.commit()
+        
+        return {
+            "message": "Check-in successful",
+            "room_number": booking.room_number,
+            "check_out_code": checkout_code
+        }
+        
+    except Exception as e:
+        db.rollback()
+        print(f"Error during check-in: {str(e)}")
+        
+        if(isinstance(e, HTTPException)):
+            raise e
+        
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An error occurred during check-in. Please try again."
         )
 

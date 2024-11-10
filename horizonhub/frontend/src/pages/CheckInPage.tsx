@@ -6,6 +6,8 @@
 
 // react
 import { useState } from "react";
+import axios from "axios";
+import { getURL } from "../utils";
 
 // chakra-ui
 import {
@@ -15,15 +17,20 @@ import {
     Input,
     Button,
     Text,
-    useToast
+    useToast,
+    Box,
+    Collapse
 } from "@chakra-ui/react";
 
 function CheckInPage() 
 {
     const [code, setCode] = useState("");
+    const [checkOutCode, setCheckOutCode] = useState("");
+    const [isCheckedIn, setIsCheckedIn] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const toast = useToast();
 
-    const handleSubmit = () =>
+    const handleSubmit = async () =>
     {
         if(code.length !== 6)
         {
@@ -37,47 +44,101 @@ function CheckInPage()
             return;
         }
 
-        // Hardcoded response for now
-        toast({
-            title: "Check-in Successful",
-            description: "Welcome to Horizon Hotel! Your room is 301.",
-            status: "success",
-            duration: 5000,
-            isClosable: true,
-        });
+        setIsLoading(true);
+        try 
+        {
+            const response = await axios.post(getURL('/booking/check-in'), {
+                check_in_code: code
+            });
+
+            setCheckOutCode(response.data.check_out_code);
+            setIsCheckedIn(true);
+            
+            toast({
+                title: "Check-in Successful",
+                description: `Welcome to Horizon Hotel! Your room is ${response.data.room_number}.`,
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+            });
+        } 
+        catch (error:any) 
+        {
+            toast({
+                title: "Check-in Failed",
+                description: error.response?.data?.detail || "An error occurred during check-in",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+        }
+        finally 
+        {
+            setIsLoading(false);
+        }
     };
 
     return (
         <Container maxW="container.md" py={10}>
             <VStack spacing={8}>
                 <Heading color="brand.text">Check In</Heading>
-                <Text color="brand.text">Please enter your 6-digit check-in code</Text>
                 
-                <Input
-                    placeholder="Enter code"
-                    value={code}
-                    onChange={(e) => setCode(e.target.value.slice(0, 6))}
-                    maxLength={6}
-                    size="lg"
-                    width="200px"
-                    textAlign="center"
-                    bg="white"
-                    color="brand.accent3"
-                    _placeholder={{ color: 'brand.accent3' }}
-                />
-                
-                <Button
-                    bg="brand.accent1"
-                    color="brand.text"
-                    onClick={handleSubmit}
-                    size="lg"
-                    _hover={{ bg: 'brand.accent4' }}
-                >
-                    Check In
-                </Button>
+                <Collapse in={!isCheckedIn} animateOpacity>
+                    <VStack spacing={4}>
+                        <Text color="brand.text">Please enter your 6-digit check-in code</Text>
+                        <Input
+                            placeholder="Enter code"
+                            value={code}
+                            onChange={(e) => setCode(e.target.value.slice(0, 6))}
+                            maxLength={6}
+                            size="lg"
+                            width="200px"
+                            textAlign="center"
+                            bg="white"
+                            color="brand.accent3"
+                            _placeholder={{ color: 'brand.accent3' }}
+                        />
+                        
+                        <Button
+                            bg="brand.accent1"
+                            color="brand.text"
+                            onClick={handleSubmit}
+                            size="lg"
+                            isLoading={isLoading}
+                            _hover={{ bg: 'brand.accent4' }}
+                        >
+                            Check In
+                        </Button>
+                    </VStack>
+                </Collapse>
+
+                <Collapse in={isCheckedIn} animateOpacity>
+                    <VStack spacing={6}>
+                        <Box
+                            bg="brand.accent3"
+                            p={6}
+                            borderRadius="lg"
+                            textAlign="center"
+                        >
+                            <VStack spacing={4}>
+                                <Heading size="md" color="brand.text">Your Check-out Code</Heading>
+                                <Text 
+                                    fontSize="2xl" 
+                                    fontWeight="bold"
+                                    color="brand.text"
+                                >
+                                    {checkOutCode}
+                                </Text>
+                                <Text color="brand.text" fontSize="sm">
+                                    Please save this code - you'll need it to check out.
+                                </Text>
+                            </VStack>
+                        </Box>
+                    </VStack>
+                </Collapse>
             </VStack>
         </Container>
     );
 }
 
-export default CheckInPage; 
+export default CheckInPage;

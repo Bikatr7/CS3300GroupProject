@@ -30,7 +30,8 @@ class Booking(Base):
     check_out = Column(DateTime)
     confirmation_code = Column(String(6), unique=True, nullable=False)
     status = Column(String, nullable=False, default="pending")  ## pending, confirmed, cancelled
-
+    checkout_code = Column(String, unique=True, nullable=True)
+    room_number = Column(String, nullable=True)
 
 class VerificationCode(Base):
     __tablename__ = "verification_codes"
@@ -49,3 +50,4 @@ class Room(Base):
     price = Column(Integer, nullable=False)
     capacity = Column(Integer, nullable=False)
     quantity = Column(Integer, nullable=False, default=2)
+    number = Column(String, nullable=False)
