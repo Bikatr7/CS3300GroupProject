@@ -82,20 +82,33 @@ function PaymentPage()
                     room_name: room.name
                 });
 
-                // Redirect to Stripe Checkout
-                window.location.href = response.data.url;
+                // Instead of directly setting window.location, use a controlled redirect
+                if(response.data.url)
+                {
+                    // Small timeout to ensure the response is fully processed
+                    setTimeout(() => {
+                        window.location.href = response.data.url;
+                    }, 100);
+                    return;
+                }
+
+                throw new Error('No redirect URL received from Stripe');
             } 
             catch (error) 
             {
-                console.error('Payment initiation error:', error);
-                toast({
-                    title: "Error",
-                    description: "Failed to initiate payment. Please try again.",
-                    status: "error",
-                    duration: 5000,
-                    isClosable: true,
-                });
-                navigate('/booking');
+                // Only show error toast if it's not an abort error
+                if(axios.isAxiosError(error) && error.code !== 'ECONNABORTED')
+                {
+                    console.error('Payment initiation error:', error);
+                    toast({
+                        title: "Error",
+                        description: "Failed to initiate payment. Please try again.",
+                        status: "error",
+                        duration: 5000,
+                        isClosable: true,
+                    });
+                    navigate('/booking');
+                }
             }
         };
 
