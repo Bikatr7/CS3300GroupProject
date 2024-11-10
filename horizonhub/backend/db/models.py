@@ -29,6 +29,7 @@ class Booking(Base):
     check_in = Column(DateTime)
     check_out = Column(DateTime)
     confirmation_code = Column(String(6), unique=True, nullable=False)
+    status = Column(String, nullable=False, default="pending")  ## pending, confirmed, cancelled
 
 
 class VerificationCode(Base):

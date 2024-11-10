@@ -6,12 +6,17 @@
 import sys
 import subprocess
 import os
+import base64
 
 ## Define the paths relative to the current working directory of the script
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 FRONTEND_ENV = os.path.join(current_dir, "../frontend/.env")
 BACKEND_ENV = os.path.join(current_dir, ".env")
+
+## Encoded stripe key
+## It is a test key and will not work for real payments
+ENCODED_STRIPE_KEY = "c2tfdGVzdF81MVEzQVlnRFoyeWxUamNEMGtvQ2dKb0RHdFRUanA2UnRmeEdnalF2NGRkUjgwR1JadTZ0VXl0VTlrWExYMTI2U09TR0U5T2E1WDZqU25sRHNFdDJmalpjYjAwN2p2Wm1hWUs="
 
 ##-------------------start-of-install_dependencies()---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def install_dependencies() -> None:
@@ -39,7 +44,8 @@ def setup_local_environment() -> None:
         "ACCESS_TOKEN_SECRET": "secret",
         "REFRESH_TOKEN_SECRET": "secret",
         "ENVIRONMENT": "development",
-        "NODE_ENV": "development"
+        "NODE_ENV": "development",
+        "STRIPE_API_KEY": base64.b64decode(ENCODED_STRIPE_KEY).decode('utf-8')
     }
 
     try:
@@ -53,6 +59,7 @@ def setup_local_environment() -> None:
                 f"ENVIRONMENT={env_to_key_local['ENVIRONMENT']}\n"
                 f"ACCESS_TOKEN_SECRET={env_to_key_local['ACCESS_TOKEN_SECRET']}\n"
                 f"REFRESH_TOKEN_SECRET={env_to_key_local['REFRESH_TOKEN_SECRET']}\n"
+                f"STRIPE_API_KEY={env_to_key_local['STRIPE_API_KEY']}\n"
             )
         else:
             print("Setting up production environment...")

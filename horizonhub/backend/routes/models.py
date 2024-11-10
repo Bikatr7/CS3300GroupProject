@@ -39,10 +39,19 @@ class CheckAvailabilityRequest(BaseModel):
     check_out:datetime
 
 class BookingCreate(BaseModel):
-    room_id:UUID
+    room_id:str
     check_in:datetime
     check_out:datetime
+
+    class Config:
+        json_encoders = {
+            UUID: str
+        }
 
 class BookingUpdate(BaseModel):
     check_in:datetime
     check_out:datetime
+
+class PaymentConfirmation(BaseModel):
+    session_id: str
+    booking_id: str

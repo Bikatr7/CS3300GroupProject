@@ -23,6 +23,7 @@ import NotFoundPage from './pages/error_pages/404.tsx';
 import ForbiddenPage from './pages/error_pages/403.tsx';
 import InternalErrorPage from './pages/error_pages/500.tsx';
 import AmenitiesPage from './pages/Amenities.tsx';
+import BookingSuccessPage from './pages/BookingSuccessPage.tsx';
 
 // components
 import AdminPanel from './components/AdminPanel.tsx';
@@ -84,6 +85,7 @@ function Router()
         '/payment': <PaymentPage />,
         '/customer': <CustomerPortalPage />,
         '/amenities': <AmenitiesPage />,
+        '/booking/success': <BookingSuccessPage />,
         '/admin': <ProtectedAdminRoute><AdminPanel /></ProtectedAdminRoute>,
         '/403': <ForbiddenPage />,
         '/500': <InternalErrorPage />

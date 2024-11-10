@@ -26,6 +26,7 @@ from db.migration import migrate_database
 
 from routes.warmups import router as warmups_router
 from routes.auth import router as auth_router
+from routes.financial import router as financial_router
 from routes.booking import router as booking_router
 
 ##-----------------------------------------start-of-main----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -78,3 +79,4 @@ async def maintenance_middleware(request:Request, call_next):
 app.include_router(warmups_router)
 app.include_router(auth_router)
 app.include_router(booking_router)
+app.include_router(financial_router)

@@ -61,6 +61,14 @@ def migrate_database(engine):
                 connection.execute(text("ALTER TABLE bookings_new RENAME TO bookings"))
                 connection.commit()
 
+        ## Add status column to bookings if it doesn't exist
+        result = connection.execute(text("PRAGMA table_info(bookings)"))
+        columns = [row[1] for row in result.fetchall()]
+        
+        if('status' not in columns):
+            connection.execute(text("ALTER TABLE bookings ADD COLUMN status VARCHAR NOT NULL DEFAULT 'pending'"))
+            connection.commit()
+
         ## Add some initial rooms if the table is empty
         result = connection.execute(text("SELECT COUNT(*) FROM rooms"))
         if(result.fetchone()[0] == 0):
@@ -100,3 +108,64 @@ def migrate_database(engine):
                     room
                 )
             connection.commit()
+
+    ## Add the new migration
+    add_default_rooms(engine)
+
+def add_default_rooms(engine):
+    """Add default rooms if they don't exist"""
+    from sqlalchemy.orm import sessionmaker
+    from db.models import Room
+    
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    ## Check if rooms already exist
+    existing_rooms = session.query(Room).count()
+    if(existing_rooms > 0):
+        session.close()
+        return
+
+    ## Define default rooms
+    default_rooms = [
+        Room(
+            name="Deluxe King Suite",
+            description="Spacious suite with king-size bed, ocean view, and luxury amenities",
+            price=299,
+            capacity=2,
+            quantity=5
+        ),
+        Room(
+            name="Double Queen Room",
+            description="Comfortable room with two queen beds, perfect for families",
+            price=199,
+            capacity=4,
+            quantity=8
+        ),
+        Room(
+            name="Executive Suite",
+            description="Premium suite with separate living area and premium amenities",
+            price=399,
+            capacity=2,
+            quantity=3
+        ),
+        Room(
+            name="Family Suite",
+            description="Large suite with two bedrooms, perfect for family stays",
+            price=499,
+            capacity=6,
+            quantity=4
+        )
+    ]
+
+    ## Add rooms to database
+    for room in default_rooms:
+        session.add(room)
+
+    try:
+        session.commit()
+    except Exception as e:
+        print(f"Error adding default rooms: {e}")
+        session.rollback()
+    finally:
+        session.close()

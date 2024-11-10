@@ -5,6 +5,7 @@
 ## built-in imports
 from uuid import UUID
 import random
+import stripe
 import string
 
 ## third-party imports
@@ -16,7 +17,7 @@ from db.base import get_db
 from db.models import Booking, User, Room
 from auth.func import get_current_user
 from auth.util import check_internal_request
-from routes.models import BookingCreate, BookingUpdate, CheckAvailabilityRequest
+from routes.models import BookingCreate, BookingUpdate, CheckAvailabilityRequest, PaymentConfirmation
 
 router = APIRouter()
 
@@ -25,24 +26,38 @@ def generate_confirmation_code():
     return ''.join(random.choices(string.digits, k=6))
 
 @router.post("/booking/create")
-async def create_booking(request:Request, booking_data:BookingCreate, current_user:str = Depends(get_current_user), db = Depends(get_db)):
+async def create_booking(request:Request, booking_data:BookingCreate, db = Depends(get_db)):
     """
-    Create a new booking for a user
+    Create a new booking in pending state
     """
     
-    origin = request.headers.get('origin')
-    check_internal_request(origin)
+    await check_internal_request(request)
 
-    ## Get user from database
-    user = db.query(User).filter(User.email == current_user).first()
-    if(not user):
+    
+    ## Convert string UUID to UUID object
+    try:
+        room_id = booking_data.room_id if isinstance(booking_data.room_id, UUID) else UUID(booking_data.room_id)
+        room = db.query(Room).filter(Room.id == room_id).first()
+        
+        ## Debug print the actual query
+        print(f"Room query result: {room}")
+        print(f"Room ID type: {type(room_id)}")
+        
+        ## Try direct comparison
+        all_rooms = db.query(Room).all()
+        for r in all_rooms:
+            print(f"Comparing {str(r.id)} ({type(r.id)}) with {str(room_id)} ({type(room_id)})")
+            if str(r.id) == str(room_id):
+                room = r
+                break
+                
+    except ValueError as e:
+        print(f"Invalid UUID format: {e}")
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid room ID format"
         )
-
-    ## Check if room exists
-    room = db.query(Room).filter(Room.id == booking_data.room_id).first()
+    
     if(not room):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -52,9 +67,10 @@ async def create_booking(request:Request, booking_data:BookingCreate, current_us
     ## Check if room is available for the requested dates
     booking_count = db.query(Booking).filter(
         and_(
-            Booking.room_id == booking_data.room_id,
+            Booking.room_id == room_id,      ## Use the UUID object here
             Booking.check_out > booking_data.check_in,
-            Booking.check_in < booking_data.check_out
+            Booking.check_in < booking_data.check_out,
+            Booking.status != "cancelled"  ## Ignore cancelled bookings
         )
     ).count()
 
@@ -71,13 +87,13 @@ async def create_booking(request:Request, booking_data:BookingCreate, current_us
         if(not existing_code):
             break
 
-    ## Create new booking
+    ## Create new booking in pending state
     new_booking = Booking(
-        user_id=user.id,
-        room_id=booking_data.room_id,
+        room_id=room_id,  # Use the UUID object here
         check_in=booking_data.check_in,
         check_out=booking_data.check_out,
-        confirmation_code=confirmation_code
+        confirmation_code=confirmation_code,
+        status="pending"  # Initial state before payment
     )
 
     db.add(new_booking)
@@ -157,8 +173,7 @@ async def check_availability(request:Request, availability_data:CheckAvailabilit
     Check room availability for given dates
     """
     
-    origin = request.headers.get('origin')
-    check_internal_request(origin)
+    await check_internal_request(request)
 
     available_rooms = []
     all_rooms = db.query(Room).all()
@@ -185,4 +200,70 @@ async def check_availability(request:Request, availability_data:CheckAvailabilit
             })
 
     return available_rooms
+
+@router.post("/booking/confirm-payment")
+async def confirm_booking_payment(request:Request, data:PaymentConfirmation, db = Depends(get_db)):
+    """
+    Confirm booking after successful payment
+    """
+    
+    await check_internal_request(request)
+
+    booking = db.query(Booking).filter(Booking.confirmation_code == data.booking_id).first()
+    if(not booking):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Booking not found"
+        )
+
+    # Verify payment with Stripe
+    try:
+        session = stripe.checkout.Session.retrieve(data.session_id)
+        
+        # First check if payment was successful
+        if(session.payment_status != "paid"):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Payment not completed"
+            )
+            
+        # Check if this is the correct booking
+        if(session.metadata.get("booking_id") != data.booking_id):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Payment verification failed"
+            )
+            
+        # If already processed, just return the confirmation
+        if(session.metadata.get("processed") == "true"):
+            return {
+                "message": "Booking already confirmed", 
+                "booking_id": data.booking_id
+            }
+            
+        # If we get here, payment is valid and not yet processed
+        booking.status = "confirmed"
+        db.commit()
+
+        # Mark Stripe session as processed
+        stripe.checkout.Session.modify(
+            data.session_id,
+            metadata={"processed": "true"}
+        )
+
+        return {
+            "message": "Booking confirmed successfully", 
+            "booking_id": data.booking_id
+        }
+            
+    except stripe.error.StripeError as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Stripe error: {str(e)}"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(e)
+        )
 

@@ -15,3 +15,15 @@ def get_url() -> str:
     
     ## needs to be changed later
     raise NotImplementedError("Not implemented yet (Kaden needs to decide if we want to do a production build)")
+
+
+async def get_frontend_url() -> str:
+
+    """
+    Returns the URL of the frontend based on the environment.
+    """
+
+    if(ENVIRONMENT == "development"):
+        return "http://localhost:5173"
+    
+    raise NotImplementedError("Not implemented yet (Kaden needs to decide if we want to do a production build)")

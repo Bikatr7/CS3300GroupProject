@@ -3,6 +3,7 @@
 ## license that can be found in the LICENSE file.
 
 import os 
+import stripe
 
 def get_env_variables() -> None:
 
@@ -35,6 +36,10 @@ TOKEN_EXPIRE_MINUTES = 30 * 24 * 60  ## 30 days in minutes
 DATABASE_URL:str = "sqlite:///./database/database.db"
 DATABASE_PATH:str = "database/database.db"
 
+STRIPE_API_KEY = os.environ.get("STRIPE_API_KEY")
+
+stripe.api_key = STRIPE_API_KEY
+
 __all__ = ["ADMIN_USER", 
            "ADMIN_PASS_HASH", 
            "ACCESS_TOKEN_SECRET", 
@@ -43,4 +48,5 @@ __all__ = ["ADMIN_USER",
            "TOKEN_ALGORITHM",
            "TOKEN_EXPIRE_MINUTES",
            "DATABASE_URL", 
-           "DATABASE_PATH"]
+           "DATABASE_PATH",
+           "STRIPE_API_KEY"]
