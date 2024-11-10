@@ -401,3 +401,58 @@ async def manual_cleanup_pending(request:Request, db = Depends(get_db)):
     await cleanup_pending_bookings(db)
     return {"message": "Cleanup completed"}
 
+@router.post("/booking/check-out")
+async def check_out(request:Request, db = Depends(get_db)):
+    """
+    Process check-out with checkout code
+    """
+    
+    await check_internal_request(request)
+    
+    data = await request.json()
+    check_out_code = data.get('check_out_code')
+    
+    if(not check_out_code):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Check-out code is required"
+        )
+    
+    try:
+        ## Find the booking with this checkout code
+        booking = db.query(Booking).filter(
+            and_(
+                Booking.checkout_code == check_out_code,
+                Booking.status == "checked_in"
+            )
+        ).first()
+        
+        if(not booking):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Invalid check-out code or booking already checked out"
+            )
+        
+        ## Update booking status
+        booking.status = "completed"
+        
+        ## Commit the changes
+        db.commit()
+        
+        return {
+            "message": "Check-out successful",
+            "room_number": booking.room_number
+        }
+        
+    except Exception as e:
+        db.rollback()
+        print(f"Error during check-out: {str(e)}")
+        
+        if(isinstance(e, HTTPException)):
+            raise e
+        
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An error occurred during check-out. Please try again."
+        )
+

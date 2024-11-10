@@ -172,6 +172,67 @@ def migrate_database(engine):
             except Exception as e:
                 print(f"Error adding number column to rooms: {e}")
 
+        ## Add created_at column to bookings if it doesn't exist
+        result = connection.execute(text("PRAGMA table_info(bookings)"))
+        columns = [row[1] for row in result.fetchall()]
+        
+        if('created_at' not in columns):
+            try:
+                ## Add created_at column
+                connection.execute(text("""
+                    ALTER TABLE bookings 
+                    ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                """))
+                
+                ## Update existing records to have current timestamp
+                connection.execute(text("""
+                    UPDATE bookings 
+                    SET created_at = CURRENT_TIMESTAMP 
+                    WHERE created_at IS NULL
+                """))
+                
+                print("Successfully added created_at column to bookings table")
+                
+            except Exception as e:
+                print(f"Error adding created_at column: {e}")
+                ## If ALTER TABLE fails, recreate the table
+                try:
+                    ## Create new table with all columns including created_at
+                    connection.execute(text("""
+                        CREATE TABLE bookings_new (
+                            id UUID PRIMARY KEY,
+                            user_id UUID REFERENCES users(id),
+                            room_id UUID REFERENCES rooms(id),
+                            check_in TIMESTAMP,
+                            check_out TIMESTAMP,
+                            confirmation_code VARCHAR(6) UNIQUE,
+                            status VARCHAR NOT NULL DEFAULT 'pending',
+                            checkout_code VARCHAR UNIQUE,
+                            room_number VARCHAR,
+                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                        )
+                    """))
+                    
+                    ## Copy existing data
+                    connection.execute(text("""
+                        INSERT INTO bookings_new (
+                            id, user_id, room_id, check_in, check_out,
+                            confirmation_code, status, checkout_code, room_number
+                        )
+                        SELECT id, user_id, room_id, check_in, check_out,
+                               confirmation_code, status, checkout_code, room_number
+                        FROM bookings
+                    """))
+                    
+                    ## Drop old table and rename new one
+                    connection.execute(text("DROP TABLE bookings"))
+                    connection.execute(text("ALTER TABLE bookings_new RENAME TO bookings"))
+                    print("Successfully recreated bookings table with created_at column")
+                    
+                except Exception as e:
+                    print(f"Error recreating bookings table: {e}")
+                    raise e
+
         connection.commit()
 
     ## Add the new migration
