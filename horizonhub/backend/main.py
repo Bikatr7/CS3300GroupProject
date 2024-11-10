@@ -56,7 +56,13 @@ migrate_database(engine)
 app = FastAPI()
 
 ## CORS setup
-allowed_origins = ["*"]
+allowed_origins = [
+    "http://localhost:5173",  ### Frontend dev server
+    "http://127.0.0.1:5173",  ### Alternative frontend URL
+    "http://localhost:5000",  ### Backend dev server
+    "http://127.0.0.1:5000"   ### Alternative backend URL
+]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
