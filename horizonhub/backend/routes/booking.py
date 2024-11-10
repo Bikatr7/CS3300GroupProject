@@ -7,11 +7,12 @@ from uuid import UUID
 import random
 import stripe
 import string
-from datetime import datetime
+from datetime import datetime, timedelta
 
 ## third-party imports
-from fastapi import APIRouter, HTTPException, Request, Depends, status
-from sqlalchemy import and_, String
+from fastapi import APIRouter, HTTPException, Request, Depends, status, BackgroundTasks
+from sqlalchemy import and_, String, or_
+from sqlalchemy.orm import Session
 
 ## custom imports
 from db.base import get_db
@@ -25,8 +26,31 @@ router = APIRouter()
 def generate_six_digit_code():
     return ''.join(random.choices(string.digits, k=6))
 
+async def cleanup_pending_bookings(db: Session):
+    """
+    Cleanup bookings that have been in pending state for more than 30 minutes
+    """
+    timeout = datetime.utcnow() - timedelta(minutes=30)
+    
+    pending_bookings = db.query(Booking).filter(
+        and_(
+            Booking.status == "pending",
+            Booking.created_at <= timeout
+        )
+    ).all()
+    
+    for booking in pending_bookings:
+        booking.status = "cancelled"
+    
+    db.commit()
+
 @router.post("/booking/create")
-async def create_booking(request:Request, booking_data:BookingCreate, db = Depends(get_db)):
+async def create_booking(
+    request:Request, 
+    booking_data:BookingCreate, 
+    background_tasks: BackgroundTasks,
+    db = Depends(get_db)
+):
     """
     Create a new booking in pending state
     """
@@ -58,7 +82,14 @@ async def create_booking(request:Request, booking_data:BookingCreate, db = Depen
             Booking.room_id == room_id,
             Booking.check_out > booking_data.check_in,
             Booking.check_in < booking_data.check_out,
-            Booking.status != "cancelled"
+            or_(
+                Booking.status == "confirmed",
+                Booking.status == "checked_in",
+                and_(
+                    Booking.status == "pending",
+                    Booking.created_at >= datetime.utcnow() - timedelta(minutes=30)
+                )
+            )
         )
     ).count()
 
@@ -82,12 +113,16 @@ async def create_booking(request:Request, booking_data:BookingCreate, db = Depen
         check_out=booking_data.check_out,
         confirmation_code=confirmation_code,
         status="pending",
-        room_number=room.number  ## Store the room number at creation
+        room_number=room.number,  ## Store the room number at creation
+        created_at=datetime.utcnow()  ## Add creation timestamp
     )
 
     db.add(new_booking)
     db.commit()
     db.refresh(new_booking)
+
+    ## Schedule cleanup task
+    background_tasks.add_task(cleanup_pending_bookings, db)
 
     return {
         "message": "Booking created successfully", 
@@ -354,4 +389,15 @@ async def check_in(request:Request, db = Depends(get_db)):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An error occurred during check-in. Please try again."
         )
+
+@router.post("/booking/cleanup-pending")
+async def manual_cleanup_pending(request:Request, db = Depends(get_db)):
+    """
+    Manually trigger cleanup of pending bookings (admin only)
+    """
+    
+    await check_internal_request(request)
+    
+    await cleanup_pending_bookings(db)
+    return {"message": "Cleanup completed"}
 

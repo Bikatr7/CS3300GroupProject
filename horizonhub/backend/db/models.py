@@ -32,6 +32,7 @@ class Booking(Base):
     status = Column(String, nullable=False, default="pending")  ## pending, confirmed, cancelled
     checkout_code = Column(String, unique=True, nullable=True)
     room_number = Column(String, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
 class VerificationCode(Base):
     __tablename__ = "verification_codes"
