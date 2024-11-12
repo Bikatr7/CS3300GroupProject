@@ -34,13 +34,14 @@ import {
         <VStack justify="space-between" align="center" direction="column" gap="8">
             <Spacer />
             
-            {/*king suite*/}
+            {/*ocean view suite*/}
 
             <Box alignContent={"center"} w="1000px" bg="transparent" h="600px" 
               borderRadius="10px" borderWidth="1px" borderColor="#fbe9b4">
-              <Text color="#fbe9b4" textAlign="center" fontWeight="bold" fontSize="25">King Suite</Text> 
+              <Text color="#fbe9b4" textAlign="center" fontWeight="bold" fontSize="25">Ocean View Suite</Text> 
               <Text color="#fbe9b4" textAlign="center" padding="8px" >
-                Our King Suite is designed for the height of luxury and relaxation for up to two guests.
+                Our Ocean View Suite is designed for the height of luxury and relaxation,
+                with panoramic ocean views. Sleeps up to two guests.
               </Text>
               <Flex justify={"center"}>
                 <Image src={kingBed} h="500px" padding="3"/>
@@ -48,13 +49,13 @@ import {
 
               </Box> 
 
-            {/*double room*/}
+            {/*presidential suite*/}
               <Box w="1000px" bg="transparent" h="600px" 
               borderRadius="10px" borderWidth="1px" borderColor="#fbe9b4">
-              <Text color="#fbe9b4" textAlign="center" fontWeight="bold" fontSize="25">Double Room</Text> 
+              <Text color="#fbe9b4" textAlign="center" fontWeight="bold" fontSize="25">Presidential Suite</Text> 
               <Text color="#fbe9b4" textAlign="center" padding="8px">
-                With two queen size beds, our Double Room is best for friends and families. 
-                Sleeps up to four guests.
+                With two queen beds, the Presidential Suite is our finest accommodation 
+                with premium amenities. Sleeps up to four guests.
               </Text>
               <Spacer />
               <Flex justify={"center"}>
@@ -62,14 +63,14 @@ import {
               </Flex>
               </Box> 
               
-              {/*queen room*/}
+              {/*garden deluxe room*/}
               <Box w="1000px" bg="transparent" h="630px" 
               borderRadius="10px" borderWidth="1px" borderColor="#fbe9b4" >
-              <Text color="#fbe9b4" textAlign="center" fontWeight="bold" fontSize="25">Queen Room</Text> 
+              <Text color="#fbe9b4" textAlign="center" fontWeight="bold" fontSize="25">Garden Deluxe Room</Text> 
               <Text color="#fbe9b4" textAlign="center" padding="10px">
-                Our Queen Room is designed for economy without sacrificing the comforts of 
-                our luxury amenities. Whether it's a quick trip or you're traveling solo, 
-                you'll still experience our high standards of relaxation. Sleeps up to two guests.
+                Our Garden Deluxe Room is designed for economy without sacrificing the comforts of 
+                our luxury amenities. With peaceful views of our tropical gardens,
+                this room sleeps up to two guests.
               </Text>
               <Flex justify={"center"}>
                 <Image src={queenBed} h="500px"></Image>
