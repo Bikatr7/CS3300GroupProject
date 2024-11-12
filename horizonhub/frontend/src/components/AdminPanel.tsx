@@ -272,6 +272,19 @@ function AdminPanel()
                         <Center height="100%">
                             <Spinner />
                         </Center>
+                    ) : bookings.length === 0 ? (
+                        <Center height="100%" flexDirection="column">
+                            <Text 
+                                fontSize="xl" 
+                                color={theme.colors.brand.accent1}
+                                mb={2}
+                            >
+                                No Bookings Found
+                            </Text>
+                            <Text color={theme.colors.brand.text}>
+                                There are currently no bookings in the system.
+                            </Text>
+                        </Center>
                     ) : (
                         <Accordion allowMultiple>
                             {bookings.map((booking:any) => (
