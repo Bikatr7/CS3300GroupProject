@@ -4,6 +4,7 @@
 
 ## built-in imports
 from uuid import UUID
+from asyncio import Lock
 import random
 import stripe
 import string
@@ -23,6 +24,8 @@ from constants import ADMIN_USER
 from routes.models import BookingCreate, BookingUpdate, CheckAvailabilityRequest, PaymentConfirmation
 
 router = APIRouter()
+
+booking_locks = {}
 
 def generate_six_digit_code():
     return ''.join(random.choices(string.digits, k=6))
@@ -53,7 +56,7 @@ async def create_booking(
     db = Depends(get_db)
 ):
     """
-    Create a new booking in pending state
+    Create a new booking in pending state with locking to prevent double bookings
     """
     
     await check_internal_request(request)
@@ -62,73 +65,96 @@ async def create_booking(
         ## Convert string UUID to UUID object if needed
         room_id = booking_data.room_id if isinstance(booking_data.room_id, UUID) else UUID(str(booking_data.room_id))
 
-        room = db.query(Room).filter(Room.id.cast(String) == str(room_id)).first()
+        ## Get or create lock for this room
+        lock = booking_locks.setdefault(str(room_id), Lock())
+        
+        async with lock:
+            room = db.query(Room).filter(Room.id.cast(String) == str(room_id)).first()
 
-        if(not room):
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Room not found"
+            if(not room):
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Room not found"
+                )
+
+            ## Check if room is available for the requested dates
+            booking_count = db.query(Booking).filter(
+                and_(
+                    Booking.room_id == room_id,
+                    Booking.check_out > booking_data.check_in,
+                    Booking.check_in < booking_data.check_out,
+                    or_(
+                        Booking.status == "confirmed",
+                        Booking.status == "checked_in",
+                        and_(
+                            Booking.status == "pending",
+                            Booking.created_at >= datetime.utcnow() - timedelta(minutes=5)
+                        )
+                    )
+                )
+            ).count()
+
+            if(booking_count >= room.quantity):
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Room is not available for the selected dates"
+                )
+
+            ## Check for existing pending booking with same parameters
+            existing_pending = db.query(Booking).filter(
+                and_(
+                    Booking.room_id == room_id,
+                    Booking.check_in == booking_data.check_in,
+                    Booking.check_out == booking_data.check_out,
+                    Booking.status == "pending",
+                    Booking.created_at >= datetime.utcnow() - timedelta(minutes=5)
+                )
+            ).first()
+
+            if existing_pending:
+                return {
+                    "message": "Booking already exists",
+                    "booking_id": existing_pending.confirmation_code
+                }
+
+            ## Generate unique confirmation code
+            while True:
+                confirmation_code = generate_six_digit_code()
+                existing_code = db.query(Booking).filter(
+                    Booking.confirmation_code == confirmation_code
+                ).first()
+                if(not existing_code):
+                    break
+
+            ## Create new booking in pending state
+            new_booking = Booking(
+                room_id=room_id,
+                check_in=booking_data.check_in,
+                check_out=booking_data.check_out,
+                confirmation_code=confirmation_code,
+                status="pending",
+                room_number=room.number,
+                created_at=datetime.utcnow()
             )
-                
+
+            db.add(new_booking)
+            db.commit()
+            db.refresh(new_booking)
+
+            ## Schedule cleanup task
+            background_tasks.add_task(cleanup_pending_bookings, db)
+
+            return {
+                "message": "Booking created successfully", 
+                "booking_id": confirmation_code
+            }
+
     except ValueError as e:
         print(f"Invalid UUID format: {e}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid room ID format"
         )
-
-    ## Check if room is available for the requested dates
-    booking_count = db.query(Booking).filter(
-        and_(
-            Booking.room_id == room_id,
-            Booking.check_out > booking_data.check_in,
-            Booking.check_in < booking_data.check_out,
-            or_(
-                Booking.status == "confirmed",
-                Booking.status == "checked_in",
-                and_(
-                    Booking.status == "pending",
-                    Booking.created_at >= datetime.utcnow() - timedelta(minutes=30)
-                )
-            )
-        )
-    ).count()
-
-    if(booking_count >= room.quantity):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Room is not available for the selected dates"
-        )
-
-    ## Generate unique confirmation code
-    while True:
-        confirmation_code = generate_six_digit_code()
-        existing_code = db.query(Booking).filter(Booking.confirmation_code == confirmation_code).first()
-        if(not existing_code):
-            break
-
-    ## Create new booking in pending state
-    new_booking = Booking(
-        room_id=room_id,
-        check_in=booking_data.check_in,
-        check_out=booking_data.check_out,
-        confirmation_code=confirmation_code,
-        status="pending",
-        room_number=room.number,  ## Store the room number at creation
-        created_at=datetime.utcnow()  ## Add creation timestamp
-    )
-
-    db.add(new_booking)
-    db.commit()
-    db.refresh(new_booking)
-
-    ## Schedule cleanup task
-    background_tasks.add_task(cleanup_pending_bookings, db)
-
-    return {
-        "message": "Booking created successfully", 
-        "booking_id": confirmation_code
-    }
 
 @router.put("/booking/modify/{booking_id}")
 async def modify_booking(
