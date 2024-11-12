@@ -12,8 +12,8 @@ Assigned Roles:
 
 1. Ensure you are in the backend directory
 2. Run `python setup.py local` to install requirements and setup envs.
-3. Run `uvicorn main:app --reload --port 5000` to start the uvicorn server
-4. Go to the url `http://localhost:5000/` to view the API
+3. Run `uvicorn main:app --reload --port 5555` to start the uvicorn server
+4. Go to the url `http://localhost:5555/` to view the API
 
 ## To
 - Functionality needs to be decided, majority of backend work will just be making sure the database holds new data and the api serves it correctly.

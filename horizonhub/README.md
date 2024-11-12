@@ -67,17 +67,28 @@ VScode will also prompt you to use that. I also recommend using type checking fo
 
 ### **Setting Up A Local Build**<a name="setting-up-a-local-build"></a>
 
-These steps must be followed _in order_.
+These steps must be followed _in order_. You only need to do this once per computer to set things up, or if Kaden tells you to.
 
 1. Clone the repo, make sure you are using the correct branch (currently `development`)
 2. Navigate to the project directory. `cd horizonhub`
 3. Navigate to the `backend` directory. `cd backend`. Inside is the python backend.
 4. Run the setup script with the local argument. This will install all requirements and setup the local env `python setup.py local`.
-5. Run the server. For local `uvicorn main:app --reload --port 5000`
+5. Run the server. For local `uvicorn main:app --reload --port 5555`
 6. Open a new terminal and navigate to the `horizonhub/frontend` directory. `cd horizonhub/frontend`. Inside is the react (vite) frontend.
 7. First install all required packages, these are in `package.json`. Do `npm i`. Then run the dev server with `npm run dev`
-8. Website will be on localhost:5173 (frontend) and localhost:5000 (backend)
-so
+8. Website will be on localhost:5173 (frontend) and localhost:5555 (backend)
+
+#### To just run after setup
+
+If you have already done the above and just want to run again:
+
+1. Navigate to the project directory. `cd horizonhub`
+2. Navigate to the `backend` directory. `cd backend`. Inside is the python backend.
+3. Run the server. For local `uvicorn main:app --reload --port 5555`
+4. Open a new terminal and navigate to the `horizonhub/frontend` directory. `cd horizonhub/frontend`. Inside is the react (vite) frontend.
+5. Run the dev server with `npm run dev`
+6. Website will be on localhost:5173 (frontend) and localhost:5555 (backend)
+
 Default login is admin:password
 
 ## **Resources**
