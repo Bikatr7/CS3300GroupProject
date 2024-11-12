@@ -15,7 +15,7 @@ const getURL = (path: string) =>
     } 
     else if (process.env.NODE_ENV === "development") 
     {
-        url = "http://api.localhost:5000";
+        url = "http://api.localhost:5555";
     } 
     
     return url + path;

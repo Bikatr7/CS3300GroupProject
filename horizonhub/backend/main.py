@@ -59,8 +59,10 @@ app = FastAPI()
 allowed_origins = [
     "http://localhost:5173",  ### Frontend dev server
     "http://127.0.0.1:5173",  ### Alternative frontend URL
-    "http://localhost:5000",  ### Backend dev server
-    "http://127.0.0.1:5000"   ### Alternative backend URL
+    "http://localhost:5555",  ### Backend dev server
+    "http://127.0.0.1:5555",   ### Alternative backend URL
+    "http://localhost:5173/",  ### Frontend with trailing slash
+    "http://api.localhost:5555"  ### API domain
 ]
 
 app.add_middleware(
@@ -69,6 +71,8 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
+    max_age=3600
 )
 
 @app.middleware("http")

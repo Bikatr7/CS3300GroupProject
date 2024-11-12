@@ -29,6 +29,6 @@ RUN rm -rf __pycache__ Dockerfile.prod entrypoint_prod.sh setup.py requirements.
 
 ENV PYTHONPATH=/app
 
-EXPOSE 5000
+EXPOSE 5555
 
 CMD ["./entrypoint_dev.sh"]
