@@ -7,6 +7,7 @@
 // React
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 // Chakra UI
 import {
@@ -121,23 +122,13 @@ function AdminPanel()
         setIsLoadingBookings(true);
         try 
         {
-            const response = await fetch(getURL('/admin/bookings'), 
-            {
-                headers: 
-                {
+            const response = await axios.get(getURL('/admin/bookings'), {
+                headers: {
                     'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
 
-            if(response.ok) 
-            {
-                const data = await response.json();
-                setBookings(data.bookings);
-            } 
-            else 
-            {
-                throw new Error('Failed to fetch bookings');
-            }
+            setBookings(response.data.bookings);
         } 
         catch (error) 
         {

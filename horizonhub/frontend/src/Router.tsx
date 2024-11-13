@@ -11,6 +11,9 @@ import { useLocation } from 'react-router-dom';
 // chakra-ui
 import { Spinner, Center } from "@chakra-ui/react";
 
+// axios
+import axios from 'axios';
+
 // pages
 import HomePage from "./pages/HomePage.tsx";
 import BookingPage from './pages/BookingPage.tsx';
@@ -38,21 +41,29 @@ const ProtectedAdminRoute = ({ children }: { children: ReactNode }) =>
 
     useEffect(() => 
     {
-        if(!isLoading && isLoggedIn)
+        const checkAdminStatus = async () =>
         {
-            fetch(getURL('/auth/check-if-admin-user'), 
+            if(!isLoading && isLoggedIn)
             {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` },
-            })
-            .then(response => response.ok ? response.json() : Promise.reject())
-            .then(data => setIsAdmin(data.result))
-            .catch(() => setIsAdmin(false));
-        }
-        else if(!isLoading)
-        {
-            setIsAdmin(false);
-        }
+                try 
+                {
+                    const response = await axios.post(getURL('/auth/check-if-admin-user'), {}, {
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
+                    });
+                    setIsAdmin(response.data.result);
+                }
+                catch(error)
+                {
+                    setIsAdmin(false);
+                }
+            }
+            else if(!isLoading)
+            {
+                setIsAdmin(false);
+            }
+        };
+
+        checkAdminStatus();
     }, [isLoggedIn, isLoading]);
 
     if(isLoading || isAdmin === null)
