@@ -71,8 +71,8 @@ async def verify_payment(request: Request, db: Session = Depends(get_db)):
 
         session = stripe.checkout.Session.retrieve(session_id)
 
-        if(session.payment_status == 'paid' and session.metadata.get('booking_id') == booking_id):
-            if(session.metadata.get('processed') == 'true'):
+        if(session.payment_status == 'paid' and session.metadata.get('booking_id') == booking_id): ## type: ignore
+            if(session.metadata.get('processed') == 'true'): ## type: ignore
                 return {"success": False, "message": "Payment already processed"}
 
             stripe.checkout.Session.modify(

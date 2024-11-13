@@ -10,7 +10,6 @@ from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.engine import create_engine, Engine
 
-
 ## custom imports
 from constants import DATABASE_URL
 

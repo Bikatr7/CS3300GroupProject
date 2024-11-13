@@ -13,7 +13,6 @@ from sqlalchemy.dialects.postgresql import UUID as modelUUID
 ## custom imports
 from db.base import Base
 
-## going to need a lot of work as we add more functionality
 
 class User(Base):
     __tablename__ = "users"
@@ -39,11 +38,11 @@ class Booking(Base):
         data = {
             "id": str(self.id),
             "confirmation_code": self.confirmation_code,
-            "check_in_date": self.check_in.isoformat() if self.check_in else None,
-            "check_out_date": self.check_out.isoformat() if self.check_out else None,
+            "check_in_date": self.check_in.isoformat() if getattr(self, 'check_in', None) else None,
+            "check_out_date": self.check_out.isoformat() if getattr(self, 'check_out', None) else None,
             "status": self.status,
             "room_number": self.room_number,
-            "created_at": self.created_at.isoformat() if self.created_at else None
+            "created_at": getattr(self, 'created_at', None).isoformat() if getattr(self, 'created_at', None) is not None else None ## type: ignore
         }
         
         if db:

@@ -44,7 +44,7 @@ async def cleanup_pending_bookings(db: Session):
     ).all()
     
     for booking in pending_bookings:
-        booking.status = "cancelled"
+        booking.status = "cancelled" ## type: ignore
     
     db.commit()
 
@@ -280,7 +280,7 @@ async def confirm_booking_payment(request:Request, data:PaymentConfirmation, db 
             )
             
         # Check if this is the correct booking
-        if(session.metadata.get("booking_id") != data.booking_id):
+        if(session.metadata.get("booking_id") != data.booking_id): ## type: ignore
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Payment verification failed"
@@ -301,7 +301,7 @@ async def confirm_booking_payment(request:Request, data:PaymentConfirmation, db 
             "booking_id": data.booking_id
         }
             
-    except stripe.error.StripeError as e:
+    except stripe.error.StripeError as e: ## type: ignore
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Stripe error: {str(e)}"

@@ -21,8 +21,6 @@ from fastapi.security import HTTPBasic
 
 ## custom modules
 from db.base import Base, engine
-from db.common import create_tables_if_not_exist
-from db.migration import migrate_database
 
 from routes.warmups import router as warmups_router
 from routes.auth import router as auth_router
@@ -37,6 +35,9 @@ if(not os.path.exists("database") and ACCESS_TOKEN_SECRET == "secret"):
 elif(not os.path.exists("database") and ACCESS_TOKEN_SECRET != "secret"):
     raise NotImplementedError("Database volume not attached and running in production mode, please exit and attach the volume")
 
+## Create all database tables
+Base.metadata.create_all(bind=engine)
+
 security = HTTPBasic()
 
 envs = [ADMIN_USER, 
@@ -47,9 +48,6 @@ envs = [ADMIN_USER,
 for env in envs:
     assert env, f"{env} environment variable not set"
 
-create_tables_if_not_exist(engine, Base)
-
-migrate_database(engine)
 
 ##-----------------------------------------start-of-main----------------------------------------------------------------------------------------------------------------------------------------------------------
 
