@@ -307,7 +307,7 @@ function AdminPanel()
                                                     </Text>
                                                 </GridItem>
                                                 <GridItem>
-                                                    <Text>{booking.customer_email}</Text>
+                                                    <Text>{booking.customer_email || 'No email'}</Text>
                                                 </GridItem>
                                                 <GridItem>
                                                     <Text>{formatDate(booking.check_in_date)}</Text>
@@ -328,19 +328,16 @@ function AdminPanel()
                                         <Grid templateColumns="repeat(2, 1fr)" gap={4}>
                                             <GridItem>
                                                 <Text fontWeight="bold" color={theme.colors.brand.accent1}>Room Details</Text>
-                                                <Text>Type: {booking.room_type}</Text>
-                                                <Text>Number: {booking.room_number}</Text>
-                                                <Text>Price: ${booking.room_price}</Text>
-                                                <Text>Description: {booking.room_description}</Text>
+                                                <Text>Type: {booking.room_type || 'N/A'}</Text>
+                                                <Text>Number: {booking.room_number || 'N/A'}</Text>
+                                                {booking.room_price && <Text>Price: ${booking.room_price}</Text>}
+                                                {booking.room_description && <Text>Description: {booking.room_description}</Text>}
                                             </GridItem>
                                             <GridItem>
                                                 <Text fontWeight="bold" color={theme.colors.brand.accent1}>Booking Details</Text>
                                                 <Text>Check-in: {formatDate(booking.check_in_date)}</Text>
                                                 <Text>Check-out: {formatDate(booking.check_out_date)}</Text>
                                                 <Text>Created: {formatDate(booking.created_at)}</Text>
-                                                {booking.checkout_code && (
-                                                    <Text>Checkout Code: {booking.checkout_code}</Text>
-                                                )}
                                             </GridItem>
                                         </Grid>
                                     </AccordionPanel>
