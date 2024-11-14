@@ -18,13 +18,11 @@ Assigned Roles:
 
 Home Page: Choose between customer and admin portals, can view amenities page from Navigation Bar.
 
-Customer Page:
+Customer Page: Customers can book rooms from the Home page or Booking page, based on date range of stay and number of guests.
 
 Check-in: Customer recieves a 6 digit code upon transaction completion. On the day of their check in, as long as it is at or after the check-in time the customer can check in online and receive their room number. 
 
 Check-out: As with check-in, the customer can check out remotely with another 6 digit code.
-
-schedule (prompt for first name/last name/email/phone number/) -> go to next window or whatever (ask for date, best way to do this is probably a calender modal, we need that and a time) -> (next ask for room, just assume we have three hardcoded options for now, approve it and output a 6 digit code)
 
 Admin Page: Accessible only to hotel management and staff
 
