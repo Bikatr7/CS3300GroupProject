@@ -26,7 +26,23 @@ import {
   AccordionIcon,
   Grid,
   GridItem,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  FormControl,
+  FormLabel,
+  Select,
+  IconButton,
+  Input,
+  Button,
+  VStack,
 } from "@chakra-ui/react";
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 
 // Images
 import fullscreen from '../assets/images/fullscreen.jpg';
@@ -58,6 +74,8 @@ function AdminPanel()
         const savedPosition = localStorage.getItem('adminPanelPosition');
         return savedPosition ? JSON.parse(savedPosition) : { left: window.innerWidth / 2, top: window.innerHeight / 2 };
     });
+    const [selectedBooking, setSelectedBooking] = useState<any>(null);
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const navigate = useNavigate();
 
@@ -213,6 +231,74 @@ function AdminPanel()
 
     const showBackground = themeConfig.theme.images.showBackgroundOn.admin;
 
+    const handleEdit = async (bookingId: string, updatedData: any) => {
+        try {
+            await axios.put(
+                getURL(`/admin/bookings/${bookingId}`),
+                updatedData,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    }
+                }
+            );
+            
+            toast({
+                title: "Success",
+                description: "Booking updated successfully",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+            });
+            
+            fetchBookings(); // Refresh the bookings list
+            onClose();
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error.response?.data?.detail || "Failed to update booking",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    };
+
+    const handleDelete = async (bookingId: string) => {
+        if (!window.confirm("Are you sure you want to delete this booking?")) {
+            return;
+        }
+
+        try {
+            await axios.delete(
+                getURL(`/admin/bookings/${bookingId}`),
+                {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    }
+                }
+            );
+            
+            toast({
+                title: "Success",
+                description: "Booking deleted successfully",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+            });
+            
+            fetchBookings(); // Refresh the bookings list
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error.response?.data?.detail || "Failed to delete booking",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    };
+
     return (
         <Box
             height="100vh"
@@ -341,6 +427,29 @@ function AdminPanel()
                                                 <Text>Check-out: {formatDate(booking.check_out_date)}</Text>
                                                 <Text>Created: {formatDate(booking.created_at)}</Text>
                                             </GridItem>
+                                            <GridItem colSpan={2}>
+                                                <HStack spacing={4} justifyContent="flex-end">
+                                                    <IconButton
+                                                        aria-label="Edit booking"
+                                                        icon={<EditIcon />}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setSelectedBooking(booking);
+                                                            onOpen();
+                                                        }}
+                                                        colorScheme="blue"
+                                                    />
+                                                    <IconButton
+                                                        aria-label="Delete booking"
+                                                        icon={<DeleteIcon />}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleDelete(booking.id);
+                                                        }}
+                                                        colorScheme="red"
+                                                    />
+                                                </HStack>
+                                            </GridItem>
                                         </Grid>
                                     </AccordionPanel>
                                 </AccordionItem>
@@ -359,6 +468,115 @@ function AdminPanel()
                     className="resize-handle"
                 />
             </Box>
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent bg="brand.background">
+                    <ModalHeader color="brand.text">Edit Booking</ModalHeader>
+                    <ModalCloseButton color="brand.text" />
+                    <ModalBody>
+                        {selectedBooking && (
+                            <VStack spacing={4}>
+                                <FormControl>
+                                    <FormLabel color="brand.text">Status</FormLabel>
+                                    <Select
+                                        value={selectedBooking.status}
+                                        onChange={(e) => setSelectedBooking({
+                                            ...selectedBooking,
+                                            status: e.target.value
+                                        })}
+                                        bg="brand.accent3"
+                                        color="brand.text"
+                                        borderColor="brand.accent1"
+                                        _hover={{ borderColor: 'brand.accent4' }}
+                                        sx={{
+                                            option: {
+                                                bg: 'brand.accent3',
+                                                color: 'brand.text',
+                                                _hover: { bg: 'brand.accent2' }
+                                            }
+                                        }}
+                                    >
+                                        <option value="pending">Pending</option>
+                                        <option value="confirmed">Confirmed</option>
+                                        <option value="checked_in">Checked In</option>
+                                        <option value="completed">Completed</option>
+                                        <option value="cancelled">Cancelled</option>
+                                    </Select>
+                                </FormControl>
+                                <FormControl>
+                                    <FormLabel color="brand.text">Email</FormLabel>
+                                    <Input
+                                        value={selectedBooking.customer_email || ''}
+                                        onChange={(e) => setSelectedBooking({
+                                            ...selectedBooking,
+                                            customer_email: e.target.value
+                                        })}
+                                        bg="brand.accent3"
+                                        color="brand.text"
+                                        borderColor="brand.accent1"
+                                        _hover={{ borderColor: 'brand.accent4' }}
+                                        _placeholder={{ color: 'brand.text' }}
+                                    />
+                                </FormControl>
+                                <FormControl>
+                                    <FormLabel color="brand.text">Check-in Date</FormLabel>
+                                    <Input
+                                        type="datetime-local"
+                                        value={selectedBooking.check_in_date?.slice(0, 16)}
+                                        onChange={(e) => setSelectedBooking({
+                                            ...selectedBooking,
+                                            check_in_date: e.target.value
+                                        })}
+                                        bg="brand.accent3"
+                                        color="brand.text"
+                                        borderColor="brand.accent1"
+                                        _hover={{ borderColor: 'brand.accent4' }}
+                                    />
+                                </FormControl>
+                                <FormControl>
+                                    <FormLabel color="brand.text">Check-out Date</FormLabel>
+                                    <Input
+                                        type="datetime-local"
+                                        value={selectedBooking.check_out_date?.slice(0, 16)}
+                                        onChange={(e) => setSelectedBooking({
+                                            ...selectedBooking,
+                                            check_out_date: e.target.value
+                                        })}
+                                        bg="brand.accent3"
+                                        color="brand.text"
+                                        borderColor="brand.accent1"
+                                        _hover={{ borderColor: 'brand.accent4' }}
+                                    />
+                                </FormControl>
+                            </VStack>
+                        )}
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button
+                            bg="brand.accent1"
+                            color="brand.text"
+                            mr={3}
+                            onClick={() => handleEdit(selectedBooking.id, {
+                                status: selectedBooking.status,
+                                email: selectedBooking.customer_email,
+                                check_in: selectedBooking.check_in_date,
+                                check_out: selectedBooking.check_out_date
+                            })}
+                            _hover={{ bg: 'brand.accent4' }}
+                        >
+                            Save Changes
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            onClick={onClose}
+                            color="brand.text"
+                            _hover={{ bg: 'brand.accent3' }}
+                        >
+                            Cancel
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </Box>
     );
 }

@@ -3,7 +3,7 @@
 ## license that can be found in the LICENSE file.
 
 ## built-in imports
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 ## third-party imports
 from fastapi import APIRouter, HTTPException, Request, status, Cookie, Depends
@@ -138,3 +138,50 @@ async def get_all_bookings(request:Request, current_user:str = Depends(check_if_
     
     bookings = db.query(Booking).all()
     return {"bookings": [booking.to_dict(db) for booking in bookings]}
+
+@router.put("/admin/bookings/{booking_id}")
+async def update_booking(
+    request: Request,
+    booking_id: str,
+    current_user: str = Depends(check_if_admin_user),
+    db = Depends(get_db)
+):
+    """Update a booking (admin only)"""
+    await check_internal_request(request)
+    
+    data = await request.json()
+    booking = db.query(Booking).filter(Booking.id == booking_id).first()
+    
+    if not booking:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    
+    # Update allowed fields
+    if 'check_in' in data:
+        booking.check_in = datetime.fromisoformat(data['check_in'])
+    if 'check_out' in data:
+        booking.check_out = datetime.fromisoformat(data['check_out'])
+    if 'status' in data:
+        booking.status = data['status']
+    if 'email' in data:
+        booking.email = data['email']
+    
+    db.commit()
+    return {"message": "Booking updated successfully"}
+
+@router.delete("/admin/bookings/{booking_id}")
+async def delete_booking(
+    request: Request,
+    booking_id: str,
+    current_user: str = Depends(check_if_admin_user),
+    db = Depends(get_db)
+):
+    """Delete a booking (admin only)"""
+    await check_internal_request(request)
+    
+    booking = db.query(Booking).filter(Booking.id == booking_id).first()
+    if not booking:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    
+    db.delete(booking)
+    db.commit()
+    return {"message": "Booking deleted successfully"}
