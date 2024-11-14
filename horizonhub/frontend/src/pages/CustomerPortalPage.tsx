@@ -16,7 +16,8 @@ import {
     Text,
     SimpleGrid,
     Box,
-    Icon
+    Icon,
+    useTheme
 } from "@chakra-ui/react";
 
 import { CalendarIcon, UnlockIcon, LockIcon } from '@chakra-ui/icons';
@@ -24,6 +25,8 @@ import { CalendarIcon, UnlockIcon, LockIcon } from '@chakra-ui/icons';
 function CustomerPortalPage() 
 {
     const navigate = useNavigate();
+    const theme = useTheme();
+    const hotelName = theme.hotelName || 'The Horizon Hotel';
 
     const portalOptions = [
         {
@@ -51,7 +54,7 @@ function CustomerPortalPage()
             <VStack spacing={8}>
                 <Heading color="brand.text">Customer Portal</Heading>
                 <Text color="brand.text" textAlign="center">
-                    Welcome to the Horizon Hotel customer portal. 
+                    Welcome to the {hotelName} customer portal. 
                     What would you like to do today?
                 </Text>
                 

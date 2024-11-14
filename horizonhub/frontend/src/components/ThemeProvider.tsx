@@ -83,33 +83,27 @@ function createTheme(config:any)
         }
     }
 
-    return extendTheme(
-    {
+    return extendTheme({
         config: themeConfig,
         colors,
-        styles: 
-        {
-            global: 
-            {
-                'html, body': 
-                {
+        styles: {
+            global: {
+                'html, body': {
                     color: colors.brand.text,
                     backgroundColor: colors.brand.background,
                 },
-                '.mainHeader':
-                {
+                '.mainHeader': {
                     color: colors.brand.text,
                 }
             },
-            dateRangePicker:
-            {
-                '.picker':
-                {
+            dateRangePicker: {
+                '.picker': {
                     padding: 20,
                     border: 2 
                 }
             }
         },
+        hotelName: config.theme.name || 'The Horizon Hotel',
     })
 }
 

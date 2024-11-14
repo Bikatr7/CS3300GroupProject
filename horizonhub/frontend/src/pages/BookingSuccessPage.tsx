@@ -23,6 +23,7 @@ import {
     Flex,
     Divider
 } from "@chakra-ui/react";
+import { useTheme } from "@chakra-ui/react";
 
 interface BookingConfirmation 
 {
@@ -35,6 +36,8 @@ function BookingSuccessPage()
     const location = useLocation();
     const navigate = useNavigate();
     const toast = useToast();
+    const theme = useTheme();
+    const hotelName = theme.hotelName || 'The Horizon Hotel';
     const [confirmation, setConfirmation] = useState<BookingConfirmation | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -108,7 +111,7 @@ function BookingSuccessPage()
                     <Box w="full">
                         <VStack spacing={4} align="start" w="full">
                             <Text color="brand.text" fontSize="lg">
-                                Thank you for choosing Horizon Hotel!
+                                Thank you for choosing {hotelName}!
                             </Text>
                             
                             <Divider />
