@@ -13,66 +13,27 @@ Assigned Roles:
 3. Run `npm run dev` to start the development server
 4. Go to the url `http://localhost:5173/` to view the website
 
-## ToDo
-
-- Overall theming needs to be decided and dealt with
-- New pages and stuff will need to be added
-- Functionality needs to be added, most data fetches will be done in the backend, but stuff like getting info, forms, selecting stuff etc. will be done here.
-
-## Other pages (Maddison)
-
-Feel free to add/keep those amenity pages as you see fit, they can just be the cherry on top of the overall product. I'd like the main page root (/) to have two buttons, one for customers and one for admins like specified in the requirements.
 
 ## Frontend:
 
+Home Page: Choose between customer and admin portals, can view amenities page from Navigation Bar.
 
-Basic overview of what needs to be done.
+Customer Page: Customers can book rooms from the Home page or Booking page, based on date range of stay and number of guests.
 
-- Home Page or main page should have two buttons, one for customers one for admins
+Check-in: Customer recieves a 6 digit code upon transaction completion. On the day of their check in, as long as it is at or after the check-in time the customer can check in online and receive their room number. 
 
-Customer Page:
+Check-out: As with check-in, the customer can check out remotely with another 6 digit code.
 
-check in (prompt for 6 digit code, accept it, and return some hardcoded response)
+Admin Page: Accessible only to hotel management and staff
 
-check out (prompt for 6 digit code, accept it, return some hardcoded response)
+- Staff must log in to portal
+- From the admin page, staff can view and edit all bookings
 
-schedule (prompt for first name/last name/email/phone number/) -> go to next window or whatever (ask for date, best way to do this is probably a calender modal, we need that and a time) -> (next ask for room, just assume we have three hardcoded options for now, approve it and output a 6 digit code)
-
-Admin Page:
-
-- Login page FIRST
-- View all bookings (will have a way to cancel/modify bookings later)
-
-you're free to hardcode all these responses on the frontend, i'll design the base of the backend and connect them up later
-
-## Integrator:
-
-It is up to the integrator to coordinate with the frontend developer to ensure that the frontend is doing what the backend expects it to do. As well as communicate api needs to the backend.
-
-
-## File Structure
-
-### Things you will probably not have to change
-
-You will probably not have to change the following files
-
-- vite.config.ts
-- tsconfig.json
-- tsconfig.node.json
-- .env
-- .eslintrc.cjs
-- .prettierignore
-- package-lock.json
-- package.json
-- vite-env.d.ts
-- main.tsx
-
-### Things you will definitely have to change
 
 #### Theming
 
-- index.html (favicon and root styles need to be decided)
-- theme.ts (colors and fonts need to be decided)
+- index.html
+- theme.ts
 <img width="604" alt="Screen Shot 2024-10-06 at 11 00 44 AM" src="https://github.com/user-attachments/assets/bd0e3c9a-4bd8-4c64-9655-e67825393ad0">
 
 - Color Scheme hex codes (from left to right)
@@ -93,51 +54,13 @@ You will probably not have to change the following files
 
 #### Components
 
-components/Navbar.tsx is the navbar. This is the top navigation bar that is present on every page.
-components/NavItem.tsx is the navbar item. Holds lists of nav items for the navbar.
+components/Navbar.tsx is the navigation bar. This is the top navigation bar that is present on every page.
+components/NavItem.tsx is the navigation bar item. Holds lists of navigation items for the navbar.
 
 components/Footer.tsx is the footer. This is the bottom navigation bar that is present on every page.
 
-Both of these need to changed for new pages and theming.
+components/Login.tsx is the login component. This is the login button that is on the navbar.
 
-components/Login.tsx is the login component. This is the login button that is on the navbar. Login wise should be okay, but needs styling.
-
-### Things you may have to change
-
-#### Dependencies
-
-If you run into dependency issues, just contact me (Kaden) and we can figure it out.
-
-- package.json
-- package-lock.json
-
-#### App Config
-
-Hopefully won't have to change anything here. Basically just the root component. If you believe something is wrong with the app config, then contact me (Kaden) and we can figure it out.
-
-- App.tsx
-
-#### Utils
-
-index.tsx has some functions that are used throughout the app. Nothing too important. If you want to add a function, just add it here.
-
-#### Pages
-
-pages/HomePage.tsx is the home page. This is what you see when you first navigate to the website.
-
-We'll add more pages as we get more functionality.
-
-#### Contexts
-
-contexts/AuthContext.tsx is the context for the authentication state. This is used to store the authentication state and provide it to the rest of the app. Hopefully proven technology and should work fine.
-
-#### Animations
-
-animations/commonAnimations.tsx has some common animations that are used throughout the app. Nothing too important. Add new ones as you see fit.
-
-#### Assets
-
-assets/images has all the images used in the app. Add new ones as you see fit.
 
 ### Resources
 
