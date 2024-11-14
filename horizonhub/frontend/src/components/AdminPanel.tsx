@@ -29,7 +29,7 @@ import {
 } from "@chakra-ui/react";
 
 // Images
-import landingPageBg from '../assets/images/SunsetBkgd.jpg';
+import landingPageBg from '../assets/images/fullscreen.jpg';
 
 // Util
 import { getURL } from '../utils';

@@ -26,7 +26,6 @@ import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 import "@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css";
 import "react-calendar/dist/Calendar.css";
 
-// Add these styles right after imports
 const customStyles = `
   .react-calendar { 
     background-color: white;
