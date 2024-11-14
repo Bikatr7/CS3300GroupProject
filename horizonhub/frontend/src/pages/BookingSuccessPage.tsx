@@ -54,12 +54,20 @@ function BookingSuccessPage()
 
             try 
             {
-                const response = await axios.post(getURL('/booking/confirm-payment'), {
+                const response = await axios.post(getURL('/stripe/verify-payment'), {
                     session_id: sessionId,
                     booking_id: bookingId
                 });
 
-                setConfirmation(response.data);
+                if (response.data.success) {
+                    // Even if already processed, still show the booking confirmation
+                    setConfirmation({
+                        message: response.data.message,
+                        booking_id: bookingId
+                    });
+                } else {
+                    throw new Error(response.data.message);
+                }
             } 
             catch (error) 
             {

@@ -71,32 +71,47 @@ async def verify_payment(request: Request, db: Session = Depends(get_db)):
         if(not all([session_id, booking_id])):
             return {"success": False, "message": "Missing required fields"}
 
+        # Retrieve the session with expanded customer_details
         session = stripe.checkout.Session.retrieve(
             session_id,
-            expand=['customer_details']  # Expand customer_details to ensure we get the email
+            expand=['customer_details']
         )
 
-        if(session.payment_status == 'paid' and session.metadata.get('booking_id') == booking_id): ## type: ignore
-            if(session.metadata.get('processed') == 'true'): ## type: ignore
-                return {"success": False, "message": "Payment already processed"}
-
-            # Get the booking and update it
+        if(session.payment_status == 'paid' and session.metadata.get('booking_id') == booking_id):
+            # Get the booking using confirmation_code
             booking = db.query(Booking).filter(Booking.confirmation_code == booking_id).first()
-            if booking and hasattr(session, 'customer_details') and hasattr(session.customer_details, 'email'):
-                # Save the customer's email from the session
+            
+            if not booking:
+                return {"success": False, "message": "Booking not found"}
+
+            # Check if already processed but return success
+            if(session.metadata.get('processed') == 'true'):
+                return {
+                    "success": True, 
+                    "message": "Payment already processed",
+                    "alreadyProcessed": True
+                }
+
+            # Update booking with customer email and status
+            if booking and hasattr(session, 'customer_details') and session.customer_details.email:
                 booking.email = session.customer_details.email
                 booking.status = "confirmed"
                 db.commit()
-                print(f"Updated booking {booking_id} with email: {session.customer_details.email}")  # Debug log
+                print(f"Updated booking {booking_id} with email: {session.customer_details.email}")
 
+            # Mark session as processed
             stripe.checkout.Session.modify(
                 session_id,
                 metadata={'processed': 'true'}
             )
 
-            return {"success": True, "message": "Payment verified successfully"}
+            return {
+                "success": True, 
+                "message": "Payment verified successfully",
+                "alreadyProcessed": False
+            }
         else:
             return {"success": False, "message": "Payment verification failed"}
     except Exception as e:
-        print(f"Error processing payment: {str(e)}")  # Debug log
+        print(f"Error processing payment: {str(e)}")
         return {"success": False, "message": f"An error occurred: {str(e)}"}

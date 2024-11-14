@@ -40,8 +40,8 @@ class Booking(Base):
             "check_out_date": self.check_out.isoformat() if getattr(self, 'check_out', None) else None,
             "status": self.status,
             "room_number": self.room_number,
-            "created_at": getattr(self, 'created_at', None).isoformat() if getattr(self, 'created_at', None) is not None else None, ## type: ignore
-            "customer_email": self.email  # Use email directly from booking
+            "created_at": getattr(self, 'created_at', None).isoformat() if getattr(self, 'created_at', None) is not None else None,
+            "customer_email": self.email
         }
         
         if db:
@@ -49,12 +49,17 @@ class Booking(Base):
             room = db.query(Room).filter(Room.id == self.room_id).first()
             if room:
                 # Calculate total price based on number of nights
-                nights = (self.check_out - self.check_in).days
+                # Add 1 to include both check-in and check-out days
+                nights = ((self.check_out - self.check_in).days + 1) if self.check_out and self.check_in else 1
                 total_price = room.price * nights
                 
-                data["room_type"] = room.name
-                data["room_description"] = room.description
-                data["room_price"] = total_price  # Use calculated total price
+                data.update({
+                    "room_type": room.name,
+                    "room_description": room.description,
+                    "room_price": total_price,
+                    "price_per_night": room.price,
+                    "nights": nights 
+                })
         
         return data
 
