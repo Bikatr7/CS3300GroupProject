@@ -21,12 +21,12 @@ class User(Base):
 class Booking(Base):
     __tablename__ = "bookings"
     id = Column(String, primary_key=True, index=True)
-    user_id = Column(String, ForeignKey("users.id"))
     room_id = Column(String, ForeignKey("rooms.id"))
+    email = Column(String, nullable=True)
     check_in = Column(DateTime)
     check_out = Column(DateTime)
     confirmation_code = Column(String(6), unique=True, nullable=False)
-    status = Column(String, nullable=False, default="pending")  ## pending, confirmed, cancelled
+    status = Column(String, nullable=False, default="pending")
     checkout_code = Column(String, unique=True, nullable=True)
     room_number = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -40,21 +40,21 @@ class Booking(Base):
             "check_out_date": self.check_out.isoformat() if getattr(self, 'check_out', None) else None,
             "status": self.status,
             "room_number": self.room_number,
-            "created_at": getattr(self, 'created_at', None).isoformat() if getattr(self, 'created_at', None) is not None else None ## type: ignore
+            "created_at": getattr(self, 'created_at', None).isoformat() if getattr(self, 'created_at', None) is not None else None, ## type: ignore
+            "customer_email": self.email  # Use email directly from booking
         }
         
         if db:
-            # Get user email
-            user = db.query(User).filter(User.id == self.user_id).first()
-            if user:
-                data["customer_email"] = user.email
-            
             # Get room details
             room = db.query(Room).filter(Room.id == self.room_id).first()
             if room:
+                # Calculate total price based on number of nights
+                nights = (self.check_out - self.check_in).days
+                total_price = room.price * nights
+                
                 data["room_type"] = room.name
                 data["room_description"] = room.description
-                data["room_price"] = room.price
+                data["room_price"] = total_price  # Use calculated total price
         
         return data
 
