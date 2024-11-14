@@ -102,6 +102,10 @@ function BookingSuccessPage()
                             <Text color="brand.text" fontSize="lg">
                                 Thank you for choosing Horizon Hotel!
                             </Text>
+                            <Text color="brand.text" fontSize="lg">
+                                Check-in time is 4:00 pm, check-out is 11:00 am. 
+                                We hope you enjoy your stay!
+                            </Text>
                             
                             <Divider />
                             
