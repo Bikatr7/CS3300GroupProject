@@ -16,4 +16,4 @@ async def get_frontend_url() -> str:
     Returns the URL of the frontend based on the environment.
     """
 
-    return "http://localhost:517"
+    return "http://localhost:5173"

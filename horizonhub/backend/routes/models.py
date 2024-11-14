@@ -5,7 +5,6 @@
 ## third-party imports
 from pydantic import BaseModel
 from datetime import datetime
-from uuid import UUID
 
 class LoginModel(BaseModel):
     username:str
@@ -42,11 +41,6 @@ class BookingCreate(BaseModel):
     room_id:str
     check_in:datetime
     check_out:datetime
-
-    class Config:
-        json_encoders = {
-            UUID: str
-        }
 
 class BookingUpdate(BaseModel):
     check_in:datetime

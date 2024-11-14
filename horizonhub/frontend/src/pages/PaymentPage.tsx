@@ -5,7 +5,7 @@
 // maintain allman bracket style for consistency
 
 // react
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getURL } from "../utils";
 
@@ -39,6 +39,8 @@ function PaymentPage()
     const location = useLocation();
     const navigate = useNavigate();
     const toast = useToast();
+    const paymentInitiated = useRef(false);
+    const controller = useRef(new AbortController());
 
     const { dateRange, room } = (location.state as LocationState) || {};
 
@@ -61,34 +63,47 @@ function PaymentPage()
             return;
         }
 
+        // Immediately return if payment was already initiated
+        if(paymentInitiated.current)
+        {
+            return;
+        }
+
         const initiatePayment = async () =>
         {
+            // Set flag immediately
+            paymentInitiated.current = true;
+
             try 
             {
                 console.log("Creating booking with room ID:", room.id);
                 // Create temporary booking to get booking ID
-                const bookingResponse = await axios.post(getURL('/booking/create'), {
-                    room_id: room.id,
-                    check_in: dateRange[0].toISOString(),
-                    check_out: dateRange[1].toISOString()
-                });
+                const bookingResponse = await axios.post(
+                    getURL('/booking/create'), 
+                    {
+                        room_id: room.id,
+                        check_in: dateRange[0].toISOString(),
+                        check_out: dateRange[1].toISOString()
+                    },
+                    { signal: controller.current.signal }
+                );
 
                 const bookingId = bookingResponse.data.booking_id;
 
                 // Create Stripe checkout session
-                const response = await axios.post(getURL('/stripe/create-checkout-session'), {
-                    amount: calculateTotalPrice() * 100, // Convert to cents
-                    booking_id: bookingId,
-                    room_name: room.name
-                });
+                const response = await axios.post(
+                    getURL('/stripe/create-checkout-session'), 
+                    {
+                        amount: calculateTotalPrice() * 100,
+                        booking_id: bookingId,
+                        room_name: room.name
+                    },
+                    { signal: controller.current.signal }
+                );
 
-                // Instead of directly setting window.location, use a controlled redirect
                 if(response.data.url)
                 {
-                    // Small timeout to ensure the response is fully processed
-                    setTimeout(() => {
-                        window.location.href = response.data.url;
-                    }, 100);
+                    window.location.href = response.data.url;
                     return;
                 }
 
@@ -96,8 +111,10 @@ function PaymentPage()
             } 
             catch (error) 
             {
-                // Only show error toast if it's not an abort error
-                if(axios.isAxiosError(error) && error.code !== 'ECONNABORTED')
+                // Only show error toast if it's not an abort error and payment wasn't already initiated
+                if(axios.isAxiosError(error) && 
+                   error.code !== 'ERR_CANCELED' && 
+                   !controller.current.signal.aborted)
                 {
                     console.error('Payment initiation error:', error);
                     toast({
@@ -113,6 +130,17 @@ function PaymentPage()
         };
 
         initiatePayment();
+
+        // Cleanup function
+        return () => 
+        {
+            // Abort any ongoing requests
+            controller.current.abort();
+            // Create new controller for potential future requests
+            controller.current = new AbortController();
+            // Reset payment initiated flag
+            paymentInitiated.current = false;
+        };
     }, [dateRange, room, navigate, toast]);
 
     if(!dateRange || !room)

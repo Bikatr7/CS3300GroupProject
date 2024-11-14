@@ -11,6 +11,13 @@ This repository contains the group project for CS 3300 at the University of Colo
 ## Documentation
 Documentation can be found inside further folders. Inside `horizonhub-hotel-manager`, `horizonhub-hotel-manager/frontend`, and `horizonhub-hotel-manager/backend` you will find their respective READMEs.
 
+Documentation on usage will be mostly in `horizonhub-hotel-manager` while the other folders are mainly for developers.
+
+## User Guides
+User Guides can be found inside `UserGuides/`.
+
+We have some both for our end user (The Business's who use HorizonHub), and their end users as well (The Customers of the Business's who use HorizonHub).
+
 ## License
 This project is licensed under the AGPL-3.0 License. See the [LICENSE](LICENSE.md) file for details.
 

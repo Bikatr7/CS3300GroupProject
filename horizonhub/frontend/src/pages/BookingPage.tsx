@@ -125,10 +125,11 @@ const customStyles = `
 interface Room {
     id: string;
     name: string;
-    price: number;
     description: string;
+    price: number;
     capacity: number;
     available_quantity: number;
+    number: string;
 }
 
 function BookingPage() 
@@ -188,11 +189,20 @@ function BookingPage()
             return;
         }
         
+        console.log("Selected room:", selectedRoom); // Debug log
+        
         // Pass booking details through navigation state
         navigate('/payment', {
             state: {
-                dateRange,
-                room: selectedRoom
+                dateRange: [
+                    dateRange[0],
+                    new Date(dateRange[1].getTime() - 1) // Subtract 1ms to avoid overlap
+                ],
+                room: {
+                    id: selectedRoom.id,
+                    name: selectedRoom.name,
+                    price: selectedRoom.price
+                }
             }
         });
     };
@@ -243,7 +253,10 @@ function BookingPage()
                                                     p={6}
                                                     borderRadius="lg"
                                                     cursor="pointer"
-                                                    onClick={() => setSelectedRoom(room)}
+                                                    onClick={() => {
+                                                        console.log("Selecting room:", room); // Debug log
+                                                        setSelectedRoom(room);
+                                                    }}
                                                     position="relative"
                                                     transform="translateZ(0)"
                                                     _hover={{ 

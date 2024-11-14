@@ -3,12 +3,10 @@
 ## license that can be found in the LICENSE file.
 
 ## built-in imports
-from uuid import uuid4
 from datetime import datetime
 
 ## third-party imports
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean
-from sqlalchemy.dialects.postgresql import UUID as modelUUID
 
 ## custom imports
 from db.base import Base
@@ -16,15 +14,15 @@ from db.base import Base
 
 class User(Base):
     __tablename__ = "users"
-    id = Column(modelUUID(as_uuid=True), primary_key=True, index=True, default=uuid4)
+    id = Column(String, primary_key=True, index=True)
     email = Column(String, unique=True, index=True)
     credits = Column(Integer, default=0)
 
 class Booking(Base):
     __tablename__ = "bookings"
-    id = Column(modelUUID(as_uuid=True), primary_key=True, index=True, default=uuid4)
-    user_id = Column(modelUUID(as_uuid=True), ForeignKey("users.id"))
-    room_id = Column(modelUUID(as_uuid=True), ForeignKey("rooms.id"))
+    id = Column(String, primary_key=True, index=True)
+    user_id = Column(String, ForeignKey("users.id"))
+    room_id = Column(String, ForeignKey("rooms.id"))
     check_in = Column(DateTime)
     check_out = Column(DateTime)
     confirmation_code = Column(String(6), unique=True, nullable=False)
@@ -36,7 +34,7 @@ class Booking(Base):
     def to_dict(self, db=None):
         """Convert the booking object to a dictionary with related data"""
         data = {
-            "id": str(self.id),
+            "id": self.id,
             "confirmation_code": self.confirmation_code,
             "check_in_date": self.check_in.isoformat() if getattr(self, 'check_in', None) else None,
             "check_out_date": self.check_out.isoformat() if getattr(self, 'check_out', None) else None,
@@ -62,7 +60,6 @@ class Booking(Base):
 
 class VerificationCode(Base):
     __tablename__ = "verification_codes"
-    
     email = Column(String, primary_key=True)
     code = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -71,10 +68,10 @@ class VerificationCode(Base):
 
 class Room(Base):
     __tablename__ = "rooms"
-    id = Column(modelUUID(as_uuid=True), primary_key=True, index=True, default=uuid4)
+    id = Column(String, primary_key=True, index=True)
     name = Column(String, nullable=False)
     description = Column(String, nullable=False)
     price = Column(Integer, nullable=False)
     capacity = Column(Integer, nullable=False)
-    quantity = Column(Integer, nullable=False, default=2)
+    quantity = Column(Integer, nullable=False, default=1)
     number = Column(String, nullable=False)

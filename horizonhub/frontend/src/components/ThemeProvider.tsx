@@ -24,7 +24,7 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) =>
 
     useEffect(() =>
     {
-        const checkForThemeUpdates = async () =>
+        const loadTheme = async () =>
         {
             try 
             {
@@ -38,10 +38,7 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) =>
             }
         }
 
-        // Check for updates every 2 seconds
-        const interval = setInterval(checkForThemeUpdates, 2000)
-
-        return () => clearInterval(interval)
+        loadTheme()
     }, [])
 
     return (
