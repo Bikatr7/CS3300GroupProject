@@ -15,6 +15,12 @@
         "config": {
             "initialColorMode": "dark",
             "useSystemColorMode": false
+        },
+        "images": {
+            "background": "fullscreen",
+            "showBackgroundOn": {
+                "admin": true
+            }
         }
     },
     "amenities": {

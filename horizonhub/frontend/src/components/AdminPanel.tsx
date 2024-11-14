@@ -29,13 +29,20 @@ import {
 } from "@chakra-ui/react";
 
 // Images
-import landingPageBg from '../assets/images/fullscreen.jpg';
+import fullscreen from '../assets/images/fullscreen.jpg';
 
 // Util
 import { getURL } from '../utils';
 
 // Theme
 import theme from '../theme';
+import themeConfig from '../../../edit_me.json';
+
+// image mapping
+const imageMap: { [key: string]: string } = 
+{
+    fullscreen
+};
 
 function AdminPanel() 
 {
@@ -204,6 +211,8 @@ function AdminPanel()
         }
     };
 
+    const showBackground = themeConfig.theme.images.showBackgroundOn.admin;
+
     return (
         <Box
             height="100vh"
@@ -211,17 +220,19 @@ function AdminPanel()
             position="relative"
             overflow="hidden"
         >
-            <Box
-                position="absolute"
-                top="0"
-                left="0"
-                right="0"
-                bottom="0"
-                backgroundImage={`url(${landingPageBg})`}
-                backgroundSize="cover"
-                backgroundPosition="center"
-                filter="brightness(0.6)"
-            />
+            {showBackground && (
+                <Box
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    right="0"
+                    bottom="0"
+                    backgroundImage={`url(${imageMap[themeConfig.theme.images.background]})`}
+                    backgroundSize="cover"
+                    backgroundPosition="center"
+                    filter="brightness(0.6)"
+                />
+            )}
             <Box
                 ref={modalRef}
                 position="absolute"
