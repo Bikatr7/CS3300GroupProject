@@ -1,4 +1,4 @@
-// Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject) ([url placeholder])
+// Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -8,7 +8,7 @@
 import { useLocation } from 'react-router-dom';
 
 // chakra-ui
-import { ChakraProvider, Box } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 
 // react-router-dom
 import { BrowserRouter } from 'react-router-dom';
@@ -17,7 +17,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Navbar from "./components/Navbar.tsx";
 import Footer from "./components/Footer.tsx";
 import Router from './Router.tsx';
-import theme from "./theme.ts";
+import ThemeProvider from './components/ThemeProvider.tsx';
 import { AuthProvider } from "./contexts/AuthContext.tsx";
 import PageWrapper from './components/PageWrapper.tsx';
 
@@ -50,13 +50,13 @@ function App()
 {
     return (
         <HelmetProvider>
-            <ChakraProvider theme={theme}>
+            <ThemeProvider>
                 <AuthProvider>
                     <BrowserRouter>
                         <AppContent />
                     </BrowserRouter>
                 </AuthProvider>
-            </ChakraProvider>
+            </ThemeProvider>
         </HelmetProvider>
     );
 }

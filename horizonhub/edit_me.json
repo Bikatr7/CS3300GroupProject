@@ -1,0 +1,20 @@
+{
+    "theme": {
+        "colors": {
+            "primary": "#a46048",
+            "background": "#2e343c",
+            "accent1": "#de7c47",
+            "accent2": "#5c4b4a",
+            "text": "#fbe9b4",
+            "accent3": "#44545a",
+            "headerFooter": "#512316",
+            "accent4": "#7d341b",
+            "accent5": "#99837c",
+            "navbar": "#c18c6a"
+        },
+        "config": {
+            "initialColorMode": "dark",
+            "useSystemColorMode": false
+        }
+    }
+}
