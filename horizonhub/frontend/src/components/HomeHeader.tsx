@@ -74,7 +74,7 @@ const HomeHeader: React.FC = () =>
                             />
                         </Flex>
                         <Link as={RouterLink} to="/">
-                            <Image src={logo} boxSize='40px' alt='Horizon Hotel Logo' mr={4}/>
+                            <Image src={logo} boxSize='40px' alt='Hotel Logo' mr={4}/>
                         </Link>
                         <Flex display={{base: 'none', md: 'flex'}}>
                             <DesktopNav items={navItems} />

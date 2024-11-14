@@ -22,6 +22,7 @@ import {
     Box,
     Collapse
 } from "@chakra-ui/react";
+import { useTheme } from "@chakra-ui/react";
 
 function CheckOutPage() 
 {
@@ -30,6 +31,8 @@ function CheckOutPage()
     const [isLoading, setIsLoading] = useState(false);
     const toast = useToast();
     const navigate = useNavigate();
+    const theme = useTheme();
+    const hotelName = theme.hotelName || 'The Horizon Hotel';
 
     const handleSubmit = async () =>
     {
@@ -126,7 +129,7 @@ function CheckOutPage()
                                     Your check-out has been completed successfully.
                                 </Text>
                                 <Text color="brand.text">
-                                    We hope you enjoyed your stay at Horizon Hotel!
+                                    We hope you enjoyed your stay at {hotelName}!
                                 </Text>
                                 <Button
                                     bg="brand.accent1"

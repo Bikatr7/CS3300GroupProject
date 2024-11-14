@@ -6,6 +6,7 @@
 
 // react
 import { useState } from 'react';
+import axios from 'axios';
 
 // chakra-ui
 import { Button, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Flex, useDisclosure, Spinner, useToast, InputGroup, InputRightElement, IconButton } from "@chakra-ui/react";
@@ -54,45 +55,38 @@ const Login: React.FC = () =>
     {
         try 
         {
-            const response = await fetch(getURL('/auth/login'), 
-            {
-                method: 'POST',
-                headers: 
-                {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username: email, password })
+            const response = await axios.post(getURL('/auth/login'), {
+                username: email,
+                password
             });
 
-            if (response.ok) 
+            if(response.data.access_token)
             {
-                const data = await response.json();
-                if (data.access_token) 
-                {
-                    await login(data.access_token);
-                    handleClose();
-                    showToast("Success", "Successfully logged in", "success");
-                } 
-                else 
-                {
-                    showToast("Error", "Invalid credentials", "error");
-                }
-            } 
+                await login(response.data.access_token);
+                handleClose();
+                showToast("Success", "Successfully logged in", "success");
+            }
             else
             {
-                const errorData = await response.json();
-                showToast("Error", errorData.message || 'Invalid credentials', "error");
+                showToast("Error", "Invalid credentials", "error");
             }
         } 
         catch (error) 
         {
-            showToast("Error", "An error occurred. Please try again.", "error");
+            if(axios.isAxiosError(error))
+            {
+                showToast("Error", error.response?.data?.message || "Invalid credentials", "error");
+            }
+            else
+            {
+                showToast("Error", "An error occurred. Please try again.", "error");
+            }
         }
     };
 
     const handleKeyPress = (event: React.KeyboardEvent) => 
     {
-        if (event.key === 'Enter') 
+        if(event.key === 'Enter') 
         {
             handleSubmit();
         }

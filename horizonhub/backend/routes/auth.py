@@ -3,8 +3,7 @@
 ## license that can be found in the LICENSE file.
 
 ## built-in imports
-from datetime import timedelta, datetime
-import random
+from datetime import timedelta
 
 ## third-party imports
 from fastapi import APIRouter, HTTPException, Request, status, Cookie, Depends

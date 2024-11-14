@@ -18,11 +18,11 @@ import {
   Container,
   HStack,
   Center,
-  Flex
+  Flex,
+  Box
 } from "@chakra-ui/react";
 
 // components
-import PageWrapper from "../components/PageWrapper";
 import HomeHeader from "../components/HomeHeader";
 import HomeFooter from "../components/HomeFooter";
 
@@ -67,11 +67,24 @@ function HomePage()
   }
 
   return (
-    <PageWrapper showBackground={true}>
+    <Box position="relative" minHeight="100vh" bg="brand.background">
       <HomeHeader />
-      <Flex minHeight="100vh" alignItems="center" maxHeight="100vh">
-        <Container maxW="container.xl">
-          <VStack spacing={8} align="center">
+      <Flex 
+        height="calc(100vh - 140px)" 
+        alignItems="center" 
+        justifyContent="center"
+      >
+        <Container 
+          maxW="800px" 
+          display="flex"     
+          justifyContent="center"
+          alignItems="center"
+        >
+          <VStack 
+            spacing={8} 
+            align="center"
+            width="100%"
+          >
             <Heading 
               as="h1" 
               className="mainHeader" 
@@ -90,7 +103,7 @@ function HomePage()
               Plan your getaway today
             </Text>
             
-            <Center>
+            <Center width="100%">
               <HStack spacing={4}>
                 <Button 
                   bg="brand.accent1"
@@ -116,7 +129,7 @@ function HomePage()
         </Container>
       </Flex>
       <HomeFooter />
-    </PageWrapper>
+    </Box>
   );
 }
 

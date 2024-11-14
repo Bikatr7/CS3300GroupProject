@@ -8,15 +8,7 @@ const getURL = (path: string) =>
 {
     let url;
 
-    if(process.env.NODE_ENV === "production") 
-    {
-        // if we ever make a production build, we need to change this
-        url = ""
-    } 
-    else if (process.env.NODE_ENV === "development") 
-    {
-        url = "http://api.localhost:5555";
-    } 
+    url = "http://api.localhost:5555";
     
     return url + path;
 }

@@ -10,7 +10,7 @@ import React from 'react';
 import { Box } from "@chakra-ui/react";
 
 // images
-import landingPageBg from '../assets/images/SunsetBkgd.jpg';
+import landingPageBg from '../assets/images/fullscreen.jpg';
 
 interface PageWrapperProps 
 {

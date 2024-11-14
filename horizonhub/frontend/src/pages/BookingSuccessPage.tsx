@@ -23,6 +23,7 @@ import {
     Flex,
     Divider
 } from "@chakra-ui/react";
+import { useTheme } from "@chakra-ui/react";
 
 interface BookingConfirmation 
 {
@@ -35,6 +36,8 @@ function BookingSuccessPage()
     const location = useLocation();
     const navigate = useNavigate();
     const toast = useToast();
+    const theme = useTheme();
+    const hotelName = theme.hotelName || 'The Horizon Hotel';
     const [confirmation, setConfirmation] = useState<BookingConfirmation | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -54,12 +57,20 @@ function BookingSuccessPage()
 
             try 
             {
-                const response = await axios.post(getURL('/booking/confirm-payment'), {
+                const response = await axios.post(getURL('/stripe/verify-payment'), {
                     session_id: sessionId,
                     booking_id: bookingId
                 });
 
-                setConfirmation(response.data);
+                if (response.data.success) {
+                    // Even if already processed, still show the booking confirmation
+                    setConfirmation({
+                        message: response.data.message,
+                        booking_id: bookingId
+                    });
+                } else {
+                    throw new Error(response.data.message);
+                }
             } 
             catch (error) 
             {
@@ -100,7 +111,7 @@ function BookingSuccessPage()
                     <Box w="full">
                         <VStack spacing={4} align="start" w="full">
                             <Text color="brand.text" fontSize="lg">
-                                Thank you for choosing Horizon Hotel!
+                                Thank you for choosing {hotelName}!
                             </Text>
                             <Text color="brand.text" fontSize="lg">
                                 Check-in time is 4:00 pm, check-out is 11:00 am. 

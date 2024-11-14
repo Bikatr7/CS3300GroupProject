@@ -3,33 +3,30 @@
 ## license that can be found in the LICENSE file.
 
 ## built-in imports
-from uuid import uuid4
 from datetime import datetime
 
 ## third-party imports
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean
-from sqlalchemy.dialects.postgresql import UUID as modelUUID
 
 ## custom imports
 from db.base import Base
 
-## going to need a lot of work as we add more functionality
 
 class User(Base):
     __tablename__ = "users"
-    id = Column(modelUUID(as_uuid=True), primary_key=True, index=True, default=uuid4)
+    id = Column(String, primary_key=True, index=True)
     email = Column(String, unique=True, index=True)
     credits = Column(Integer, default=0)
 
 class Booking(Base):
     __tablename__ = "bookings"
-    id = Column(modelUUID(as_uuid=True), primary_key=True, index=True, default=uuid4)
-    user_id = Column(modelUUID(as_uuid=True), ForeignKey("users.id"))
-    room_id = Column(modelUUID(as_uuid=True), ForeignKey("rooms.id"))
+    id = Column(String, primary_key=True, index=True)
+    room_id = Column(String, ForeignKey("rooms.id"))
+    email = Column(String, nullable=True)
     check_in = Column(DateTime)
     check_out = Column(DateTime)
     confirmation_code = Column(String(6), unique=True, nullable=False)
-    status = Column(String, nullable=False, default="pending")  ## pending, confirmed, cancelled
+    status = Column(String, nullable=False, default="pending")
     checkout_code = Column(String, unique=True, nullable=True)
     room_number = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -37,33 +34,37 @@ class Booking(Base):
     def to_dict(self, db=None):
         """Convert the booking object to a dictionary with related data"""
         data = {
-            "id": str(self.id),
+            "id": self.id,
             "confirmation_code": self.confirmation_code,
-            "check_in_date": self.check_in.isoformat() if self.check_in else None,
-            "check_out_date": self.check_out.isoformat() if self.check_out else None,
+            "check_in_date": self.check_in.isoformat() if getattr(self, 'check_in', None) else None,
+            "check_out_date": self.check_out.isoformat() if getattr(self, 'check_out', None) else None,
             "status": self.status,
             "room_number": self.room_number,
-            "created_at": self.created_at.isoformat() if self.created_at else None
+            "created_at": getattr(self, 'created_at', None).isoformat() if getattr(self, 'created_at', None) is not None else None,
+            "customer_email": self.email
         }
         
         if db:
-            # Get user email
-            user = db.query(User).filter(User.id == self.user_id).first()
-            if user:
-                data["customer_email"] = user.email
-            
             # Get room details
             room = db.query(Room).filter(Room.id == self.room_id).first()
             if room:
-                data["room_type"] = room.name
-                data["room_description"] = room.description
-                data["room_price"] = room.price
+                # Calculate total price based on number of nights
+                # Add 1 to include both check-in and check-out days
+                nights = ((self.check_out - self.check_in).days + 1) if self.check_out and self.check_in else 1
+                total_price = room.price * nights
+                
+                data.update({
+                    "room_type": room.name,
+                    "room_description": room.description,
+                    "room_price": total_price,
+                    "price_per_night": room.price,
+                    "nights": nights 
+                })
         
         return data
 
 class VerificationCode(Base):
     __tablename__ = "verification_codes"
-    
     email = Column(String, primary_key=True)
     code = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -72,10 +73,10 @@ class VerificationCode(Base):
 
 class Room(Base):
     __tablename__ = "rooms"
-    id = Column(modelUUID(as_uuid=True), primary_key=True, index=True, default=uuid4)
+    id = Column(String, primary_key=True, index=True)
     name = Column(String, nullable=False)
     description = Column(String, nullable=False)
     price = Column(Integer, nullable=False)
     capacity = Column(Integer, nullable=False)
-    quantity = Column(Integer, nullable=False, default=2)
+    quantity = Column(Integer, nullable=False, default=1)
     number = Column(String, nullable=False)

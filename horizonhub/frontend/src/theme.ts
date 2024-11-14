@@ -1,4 +1,4 @@
-// Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject) ([url placeholder])
+// Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -7,26 +7,39 @@
 // chakra-ui
 import { extendTheme, type ThemeConfig } from '@chakra-ui/react'
 
+// theme config
+import themeConfig from '../../edit_me.json'
+
+// Type guard to ensure correct color mode
+const isValidColorMode = (mode: string): mode is "light" | "dark" | "system" =>
+{
+    return ["light", "dark", "system"].includes(mode)
+}
+
+const colorMode = isValidColorMode(themeConfig.theme.config.initialColorMode) 
+    ? themeConfig.theme.config.initialColorMode 
+    : "dark"
+
 const config: ThemeConfig = 
 {
-    initialColorMode: 'dark',
-    useSystemColorMode: false,
+    initialColorMode: colorMode,
+    useSystemColorMode: themeConfig.theme.config.useSystemColorMode
 }
 
 const colors = 
 {
     brand: 
     {
-        primary: '#a46048',
-        background: '#2e343c',
-        accent1: '#de7c47',
-        accent2: '#5c4b4a',
-        text: '#fbe9b4',
-        accent3: '#44545a',
-        headerFooter: '#512316',
-        accent4: '#7d341b',
-        accent5: '#99837c',
-        navbar: '#c18c6a'
+        primary: themeConfig.theme.colors.primary,
+        background: themeConfig.theme.colors.background,
+        accent1: themeConfig.theme.colors.accent1,
+        accent2: themeConfig.theme.colors.accent2,
+        text: themeConfig.theme.colors.text,
+        accent3: themeConfig.theme.colors.accent3,
+        headerFooter: themeConfig.theme.colors.headerFooter,
+        accent4: themeConfig.theme.colors.accent4,
+        accent5: themeConfig.theme.colors.accent5,
+        navbar: themeConfig.theme.colors.navbar
     }
 }
 

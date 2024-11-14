@@ -9,6 +9,7 @@ from constants import *
 ## built-in libraries
 import os
 import threading
+import json
 
 maintenance_mode = False
 maintenance_lock = threading.Lock()
@@ -20,14 +21,89 @@ from fastapi.responses import JSONResponse
 from fastapi.security import HTTPBasic
 
 ## custom modules
-from db.base import Base, engine
-from db.common import create_tables_if_not_exist
-from db.migration import migrate_database
+from db.base import Base, engine, SessionLocal
+from db.models import Room
 
 from routes.warmups import router as warmups_router
 from routes.auth import router as auth_router
 from routes.financial import router as financial_router
 from routes.booking import router as booking_router
+
+def find_edit_me_json():
+    """
+    Find edit_me.json by checking multiple possible locations
+    """
+    possible_paths = [
+        "edit_me.json",  ## Same directory
+        "../edit_me.json",  ##   One level up
+        "../../edit_me.json",  ## Two levels up
+        os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "edit_me.json")  ## Absolute path from current file
+    ]
+
+    for path in possible_paths:
+        if(os.path.exists(path)):
+            return path
+
+    raise FileNotFoundError("Could not find edit_me.json in any expected location")
+
+def configure_rooms():
+    """
+    Configure rooms from edit_me.json on startup
+    """
+    try:
+        ## Find and read the edit_me.json file
+        json_path = find_edit_me_json()
+        print(f"Found edit_me.json at: {json_path}")
+        
+        with open(json_path, "r") as f:
+            config = json.load(f)
+
+        ## Get the rooms configuration
+        rooms_config = config.get("rooms", [])
+
+        ## Create a new database session
+        db = SessionLocal()
+
+        try:
+            ## Clear existing rooms
+            db.query(Room).delete()
+
+            ## Add new rooms from configuration
+            for room_config in rooms_config:
+                ## Verify quantity matches number of room numbers and ids
+                if(len(room_config["numbers"]) != room_config["quantity"] or 
+                   len(room_config["ids"]) != room_config["quantity"]):
+                    raise ValueError(f"Room {room_config['name']}: quantity ({room_config['quantity']}) " +
+                                  f"does not match number of room numbers ({len(room_config['numbers'])}) " +
+                                  f"or IDs ({len(room_config['ids'])})")
+
+                ## Create individual rooms for each number/id pair
+                for i in range(room_config["quantity"]):
+                    new_room = Room(
+                        id=room_config["ids"][i],
+                        name=room_config["name"],
+                        description=room_config["description"],
+                        price=room_config["price"],
+                        capacity=room_config["capacity"],
+                        quantity=1,  # Each individual room has quantity 1
+                        number=room_config["numbers"][i]
+                    )
+                    db.add(new_room)
+
+            ## Commit the changes
+            db.commit()
+            print("Rooms configured successfully from edit_me.json")
+
+        except Exception as e:
+            print(f"Error configuring rooms: {str(e)}")
+            db.rollback()
+            raise
+        finally:
+            db.close()
+
+    except Exception as e:
+        print(f"Error reading edit_me.json: {str(e)}")
+        raise
 
 ##-----------------------------------------start-of-main----------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -36,6 +112,12 @@ if(not os.path.exists("database") and ACCESS_TOKEN_SECRET == "secret"):
 
 elif(not os.path.exists("database") and ACCESS_TOKEN_SECRET != "secret"):
     raise NotImplementedError("Database volume not attached and running in production mode, please exit and attach the volume")
+
+## Create all database tables
+Base.metadata.create_all(bind=engine)
+
+## Configure rooms from edit_me.json
+configure_rooms()
 
 security = HTTPBasic()
 
@@ -47,9 +129,6 @@ envs = [ADMIN_USER,
 for env in envs:
     assert env, f"{env} environment variable not set"
 
-create_tables_if_not_exist(engine, Base)
-
-migrate_database(engine)
 
 ##-----------------------------------------start-of-main----------------------------------------------------------------------------------------------------------------------------------------------------------
 

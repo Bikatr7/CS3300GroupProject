@@ -3,7 +3,7 @@
 ## license that can be found in the LICENSE file.
 
 ## built-in imports
-from uuid import UUID
+from uuid import UUID, uuid4
 from asyncio import Lock
 import random
 import stripe
@@ -30,6 +30,10 @@ booking_locks = {}
 def generate_six_digit_code():
     return ''.join(random.choices(string.digits, k=6))
 
+def generate_booking_id():
+    """Generate a unique booking ID"""
+    return f"booking-{uuid4().hex[:8]}"
+
 async def cleanup_pending_bookings(db: Session):
     """
     Cleanup bookings that have been in pending state for more than 30 minutes
@@ -44,7 +48,7 @@ async def cleanup_pending_bookings(db: Session):
     ).all()
     
     for booking in pending_bookings:
-        booking.status = "cancelled"
+        booking.status = "cancelled" ## type: ignore
     
     db.commit()
 
@@ -62,14 +66,11 @@ async def create_booking(
     await check_internal_request(request)
 
     try:
-        ## Convert string UUID to UUID object if needed
-        room_id = booking_data.room_id if isinstance(booking_data.room_id, UUID) else UUID(str(booking_data.room_id))
-
         ## Get or create lock for this room
-        lock = booking_locks.setdefault(str(room_id), Lock())
+        lock = booking_locks.setdefault(booking_data.room_id, Lock())
         
         async with lock:
-            room = db.query(Room).filter(Room.id.cast(String) == str(room_id)).first()
+            room = db.query(Room).filter(Room.id == booking_data.room_id).first()
 
             if(not room):
                 raise HTTPException(
@@ -80,7 +81,7 @@ async def create_booking(
             ## Check if room is available for the requested dates
             booking_count = db.query(Booking).filter(
                 and_(
-                    Booking.room_id == room_id,
+                    Booking.room_id == booking_data.room_id,
                     Booking.check_out > booking_data.check_in,
                     Booking.check_in < booking_data.check_out,
                     or_(
@@ -103,7 +104,7 @@ async def create_booking(
             ## Check for existing pending booking with same parameters
             existing_pending = db.query(Booking).filter(
                 and_(
-                    Booking.room_id == room_id,
+                    Booking.room_id == booking_data.room_id,
                     Booking.check_in == booking_data.check_in,
                     Booking.check_out == booking_data.check_out,
                     Booking.status == "pending",
@@ -128,7 +129,8 @@ async def create_booking(
 
             ## Create new booking in pending state
             new_booking = Booking(
-                room_id=room_id,
+                id=generate_booking_id(),
+                room_id=booking_data.room_id,
                 check_in=booking_data.check_in,
                 check_out=booking_data.check_out,
                 confirmation_code=confirmation_code,
@@ -149,11 +151,11 @@ async def create_booking(
                 "booking_id": confirmation_code
             }
 
-    except ValueError as e:
-        print(f"Invalid UUID format: {e}")
+    except Exception as e:
+        print(f"Error creating booking: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid room ID format"
+            detail=str(e)
         )
 
 @router.put("/booking/modify/{booking_id}")
@@ -225,33 +227,44 @@ async def check_availability(request:Request, availability_data:CheckAvailabilit
     
     await check_internal_request(request)
 
-    available_rooms = []
+    available_rooms = {}
     all_rooms = db.query(Room).all()
 
     for room in all_rooms:
         ## Count existing bookings for this room in the date range
+        ## Only count active bookings (pending, confirmed, checked_in)
         booking_count = db.query(Booking).filter(
             and_(
                 Booking.room_id == room.id,
                 Booking.check_out > availability_data.check_in,
                 Booking.check_in < availability_data.check_out,
-                Booking.status != "cancelled"
+                Booking.status.in_(["pending", "confirmed", "checked_in"]),  # Only count active bookings
+                or_(
+                    Booking.status.in_(["confirmed", "checked_in"]),
+                    and_(
+                        Booking.status == "pending",
+                        Booking.created_at >= datetime.utcnow() - timedelta(minutes=5)
+                    )
+                )
             )
         ).count()
 
-        ## If bookings are less than room quantity, room is available
-        if(booking_count < room.quantity):
-            available_rooms.append({
-                "id": str(room.id),  ## Convert UUID to string here
-                "name": room.name,
-                "description": room.description,
-                "price": room.price,
-                "capacity": room.capacity,
-                "available_quantity": room.quantity - booking_count,
-                "number": room.number  ## Include room number
-            })
+        available_quantity = 1 - booking_count  # Since each room entry represents one physical room
 
-    return available_rooms
+        if available_quantity > 0:
+            if room.name not in available_rooms:
+                available_rooms[room.name] = {
+                    "id": room.id,  # Include the room ID
+                    "name": room.name,
+                    "description": room.description,
+                    "price": room.price,
+                    "capacity": room.capacity,
+                    "available_quantity": 0,
+                    "number": room.number
+                }
+            available_rooms[room.name]["available_quantity"] += available_quantity
+
+    return list(available_rooms.values())
 
 @router.post("/booking/confirm-payment")
 async def confirm_booking_payment(request:Request, data:PaymentConfirmation, db = Depends(get_db)):
@@ -280,7 +293,7 @@ async def confirm_booking_payment(request:Request, data:PaymentConfirmation, db 
             )
             
         # Check if this is the correct booking
-        if(session.metadata.get("booking_id") != data.booking_id):
+        if(session.metadata.get("booking_id") != data.booking_id): ## type: ignore
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Payment verification failed"
@@ -301,7 +314,7 @@ async def confirm_booking_payment(request:Request, data:PaymentConfirmation, db 
             "booking_id": data.booking_id
         }
             
-    except stripe.error.StripeError as e:
+    except stripe.error.StripeError as e: ## type: ignore
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Stripe error: {str(e)}"

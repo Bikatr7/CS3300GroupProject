@@ -20,7 +20,8 @@ import {
     Text,
     useToast,
     Box,
-    Collapse
+    Collapse,
+    useTheme
 } from "@chakra-ui/react";
 
 function CheckInPage() 
@@ -31,6 +32,8 @@ function CheckInPage()
     const [isLoading, setIsLoading] = useState(false);
     const toast = useToast();
     const navigate = useNavigate();
+    const theme = useTheme();
+    const hotelName = theme.hotelName || 'The Horizon Hotel';
 
     const handleSubmit = async () =>
     {
@@ -123,6 +126,7 @@ function CheckInPage()
                             textAlign="center"
                         >
                             <VStack spacing={4}>
+                                <Heading size="md" color="brand.text">Welcome to {hotelName}!</Heading>
                                 <Heading size="md" color="brand.text">Your Check-out Code</Heading>
                                 <Text 
                                     fontSize="2xl" 

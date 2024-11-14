@@ -1,0 +1,92 @@
+{
+    "theme": {
+        "name": "The Horizon Hotel",
+        "colors": {
+            "primary": "#a46048",
+            "background": "#2e343c",
+            "accent1": "#de7c47",
+            "accent2": "#5c4b4a",
+            "text": "#fbe9b4",
+            "accent3": "#44545a",
+            "headerFooter": "#512316",
+            "accent4": "#7d341b",
+            "accent5": "#99837c",
+            "navbar": "#c18c6a"
+        },
+        "config": {
+            "initialColorMode": "dark",
+            "useSystemColorMode": false
+        },
+        "images": {
+            "background": "fullscreen",
+            "showBackgroundOn": {
+                "admin": true
+            }
+        }
+    },
+    "amenities": {
+        "rooms": {
+            "title": "Rooms",
+            "items": [
+                {
+                    "title": "Ocean View Suite",
+                    "description": "Our Ocean View Suite is designed for the height of luxury and relaxation, with panoramic ocean views. Sleeps up to two guests.",
+                    "image": "kingBed",
+                    "height": "500px"
+                },
+                {
+                    "title": "Presidential Suite",
+                    "description": "With two queen beds, the Presidential Suite is our finest accommodation with premium amenities. Sleeps up to four guests.",
+                    "image": "doubleBed",
+                    "height": "500px"
+                },
+                {
+                    "title": "Garden Deluxe Room",
+                    "description": "Our Garden Deluxe Room is designed for economy without sacrificing the comforts of our luxury amenities. With peaceful views of our tropical gardens, this room sleeps up to two guests.",
+                    "image": "queenBed",
+                    "height": "500px"
+                }
+            ]
+        },
+        "facilities": {
+            "title": "Resort Style Pool",
+            "items": [
+                {
+                    "title": "Resort Style Pool",
+                    "description": "Our outdoor pool and hot tub will help you relax after a long day, whether you spent it exploring the local area or hard at work. The pool is heated to be comfortable year-round. Open 7 AM to 10 PM.",
+                    "image": "pool",
+                    "height": "400px"
+                }
+            ]
+        }
+    },
+    "rooms": [
+        {
+            "name": "Ocean View Suite",
+            "description": "Our Ocean View Suite is designed for the height of luxury and relaxation, with panoramic ocean views. Sleeps up to two guests.",
+            "price": 299,
+            "capacity": 2,
+            "quantity": 2,
+            "numbers": ["301", "302"],
+            "ids": ["ocean-view-1", "ocean-view-2"]
+        },
+        {
+            "name": "Presidential Suite",
+            "description": "With two queen beds, the Presidential Suite is our finest accommodation with premium amenities. Sleeps up to four guests.",
+            "price": 499,
+            "capacity": 4,
+            "quantity": 2,
+            "numbers": ["401", "402"],
+            "ids": ["presidential-1", "presidential-2"]
+        },
+        {
+            "name": "Garden Deluxe Room",
+            "description": "Our Garden Deluxe Room is designed for economy without sacrificing the comforts of our luxury amenities. With peaceful views of our tropical gardens, this room sleeps up to two guests.",
+            "price": 199,
+            "capacity": 2,
+            "quantity": 4,
+            "numbers": ["201", "202", "203", "204"],
+            "ids": ["garden-1", "garden-2", "garden-3", "garden-4"]
+        }
+    ]
+}
