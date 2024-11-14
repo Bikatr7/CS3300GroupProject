@@ -232,21 +232,29 @@ async def check_availability(request:Request, availability_data:CheckAvailabilit
 
     for room in all_rooms:
         ## Count existing bookings for this room in the date range
+        ## Only count active bookings (pending, confirmed, checked_in)
         booking_count = db.query(Booking).filter(
             and_(
                 Booking.room_id == room.id,
                 Booking.check_out > availability_data.check_in,
                 Booking.check_in < availability_data.check_out,
-                Booking.status != "cancelled"
+                Booking.status.in_(["pending", "confirmed", "checked_in"]),  # Only count active bookings
+                or_(
+                    Booking.status.in_(["confirmed", "checked_in"]),
+                    and_(
+                        Booking.status == "pending",
+                        Booking.created_at >= datetime.utcnow() - timedelta(minutes=5)
+                    )
+                )
             )
         ).count()
 
-        available_quantity = 1 - booking_count  ## Since each room entry represents one physical room
+        available_quantity = 1 - booking_count  # Since each room entry represents one physical room
 
         if available_quantity > 0:
             if room.name not in available_rooms:
                 available_rooms[room.name] = {
-                    "id": room.id,  ## Include the room ID
+                    "id": room.id,  # Include the room ID
                     "name": room.name,
                     "description": room.description,
                     "price": room.price,
