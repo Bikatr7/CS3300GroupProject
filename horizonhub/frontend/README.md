@@ -34,8 +34,8 @@ Admin Page: Accessible only to hotel management and staff
 
 #### Theming
 
-- index.html (favicon and root styles need to be decided)
-- theme.ts (colors and fonts need to be decided)
+- index.html
+- theme.ts
 <img width="604" alt="Screen Shot 2024-10-06 at 11 00 44 AM" src="https://github.com/user-attachments/assets/bd0e3c9a-4bd8-4c64-9655-e67825393ad0">
 
 - Color Scheme hex codes (from left to right)
