@@ -34,6 +34,10 @@ function CheckInPage()
     const navigate = useNavigate();
     const theme = useTheme();
     const hotelName = theme.hotelName;
+    const [bookingDates, setBookingDates] = useState<{
+        checkIn: Date | null;
+        checkOut: Date | null;
+    }>({ checkIn: null, checkOut: null });
 
     const handleSubmit = async () =>
     {
@@ -57,6 +61,10 @@ function CheckInPage()
             });
 
             setCheckOutCode(response.data.check_out_code);
+            setBookingDates({
+                checkIn: new Date(response.data.check_in),
+                checkOut: new Date(response.data.check_out)
+            });
             setIsCheckedIn(true);
             
             toast({
@@ -127,6 +135,21 @@ function CheckInPage()
                         >
                             <VStack spacing={4}>
                                 <Heading size="md" color="brand.text">Welcome to {hotelName}!</Heading>
+                                
+                                {bookingDates.checkIn && bookingDates.checkOut && (
+                                    <VStack spacing={2}>
+                                        <Text color="brand.text">
+                                            You may check in anytime after your check-in time, and you must check out by your check-out time.
+                                        </Text>
+                                        <Text color="brand.text">
+                                            Check-in: {bookingDates.checkIn.toLocaleString()}
+                                        </Text>
+                                        <Text color="brand.text">
+                                            Check-out: {bookingDates.checkOut.toLocaleString()}
+                                        </Text>
+                                    </VStack>
+                                )}
+                                
                                 <Heading size="md" color="brand.text">Your Check-out Code</Heading>
                                 <Text 
                                     fontSize="2xl" 

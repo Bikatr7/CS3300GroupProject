@@ -29,6 +29,8 @@ interface BookingConfirmation
 {
     message: string;
     booking_id: string;
+    check_in: string;
+    check_out: string;
 }
 
 function BookingSuccessPage() 
@@ -67,7 +69,9 @@ function BookingSuccessPage()
                     // Even if already processed, still show the booking confirmation
                     setConfirmation({
                         message: response.data.message,
-                        booking_id: bookingId
+                        booking_id: bookingId,
+                        check_in: response.data.check_in,
+                        check_out: response.data.check_out
                     });
                 } else {
                     throw new Error(response.data.message);
@@ -114,6 +118,20 @@ function BookingSuccessPage()
                             <Text color="brand.text" fontSize="lg">
                                 Thank you for choosing {hotelName}!
                             </Text>
+                            
+                            {confirmation && (
+                                <VStack spacing={2} align="start">
+                                    <Text color="brand.text" fontSize="lg">
+                                        You may check in anytime after your check-in time, and you must check out by your check-out time.
+                                    </Text>
+                                    <Text color="brand.text" fontSize="lg">
+                                        Check-in: {new Date(confirmation.check_in).toLocaleString()}
+                                    </Text>
+                                    <Text color="brand.text" fontSize="lg">
+                                        Check-out: {new Date(confirmation.check_out).toLocaleString()}
+                                    </Text>
+                                </VStack>
+                            )}
                             
                             <Divider />
                             

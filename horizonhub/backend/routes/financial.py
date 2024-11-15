@@ -89,7 +89,9 @@ async def verify_payment(request: Request, db: Session = Depends(get_db)):
                 return {
                     "success": True, 
                     "message": "Payment already processed",
-                    "alreadyProcessed": True
+                    "alreadyProcessed": True,
+                    "check_in": booking.check_in.isoformat(),
+                    "check_out": booking.check_out.isoformat()
                 }
 
             # Update booking with customer email and status
@@ -97,7 +99,6 @@ async def verify_payment(request: Request, db: Session = Depends(get_db)):
                 booking.email = session.customer_details.email
                 booking.status = "confirmed"
                 db.commit()
-                print(f"Updated booking {booking_id} with email: {session.customer_details.email}")
 
             # Mark session as processed
             stripe.checkout.Session.modify(
@@ -108,7 +109,9 @@ async def verify_payment(request: Request, db: Session = Depends(get_db)):
             return {
                 "success": True, 
                 "message": "Payment verified successfully",
-                "alreadyProcessed": False
+                "alreadyProcessed": False,
+                "check_in": booking.check_in.isoformat(),
+                "check_out": booking.check_out.isoformat()
             }
         else:
             return {"success": False, "message": "Payment verification failed"}
