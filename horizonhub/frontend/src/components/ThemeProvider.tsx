@@ -104,6 +104,7 @@ function createTheme(config:any)
             }
         },
         hotelName: config.theme.name || 'The Horizon Hotel',
+        supportEmail: config.theme.supportEmail || 'support@horizonhotel.com',
     })
 }
 

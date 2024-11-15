@@ -23,6 +23,7 @@ import {
     Flex,
     Divider
 } from "@chakra-ui/react";
+
 import { useTheme } from "@chakra-ui/react";
 
 interface BookingConfirmation 
