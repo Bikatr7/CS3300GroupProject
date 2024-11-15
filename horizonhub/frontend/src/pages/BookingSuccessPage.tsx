@@ -37,7 +37,8 @@ function BookingSuccessPage()
     const navigate = useNavigate();
     const toast = useToast();
     const theme = useTheme();
-    const hotelName = theme.hotelName || 'The Horizon Hotel';
+    const hotelName = theme.hotelName;
+    const supportEmail = theme.supportEmail;
     const [confirmation, setConfirmation] = useState<BookingConfirmation | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -77,7 +78,7 @@ function BookingSuccessPage()
                 console.error('Payment confirmation error:', error);
                 toast({
                     title: "Error",
-                    description: "Failed to confirm payment. Please contact support.",
+                    description: `Failed to confirm payment. Please contact us at ${supportEmail}.`,
                     status: "error",
                     duration: 5000,
                     isClosable: true
@@ -131,7 +132,7 @@ function BookingSuccessPage()
                             </Box>
                             
                             <Text color="brand.text" fontSize="sm">
-                                If you have any questions, please contact our support team.
+                                If you have any questions, please contact our support team at {supportEmail}.
                             </Text>
                         </VStack>
                     </Box>

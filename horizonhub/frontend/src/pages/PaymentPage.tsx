@@ -20,7 +20,6 @@ import {
     Center
 } from "@chakra-ui/react";
 
-// Add axios import at the top
 import axios from "axios";
 
 interface Room {

@@ -233,8 +233,8 @@ function BookingPage()
                                     {error && (
                                         <Box 
                                             p={4} 
-                                            bg="red.500" 
-                                            color="white" 
+                                            bg="brand.accent1" 
+                                            color="brand.text" 
                                             borderRadius="md" 
                                             w="full" 
                                             maxW="600px"

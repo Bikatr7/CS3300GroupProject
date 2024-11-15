@@ -33,7 +33,7 @@ function CheckInPage()
     const toast = useToast();
     const navigate = useNavigate();
     const theme = useTheme();
-    const hotelName = theme.hotelName || 'The Horizon Hotel';
+    const hotelName = theme.hotelName;
 
     const handleSubmit = async () =>
     {
@@ -61,7 +61,7 @@ function CheckInPage()
             
             toast({
                 title: "Check-in Successful",
-                description: `Welcome to Horizon Hotel! Your room is ${response.data.room_number}.`,
+                description: `Welcome to ${hotelName}! Your room is ${response.data.room_number}.`,
                 status: "success",
                 duration: 5000,
                 isClosable: true,

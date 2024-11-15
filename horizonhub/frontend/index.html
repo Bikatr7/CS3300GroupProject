@@ -10,19 +10,27 @@ maintain allman bracket style for consistency
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <!-- TODO: Add favicon -->
-    <link href="/favicon.ico" rel="icon" type="image/png"/>
+    <link href="/logo.webp" rel="icon" type="image/webp"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HorizonHub</title>
+    <script>
+        fetch('/edit_me.json')
+            .then(response => response.json())
+            .then(data => 
+            {
+                document.documentElement.style.backgroundColor = data.theme.colors.background;
+                document.body.style.backgroundColor = data.theme.colors.background;
+                document.getElementById('root').style.backgroundColor = data.theme.colors.background;
+            });
+    </script>
     <style>
         html, body, #root 
         {
-          background-color: #2e343c;
-          margin: 0;
-          padding: 0;
-          height: 100%;
+            margin: 0;
+            padding: 0;
+            height: 100%;
         }
-      </style>
+    </style>
 </head>
 <body>
 <div id="root"></div>
