@@ -33,7 +33,7 @@ function CheckInPage()
     const toast = useToast();
     const navigate = useNavigate();
     const theme = useTheme();
-    const hotelName = theme.hotelName || 'The Horizon Hotel';
+    const hotelName = theme.hotelName;
     const [bookingDates, setBookingDates] = useState<{
         checkIn: Date | null;
         checkOut: Date | null;

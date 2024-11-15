@@ -9,7 +9,7 @@ import { useState, useEffect, ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 
 // chakra-ui
-import { Spinner, Center } from "@chakra-ui/react";
+import { Spinner, Center, useTheme } from "@chakra-ui/react";
 
 // axios
 import axios from 'axios';
@@ -38,6 +38,7 @@ const ProtectedAdminRoute = ({ children }: { children: ReactNode }) =>
 {
     const { isLoggedIn, isLoading } = useAuth();
     const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+    const theme = useTheme();
 
     useEffect(() => 
     {
@@ -69,8 +70,14 @@ const ProtectedAdminRoute = ({ children }: { children: ReactNode }) =>
     if(isLoading || isAdmin === null)
     {
         return (
-            <Center height="100vh">
-                <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="orange.500" size="xl"/>
+            <Center height="100vh" bg={theme.colors.brand.background}>
+                <Spinner 
+                    thickness="4px" 
+                    speed="0.65s" 
+                    emptyColor={theme.colors.brand.accent2}
+                    color={theme.colors.brand.accent1} 
+                    size="xl"
+                />
             </Center>
         );
     }
@@ -86,7 +93,7 @@ const ProtectedAdminRoute = ({ children }: { children: ReactNode }) =>
 
 function Router() 
 {
-    const routes = {
+        const routes = {
         '/': <HomePage />,
         '/booking': <BookingPage />,
         '/checkout': <CheckoutPage />,

@@ -32,7 +32,7 @@ function CheckOutPage()
     const toast = useToast();
     const navigate = useNavigate();
     const theme = useTheme();
-    const hotelName = theme.hotelName || 'The Horizon Hotel';
+    const hotelName = theme.hotelName;
     const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
 
     const handleSubmit = async () =>

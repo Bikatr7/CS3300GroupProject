@@ -26,7 +26,7 @@ function CustomerPortalPage()
 {
     const navigate = useNavigate();
     const theme = useTheme();
-    const hotelName = theme.hotelName || 'The Horizon Hotel';
+    const hotelName = theme.hotelName;
 
     const portalOptions = [
         {

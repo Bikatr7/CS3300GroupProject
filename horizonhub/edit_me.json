@@ -1,6 +1,7 @@
 {
     "theme": {
         "name": "The Horizon Hotel",
+        "supportEmail": "support@horizonhotel.com",
         "colors": {
             "primary": "#a46048",
             "background": "#2e343c",
