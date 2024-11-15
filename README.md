@@ -16,7 +16,7 @@ Documentation on usage will be mostly in `horizonhub-hotel-manager` while the ot
 ## User Guides
 User Guides can be found inside `UserGuides/`.
 
-We have some both for our end user (The Business's who use HorizonHub), and their end users as well (The Customers of the Business's who use HorizonHub).
+We have some both for our end user (The Businesses who use HorizonHub), and their end users as well (The Customers of the Businesses who use HorizonHub).
 
 ## License
 This project is licensed under the AGPL-3.0 License. See the [LICENSE](LICENSE.md) file for details.
