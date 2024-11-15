@@ -29,6 +29,8 @@ interface BookingConfirmation
 {
     message: string;
     booking_id: string;
+    check_in: string;
+    check_out: string;
 }
 
 function BookingSuccessPage() 
@@ -66,7 +68,9 @@ function BookingSuccessPage()
                     // Even if already processed, still show the booking confirmation
                     setConfirmation({
                         message: response.data.message,
-                        booking_id: bookingId
+                        booking_id: bookingId,
+                        check_in: response.data.check_in,
+                        check_out: response.data.check_out
                     });
                 } else {
                     throw new Error(response.data.message);
@@ -113,10 +117,20 @@ function BookingSuccessPage()
                             <Text color="brand.text" fontSize="lg">
                                 Thank you for choosing {hotelName}!
                             </Text>
-                            <Text color="brand.text" fontSize="lg">
-                                Check-in time is 4:00 pm, check-out is 11:00 am. 
-                                We hope you enjoy your stay!
-                            </Text>
+                            
+                            {confirmation && (
+                                <VStack spacing={2} align="start">
+                                    <Text color="brand.text" fontSize="lg">
+                                        You may check in anytime after your check-in time, and you must check out by your check-out time.
+                                    </Text>
+                                    <Text color="brand.text" fontSize="lg">
+                                        Check-in: {new Date(confirmation.check_in).toLocaleString()}
+                                    </Text>
+                                    <Text color="brand.text" fontSize="lg">
+                                        Check-out: {new Date(confirmation.check_out).toLocaleString()}
+                                    </Text>
+                                </VStack>
+                            )}
                             
                             <Divider />
                             

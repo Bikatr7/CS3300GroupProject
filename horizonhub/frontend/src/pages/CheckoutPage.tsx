@@ -33,6 +33,7 @@ function CheckOutPage()
     const navigate = useNavigate();
     const theme = useTheme();
     const hotelName = theme.hotelName || 'The Horizon Hotel';
+    const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
 
     const handleSubmit = async () =>
     {
@@ -55,6 +56,7 @@ function CheckOutPage()
                 check_out_code: code
             });
 
+            setCheckOutDate(new Date());
             setIsCheckedOut(true);
             
             toast({
@@ -125,6 +127,11 @@ function CheckOutPage()
                         >
                             <VStack spacing={4}>
                                 <Heading size="md" color="brand.text">Thank You!</Heading>
+                                {checkOutDate && (
+                                    <Text color="brand.text">
+                                        Checked out at: {checkOutDate.toLocaleString()}
+                                    </Text>
+                                )}
                                 <Text color="brand.text">
                                     Your check-out has been completed successfully.
                                 </Text>

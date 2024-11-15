@@ -408,7 +408,9 @@ async def check_in(request:Request, db = Depends(get_db)):
         return {
             "message": "Check-in successful",
             "room_number": booking.room_number,
-            "check_out_code": checkout_code
+            "check_out_code": checkout_code,
+            "check_in": booking.check_in.isoformat(),
+            "check_out": booking.check_out.isoformat()
         }
         
     except Exception as e:
@@ -486,7 +488,8 @@ async def check_out(request:Request, db = Depends(get_db)):
         
         return {
             "message": "Check-out successful",
-            "room_number": booking.room_number
+            "room_number": booking.room_number,
+            "check_out_time": datetime.now().isoformat()
         }
         
     except Exception as e:
