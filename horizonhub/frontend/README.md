@@ -30,33 +30,60 @@ All images are stored in the `frontend/src/assets` folder. However if you want t
 
 Sections: 
 "theme"
+
     -You can add the name of your hotel under the item "name". Please only edit inside of the "  " quotation marks, such as changing "The Horizon Hotel" to "The Adams Hotel". 
+    
     -change website colors using Hex codes
+    
     -Each color of the website is editable using the items under the "colors" section. 
+    
         -You can add the name of your hotel under the item "name". Please only edit inside of the "  " quotation marks, such as changing "The Horizon Hotel" to "The Adams Hotel". 
+        
     -change website colors using Hex codes
+    
     -Each color of the website is editable using the items under the "colors" section.
+    
      -"primary": "#a46048",*not sure what this changes*
+     
      -"background": the background color of the entire site
+     
      -"accent1": "login" and "book now" button colors
+     
      -"accent2": room selection button hover color
+     
      -"text": whole website text color
+     
      -"accent3": room selection button color
+     
      -"headerFooter": bars across top and bottom of website
+     
      -"accent4": Various buttons hover color
+     
      -"accent5": *didn't see anywhere this is used?*
+     
      -"navbar": *also not seen anywhere*
+     
 "config"
+
     -choose light or dark theme as default
+    
 "images"
+
     -change whether the background image is fullscreen
+    
 "amenities"
+
     -under "items", you can change the title and description of each room type. Please only edit the information contained inside the "  " quotation marks, such as "Ocean View Suite" or "Our Ocean View Suite is designed for the height of luxury and relaxation, with panoramic ocean views. Sleeps up to two guests."
+    
     -to add another room type, please contact your developer.
+    
 "facilities"
+
     -Use the same rules as the "amenities" section, only change the title and description. To add another item to the facilities page, please contact your developer.
 "rooms"
+
     -Use the same rules as the previous two sections. You can edit the items "name", "description", "price", "capacity", "quantity", "numbers" (room numbers), and "ids". 
+    
     -If you contact your developer to add an additional room type, it will also be added in this section.
 
 Rooms should only be changed before starting the backend server.
