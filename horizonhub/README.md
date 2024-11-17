@@ -21,8 +21,7 @@ HorizonHub allows easy customization of theming, branding, and hotel information
 Please also see the `frontend/README.md` for information on the frontend, as well as the `backend/README.md` for information on the backend. Both have crucial information for customizing and understanding HorizonHub.
 
 ### **Requirements**<a name="requirements"></a>
-
-![TIP] These are the recommended versions when setting up a local build of HorizonHub, other versions may work but HHG can't and does not guarantee it.
+ These are the recommended versions when setting up a local build of HorizonHub, other versions may work but HHG can't and does not guarantee it.
 
 - Python 3.11+
 - Node.js v20.13.1
@@ -31,6 +30,8 @@ Please also see the `frontend/README.md` for information on the frontend, as wel
 ### **Setting Up A Local Build**<a name="setting-up-a-local-build"></a>
 
 These steps must be followed _in order_. You only need to do this once per instance of HorizonHub to set things up, or if you change any fundamental part of `setup.py` or the code in `backend` or `frontend`.
+
+YOU MUST HAVE YOUR SCRIPTS FOLDER ADDED TO YOUR PATH. Uvicorn will not work otherwise as it will not be able to find the python executable. (if you get a uvicorn not found error, you have not added your scripts folder to your path, do this, or use the direct path of the uvicorn executable)
 
 1. Clone the repo, make sure you are using the correct branch (currently `development`)
 2. Navigate to the project directory. `cd horizonhub`
