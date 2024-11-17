@@ -26,6 +26,8 @@ Admin Page: Accessible only to hotel management and staff
 
 Please use the edit_me.json file in order to change the details of your website. 
 
+All images are stored in the `frontend/src/assets` folder. However if you want to change the favicon, you can do so by replacing the `logo.webp` file, it must be the same name and file type.
+
 Sections: 
 "theme"
     -You can add the name of your hotel under the item "name". Please only edit inside of the "  " quotation marks, such as changing "The Horizon Hotel" to "The Adams Hotel". 
