@@ -11,7 +11,7 @@ This repository contains the group project for CS 3300 at the University of Colo
 ## Documentation
 Documentation can be found inside further folders. Inside `horizonhub-hotel-manager`, `horizonhub-hotel-manager/frontend`, and `horizonhub-hotel-manager/backend` you will find their respective READMEs.
 
-Documentation on usage will be mostly in `horizonhub-hotel-manager` while the other folders are mainly for developers.
+Documentation on usage will be mostly in `horizonhub-hotel-manager` with some in `horizonhub-hotel-manager/frontend` and `horizonhub-hotel-manager/backend`, but(`horizonhub-hotel-manager/frontend/` and `horizonhub-hotel-manager/backend/`) are mainly for developers.
 
 ## User Guides
 User Guides can be found inside `UserGuides/`.

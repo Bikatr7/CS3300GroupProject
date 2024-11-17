@@ -1,12 +1,4 @@
-# Frontend
-
-Assigned Roles:
-
-- Architect (Kaden)
-- Integrator (Ethan)
-- Frontend Developer (Maddison)
-
-## To run the frontend:
+### To run the frontend independently:
 
 1. Ensure you are in the frontend directory `cd frontend`
 2. Run `npm i` to install the dependencies
@@ -14,13 +6,14 @@ Assigned Roles:
 4. Go to the url `http://localhost:5173/` to view the website
 
 
-## Frontend:
+### B2B Customer Documentation
 
-Home Page: Choose between customer and admin portals, can view amenities page from Navigation Bar.
+
+Home Page: Choose between customer and admin portals, can view amenities page from Navigation Bar. These can be changed in the upper level `edit_me.json` file.
 
 Customer Page: Customers can book rooms from the Home page or Booking page, based on date range of stay and number of guests.
 
-Check-in: Customer recieves a 6 digit code upon transaction completion. On the day of their check in, as long as it is at or after the check-in time the customer can check in online and receive their room number. 
+Check-in: Customer receives a 6 digit code upon transaction completion. On the day of their check in, as long as it is at or after the check-in time the customer can check in online and receive their room number. 
 
 Check-out: As with check-in, the customer can check out remotely with another 6 digit code.
 
@@ -28,9 +21,9 @@ Admin Page: Accessible only to hotel management and staff
 
 - Staff must log in to portal
 - From the admin page, staff can view and edit all bookings
+- Default login is admin:password, these can be changed by replacing the hashed password and username in `backend/setup.py`, make sure you do not push this change to any public repository as a B2B Customer.
 
-
-#### Theming and Details
+### Theming and Details
 
 Please use the edit_me.json file in order to change the details of your website. 
 
@@ -53,9 +46,8 @@ Sections:
     -Use the same rules as the previous two sections. You can edit the items "name", "description", "price", "capacity", "quantity", "numbers" (room numbers), and "ids". 
     -If you contact your developer to add an additional room type, it will also be added in this section.
 
+Rooms should only be changed before starting the backend server.
 
+If you change anything visually related (config, theme, images, facilities, amenities), make sure you reload the page to see the changes. 
 
-### Resources
-
-https://github.com/Kakusui/kakusui.org/tree/development/frontend
-https://github.com/Bikatr7/kadenbilyeu.com/tree/development/frontend
+### Developer Documentation

@@ -2,72 +2,32 @@
 **Table of Contents**
 
 - [**Overview**](#overview)
-  - [**To Do (Architectural wise)**](#to-do-architectural-wise)
-  - [Maddison see Readme in frontend](#maddison-see-readme-in-frontend)
   - [**Requirements**](#requirements)
-    - [**Venv**](#venv)
   - [**Setting Up A Local Build**](#setting-up-a-local-build)
-- [**Resources**](#resources)
+    - [To just run after setup](#to-just-run-after-setup)
+  - [Repairing HorizonHub](#repairing-horizonhub)
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## **Overview**<a name="overview"></a>
 
-Problem Statement: 
-The Development of a Hotel Management and Booking software that allows customers to schedule, check-in, and check-out of rooms, and enables hotel management to oversee bookings, including creating, modifying, and canceling them. The software aims to minimize the need for hotel owners to manage bookings manually, streamlining the process through automation.
+HorizonHub is a hotel management and booking software that allows customers to schedule, check-in, and check-out of rooms, and enables hotel management to oversee bookings, including modifying and deleting them.
 
-### **To Do (Architectural wise)**<a name="to-do-architectural-wise"></a>
+HorizonHub is provided as a full solution for hotel management and booking, with a focus on ease of use and customization. It is sold by Horizon Hotel Group. Hereby referred to as HHG.
 
-### Maddison see Readme in frontend
-
-Basic overview of what needs to be done.
-
-- Home Page or main page should have two buttons, one for customers one for admins
-
-Customer Page:
-
-check in (prompt for 6 digit code, accept it, and return some hardcoded response)
-
-check out (prompt for 6 digit code, accept it, return some hardcoded response)
-
-schedule (prompt for first name/last name/email/phone number/) -> go to next window or whatever (ask for date, best way to do this is probably a calender modal, we need that and a time) -> (next ask for room, just assume we have three hardcoded options for now, approve it and output a 6 digit code)
-
-Admin Page:
-
-- Login page FIRST
-- View all bookings (will have a way to cancel/modify bookings later)
-
-you're free to hardcode all these responses on the frontend, i'll design the base of the backend and connect them up later
+HorizonHub also allows easy customization of theming, branding, and hotel information via a no-code solution. simply edit the `edit_me.json` file on the same level as this README.
 
 ### **Requirements**<a name="requirements"></a>
 
-![TIP] These are rough versions, as in what I currently use. It may work with other versions, but I can't guarantee it.
+![TIP] These are the recommended versions when setting up a local build of HorizonHub, other versions may work but HHG can't guarantee it.
 
-- Docker Desktop
 - Python 3.11+
 - Node.js v20.13.1
 - NPM 10.8.1
-
-#### **Venv**
-
-It is recommended to use a virtual environment to manage dependencies. This can be done with the following commands:
-
-You may need these to install the requirements:
-https://visualstudio.microsoft.com/visual-cpp-build-tools/
-
-```bash
-python -m venv venv
-source venv/Scripts/activate
-cd horizonhub
-cd backend
-pip install -r requirements.txt
-```
-
-VScode will also prompt you to use that. I also recommend using type checking for python via pylance.
-
+  
 ### **Setting Up A Local Build**<a name="setting-up-a-local-build"></a>
 
-These steps must be followed _in order_. You only need to do this once per computer to set things up, or if Kaden tells you to.
+These steps must be followed _in order_. You only need to do this once per instance of HorizonHub to set things up, or if you change any fundamental part of `setup.py` or the code in `backend` or `frontend`.
 
 1. Clone the repo, make sure you are using the correct branch (currently `development`)
 2. Navigate to the project directory. `cd horizonhub`
@@ -89,21 +49,19 @@ If you have already done the above and just want to run again:
 5. Run the dev server with `npm run dev`
 6. Website will be on localhost:5173 (frontend) and localhost:5555 (backend)
 
-Default login is admin:password
+The default login is admin:password, these can be changed by replacing the hashed password and username in `backend/setup.py`, make sure you do not push this change to any public repository as a B2B Customer.
 
-## **Resources**
+### Repairing HorizonHub
 
-Technologies:
+If you have a broken HorizonHub, you can try the following:
 
-- [React](https://react.dev/)
-- [React Router](https://reactrouter.com/en/main)
-- [Vite](https://vitejs.dev/)
-- [Tailwind](https://tailwindcss.com/)
-- [Python](https://www.python.org/)
-- [FastAPI](https://fastapi.tiangolo.com/)
-- [Uvicorn](https://www.uvicorn.org/)
+1. In the `backend` directory, manually delete the `database/database.db` file. Make sure you have everything you need in `edit_me.json`.
+2. In the `frontend` directory, manually delete the `node_modules` folder.
+3. Navigate to the `horizonhub/backend` directory. `cd horizonhub/backend`.
+4. Run `python setup.py local` again.
+5. Run the server. For local `uvicorn main:app --reload --port 5555`
+6. Open a new terminal and navigate to the `horizonhub/frontend` directory. `cd horizonhub/frontend`
+7. Run `npm i`
+8. Run `npm run dev`
 
-Model Templates:
-
-  https://github.com/bikatr7/kadenbilyeu.com
-  https://github.com/kakusui/kakusui.org
+If all else fails, save your `edit_me.json` and start over by deleting the entire `horizonhub` folder and cloning the repository again.
