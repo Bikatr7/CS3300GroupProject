@@ -6,6 +6,7 @@
   - [**Setting Up A Local Build**](#setting-up-a-local-build)
     - [To just run after setup](#to-just-run-after-setup)
   - [Repairing HorizonHub](#repairing-horizonhub)
+  - [Some notes](#some-notes)
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -67,3 +68,11 @@ If you have a broken HorizonHub, you can try the following:
 8. Run `npm run dev`
 
 If all else fails, save your `edit_me.json` and start over by deleting the entire `horizonhub` folder and cloning the repository again.
+
+### Some notes
+
+When testing, use `https://docs.stripe.com/testing` for payment
+
+Once again, default login is `admin:password`.
+
+Check in/out times are set to 7am, this was chosen as these systems are designed to be automated and this is the standard check in time for most hotels.
