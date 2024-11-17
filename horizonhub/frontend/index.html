@@ -1,5 +1,5 @@
 <!--
-Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject) ([url placeholder])
+Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject)
 Use of this source code is governed by an GNU Affero General Public License v3.0
 license that can be found in the LICENSE file.
 
@@ -13,6 +13,13 @@ maintain allman bracket style for consistency
     <link href="/logo.webp" rel="icon" type="image/webp"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HorizonHub</title>
+    <!--
+    This mandates the flash color change when the page loads.
+    By default this is white and quite jarring.
+    You can change the background-color in that style tag down there if you deviate significantly from the default edit_me.json.
+
+    Due to DOM limitations, we HHG can not change the background color of the root element programmatically. Thus requiring the above comment instructions.
+    -->
     <script>
         fetch('/edit_me.json')
             .then(response => response.json())

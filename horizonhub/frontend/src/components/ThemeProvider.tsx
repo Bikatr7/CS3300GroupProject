@@ -13,6 +13,8 @@ import { ChakraProvider, extendTheme, type ThemeConfig } from '@chakra-ui/react'
 // theme config
 import themeConfig from '../../../edit_me.json'
 
+// used in combination with edit_me.json to create the theme
+
 interface ThemeProviderProps 
 {
     children: React.ReactNode
@@ -103,8 +105,8 @@ function createTheme(config:any)
                 }
             }
         },
-        hotelName: config.theme.name || 'The Horizon Hotel',
-        supportEmail: config.theme.supportEmail || 'support@horizonhotel.com',
+        hotelName: config.theme.name,
+        supportEmail: config.theme.supportEmail,
     })
 }
 

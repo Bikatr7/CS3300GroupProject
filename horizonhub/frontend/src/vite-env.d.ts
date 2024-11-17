@@ -4,4 +4,7 @@
 
 // maintain allman bracket style for consistency
 
+// vite-env file
+// does not need to be edited in hardly any circumstances
+
 /// <reference types="vite/client" />

@@ -1,4 +1,4 @@
-// Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject) ([url placeholder])
+// Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -32,6 +32,9 @@ interface LocationState {
     dateRange: Date[];
     room: Room;
 }
+
+// payment page
+// say if you wanted to use a new payment processor, you would come here and change the stripe api calls to the new payment processor api calls that you would have to write in the backend.
 
 function PaymentPage() 
 {

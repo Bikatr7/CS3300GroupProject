@@ -4,6 +4,9 @@
 
 // maintain allman bracket style for consistency
 
+// theme file
+// Enables the theming system (edit_me.json) for the website
+
 // chakra-ui
 import { extendTheme, type ThemeConfig } from '@chakra-ui/react'
 

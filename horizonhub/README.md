@@ -13,13 +13,13 @@
 
 HorizonHub is a hotel management and booking software that allows customers to schedule, check-in, and check-out of rooms, and enables hotel management to oversee bookings, including modifying and deleting them.
 
-HorizonHub is provided as a full solution for hotel management and booking, with a focus on ease of use and customization. It is sold by Horizon Hotel Group. Hereby referred to as HHG.
+HorizonHub is provided as a full solution for hotel management and booking, with a focus on ease of use and customization. It is distributed for free by Horizon Hotel Group (Hereby referred to as HHG), whom offers additional paid support and services.
 
-HorizonHub also allows easy customization of theming, branding, and hotel information via a no-code solution. simply edit the `edit_me.json` file on the same level as this README.
+HorizonHub allows easy customization of theming, branding, and hotel information via a no-code solution. simply edit the `edit_me.json` file on the same level as this README and reload the page.
 
 ### **Requirements**<a name="requirements"></a>
 
-![TIP] These are the recommended versions when setting up a local build of HorizonHub, other versions may work but HHG can't guarantee it.
+![TIP] These are the recommended versions when setting up a local build of HorizonHub, other versions may work but HHG can't and does not guarantee it.
 
 - Python 3.11+
 - Node.js v20.13.1

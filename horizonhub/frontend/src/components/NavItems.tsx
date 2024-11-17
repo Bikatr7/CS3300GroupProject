@@ -1,4 +1,4 @@
-// Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject) ([url placeholder])
+// Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -26,6 +26,8 @@ interface NavItem {
     children?: Array<NavItem>;
     href?: string;
 }
+
+// if and when you decide to add a new page, you can add it here so it's visible in the navbar/home header.
 
 const NAV_ITEMS: Array<NavItem> = [
     {

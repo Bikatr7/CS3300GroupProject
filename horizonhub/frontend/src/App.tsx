@@ -26,6 +26,8 @@ import { HelmetProvider } from 'react-helmet-async';
 
 function AppContent() 
 {
+    // determines if the page is a full screen page, should not really be used for anything else
+    // Home is not a full screen page, but it is used here to prevent double navbar on the home page as we have a special layout for it
     const location = useLocation();
     const isFullScreenPage = location.pathname === '/' || location.pathname === '/admin';
 
@@ -48,6 +50,7 @@ function AppContent()
 
 function App() 
 {
+    // if you were to add a new provider, you would add it here
     return (
         <HelmetProvider>
             <ThemeProvider>

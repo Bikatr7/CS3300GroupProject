@@ -60,9 +60,12 @@ const imageMap: { [key: string]: string } =
     fullscreen
 };
 
+// there's a lot done here, but it's mostly styling. If you want to add a new admin feature, you can do so by adding a new section to the admin panel.
+// The current features include viewing, editing and deleting bookings. Each booking is displayed in an accordion panel that shows basic info when collapsed
+// and detailed info when expanded. The panel is draggable and resizable, with the position and size being saved to localStorage so it persists across page reloads.
+
 function AdminPanel() 
-{
-    const [bookings, setBookings] = useState([]);
+{    const [bookings, setBookings] = useState([]);
     const [isLoadingBookings, setIsLoadingBookings] = useState(false);
     const toast = useToast();
     const modalRef = useRef<HTMLDivElement>(null);

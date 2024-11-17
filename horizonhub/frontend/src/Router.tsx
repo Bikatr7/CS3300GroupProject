@@ -1,4 +1,4 @@
-// Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject) ([url placeholder])
+// Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -33,6 +33,10 @@ import AdminPanel from './components/AdminPanel.tsx';
 // auth & util
 import { useAuth } from './contexts/AuthContext.tsx';
 import { getURL } from './utils/index.ts';
+
+// If you would want to add a new route, you can do so here.
+// Just add the new route to the routes object.
+// If a new route requires protected access, you can wrap the component in the ProtectedAdminRoute component.
 
 const ProtectedAdminRoute = ({ children }: { children: ReactNode }) => 
 {

@@ -1,4 +1,4 @@
-// Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject) ([url placeholder])
+// Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -44,6 +44,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 {
                     setIsLoggedIn(true);
                     setUserEmail(decoded.sub as string);
+                    // it's still validated on the backend, but we do this to toggle the admin dashboard link from being visible.
+                    // if you want to add/change the admin user, you can do so here.
                     setIsPrivilegedUser(decoded.sub === 'admin');
                 } 
                 else 
@@ -80,6 +82,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const logout = async () => 
     {
         localStorage.removeItem('access_token');
+        // never expires
         document.cookie = 'refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; HttpOnly';
         await checkLoginStatus();
     };

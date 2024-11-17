@@ -5,7 +5,6 @@
 3. Run `npm run dev` to start the development server
 4. Go to the url `http://localhost:5173/` to view the website
 
-
 ### B2B Customer Documentation
 
 

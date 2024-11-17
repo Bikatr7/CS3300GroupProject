@@ -1,4 +1,4 @@
-// Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject) ([url placeholder])
+// Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -61,6 +61,7 @@ function BookingSuccessPage()
 
             try 
             {
+                // once again, if you would like to change payment processors, you would come here and change the stripe api calls to the new payment processor api calls that you would have to write in the backend.
                 const response = await axios.post(getURL('/stripe/verify-payment'), {
                     session_id: sessionId,
                     booking_id: bookingId

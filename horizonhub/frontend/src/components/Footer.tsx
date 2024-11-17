@@ -10,6 +10,8 @@ import { Box, Flex, Image, Text, Link } from '@chakra-ui/react';
 // images
 import logo from '../assets/images/logo.webp';
 
+// Need both for mobile and desktop.
+
 function Footer() 
 {
     return (
