@@ -1,4 +1,4 @@
-## Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject) ([url placeholder])
+## Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject)
 ## Use of this source code is governed by an GNU Affero General Public License v3.0
 ## license that can be found in the LICENSE file.
 
@@ -61,7 +61,6 @@ def configure_rooms():
         ## Get the rooms configuration
         rooms_config = config.get("rooms", [])
 
-        ## Create a new database session
         db = SessionLocal()
 
         try:
@@ -107,6 +106,7 @@ def configure_rooms():
 
 ##-----------------------------------------start-of-main----------------------------------------------------------------------------------------------------------------------------------------------------------
 
+## prevents unsafe config in production mode (not actually provided by HHG, but helps if customer does something stupidly unsafe)
 if(not os.path.exists("database") and ACCESS_TOKEN_SECRET == "secret"):
     os.makedirs("database", exist_ok=True)
 
@@ -135,6 +135,7 @@ for env in envs:
 app = FastAPI()
 
 ## CORS setup
+## If you wanted to deploy to production, make sure to change the allowed origins to the production URL.
 allowed_origins = [
     "http://localhost:5173",  ### Frontend dev server
     "http://127.0.0.1:5173",  ### Alternative frontend URL

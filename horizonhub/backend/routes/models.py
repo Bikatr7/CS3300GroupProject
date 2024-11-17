@@ -1,10 +1,12 @@
-## Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject) ([url placeholder])
+## Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject)
 ## Use of this source code is governed by an GNU Affero General Public License v3.0
 ## license that can be found in the LICENSE file.
 
 ## third-party imports
 from pydantic import BaseModel
 from datetime import datetime
+
+## pydantic models for request and response data, useful for type checking and documentation
 
 class LoginModel(BaseModel):
     username:str

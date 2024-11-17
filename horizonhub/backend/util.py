@@ -1,6 +1,8 @@
-## Copyright [name placeholder] (https://github.com/Bikatr7/CS3300GroupProject) ([url placeholder])
+## Copyright [name placeholder] (https://github.com/Bikatr7/CS3300GroupProject)
 ## Use of this source code is governed by an GNU Affero General Public License v3.0
 ## license that can be found in the LICENSE file.
+
+## could hypothetically be used for production urls, but not currently.
 
 def get_url() -> str:
 

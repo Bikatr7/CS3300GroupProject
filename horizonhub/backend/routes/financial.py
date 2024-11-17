@@ -1,4 +1,4 @@
-## Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject) ([url placeholder])
+## Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject)
 ## Use of this source code is governed by an GNU Affero General Public License v3.0
 ## license that can be found in the LICENSE file.
 
@@ -9,9 +9,11 @@ import stripe
 
 ## custom modules
 from db.base import get_db
-from db.models import Booking  # Import the Booking model
+from db.models import Booking
 from util import get_frontend_url
 from auth.util import check_internal_request
+
+## endpoints related to financial transactions
 
 router = APIRouter()
 
@@ -71,20 +73,19 @@ async def verify_payment(request: Request, db: Session = Depends(get_db)):
         if(not all([session_id, booking_id])):
             return {"success": False, "message": "Missing required fields"}
 
-        # Retrieve the session with expanded customer_details
         session = stripe.checkout.Session.retrieve(
             session_id,
             expand=['customer_details']
         )
 
         if(session.payment_status == 'paid' and session.metadata.get('booking_id') == booking_id):
-            # Get the booking using confirmation_code
+            ## Get the booking using confirmation_code
             booking = db.query(Booking).filter(Booking.confirmation_code == booking_id).first()
             
             if not booking:
                 return {"success": False, "message": "Booking not found"}
 
-            # Check if already processed but return success
+            ## Check if already processed but return success
             if(session.metadata.get('processed') == 'true'):
                 return {
                     "success": True, 
@@ -94,13 +95,13 @@ async def verify_payment(request: Request, db: Session = Depends(get_db)):
                     "check_out": booking.check_out.isoformat()
                 }
 
-            # Update booking with customer email and status
+            ## Update booking with customer email and status
             if booking and hasattr(session, 'customer_details') and session.customer_details.email:
                 booking.email = session.customer_details.email
                 booking.status = "confirmed"
                 db.commit()
 
-            # Mark session as processed
+            ## Mark session as processed
             stripe.checkout.Session.modify(
                 session_id,
                 metadata={'processed': 'true'}
@@ -115,6 +116,7 @@ async def verify_payment(request: Request, db: Session = Depends(get_db)):
             }
         else:
             return {"success": False, "message": "Payment verification failed"}
+        
     except Exception as e:
         print(f"Error processing payment: {str(e)}")
         return {"success": False, "message": f"An error occurred: {str(e)}"}

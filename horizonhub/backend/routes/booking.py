@@ -1,4 +1,4 @@
-## Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject) ([url placeholder])
+## Copyright Horizon Hotel Group 2024 (https://github.com/Bikatr7/CS3300GroupProject)
 ## Use of this source code is governed by an GNU Affero General Public License v3.0
 ## license that can be found in the LICENSE file.
 
@@ -23,8 +23,11 @@ from auth.util import check_internal_request
 from constants import ADMIN_USER
 from routes.models import BookingCreate, BookingUpdate, CheckAvailabilityRequest, PaymentConfirmation
 
+## endpoints related to booking management
+
 router = APIRouter()
 
+## used to prevent double bookings
 booking_locks = {}
 
 def generate_six_digit_code():
@@ -210,7 +213,6 @@ async def modify_booking(
             detail="Room is not available for the selected dates"
         )
 
-    ## Update booking
     booking.check_in = booking_update.check_in
     booking.check_out = booking_update.check_out
 
@@ -238,7 +240,7 @@ async def check_availability(request:Request, availability_data:CheckAvailabilit
                 Booking.room_id == room.id,
                 Booking.check_out > availability_data.check_in,
                 Booking.check_in < availability_data.check_out,
-                Booking.status.in_(["pending", "confirmed", "checked_in"]),  # Only count active bookings
+                Booking.status.in_(["pending", "confirmed", "checked_in"]),
                 or_(
                     Booking.status.in_(["confirmed", "checked_in"]),
                     and_(
@@ -249,12 +251,12 @@ async def check_availability(request:Request, availability_data:CheckAvailabilit
             )
         ).count()
 
-        available_quantity = 1 - booking_count  # Since each room entry represents one physical room
+        available_quantity = 1 - booking_count  ## Since each room entry represents one physical room
 
         if available_quantity > 0:
             if room.name not in available_rooms:
                 available_rooms[room.name] = {
-                    "id": room.id,  # Include the room ID
+                    "id": room.id,
                     "name": room.name,
                     "description": room.description,
                     "price": room.price,
@@ -280,19 +282,17 @@ async def confirm_booking_payment(request:Request, data:PaymentConfirmation, db 
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Booking not found"
         )
-
-    # Verify payment with Stripe
     try:
         session = stripe.checkout.Session.retrieve(data.session_id)
         
-        # First check if payment was successful
+        ## First check if payment was successful
         if(session.payment_status != "paid"):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Payment not completed"
             )
             
-        # Check if this is the correct booking
+        ## Check if this is the correct booking
         if(session.metadata.get("booking_id") != data.booking_id): ## type: ignore
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -350,9 +350,6 @@ async def check_in(request:Request, db = Depends(get_db)):
                 Booking.status == "confirmed"
             )
         ).first()
-        
-        print(f"Found booking: {booking}")  ## Debug log
-        print(f"Booking room_id: {booking.room_id if booking else 'No booking found'}")  ## Debug log
         
         if(not booking):
             raise HTTPException(
@@ -427,6 +424,9 @@ async def check_in(request:Request, db = Depends(get_db)):
 
 @router.post("/booking/cleanup-pending")
 async def manual_cleanup_pending(request:Request, current_user:str = Depends(get_current_user), db = Depends(get_db)):
+
+    ## not supported in horizonhub, would have to send a literal curl request with admin credentials
+
     """
     Manually trigger cleanup of pending bookings (admin only)
     """

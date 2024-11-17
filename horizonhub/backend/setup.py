@@ -1,4 +1,4 @@
-## Copyright [name placeholder] (https://github.com/Bikatr7/CS3300GroupProject) ([url placeholder])
+## Copyright [name placeholder] (https://github.com/Bikatr7/CS3300GroupProject)
 ## Use of this source code is governed by an GNU Affero General Public License v3.0
 ## license that can be found in the LICENSE file.
 
@@ -16,6 +16,8 @@ BACKEND_ENV = os.path.join(current_dir, ".env")
 
 ## Encoded stripe key
 ## It is a test key and will not work for real payments
+## You MUST replace it with a real key to use the payment system.
+## This test key is provided by us, but will be invalidated in the future.
 ENCODED_STRIPE_KEY = "c2tfdGVzdF81MVEzQVlnRFoyeWxUamNEMGtvQ2dKb0RHdFRUanA2UnRmeEdnalF2NGRkUjgwR1JadTZ0VXl0VTlrWExYMTI2U09TR0U5T2E1WDZqU25sRHNFdDJmalpjYjAwN2p2Wm1hWUs="
 
 ##-------------------start-of-install_dependencies()---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -38,6 +40,10 @@ def install_dependencies() -> None:
 ##-------------------start-of-setup_local_environment()---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def setup_local_environment() -> None:
 
+    ## you can change the admin user and password here.
+    ## the password is hashed using bcrypt with a random salt.
+    ## if you want to change the password, you can generate a new hash with e.g.
+    ## import bcrypt; print(bcrypt.hashpw(b"your_password", bcrypt.gensalt()).decode())
     env_to_key_local = {
         "ADMIN_USER": "admin",
         "ADMIN_PASS_HASH": "$2b$12$MlPMcgDvVCU.s10xcB2fneIjZ/ymgz5O52yH5pshAFF5.bwPq4SMq",
