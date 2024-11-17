@@ -17,6 +17,8 @@ HorizonHub is provided as a full solution for hotel management and booking, with
 
 HorizonHub allows easy customization of theming, branding, and hotel information via a no-code solution. simply edit the `edit_me.json` file on the same level as this README and reload the page.
 
+Please also see the `frontend/README.md` for information on the frontend, as well as the `backend/README.md` for information on the backend. Both have crucial information for customizing and understanding HorizonHub.
+
 ### **Requirements**<a name="requirements"></a>
 
 ![TIP] These are the recommended versions when setting up a local build of HorizonHub, other versions may work but HHG can't and does not guarantee it.
