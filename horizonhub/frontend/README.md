@@ -33,7 +33,7 @@ Sections:
     -Each color of the website is editable using the items under the "colors" section. 
         -You can add the name of your hotel under the item "name". Please only edit inside of the "  " quotation marks, such as changing "The Horizon Hotel" to "The Adams Hotel". 
     -change website colors using Hex codes
-    -Each color of the website is editable using the items under the "colors" section. 
+    -Each color of the website is editable using the items under the "colors" section.
      -"primary": "#a46048",*not sure what this changes*
      -"background": the background color of the entire site
      -"accent1": "login" and "book now" button colors
