@@ -31,14 +31,11 @@ All images are stored in the `frontend/src/assets` folder. However if you want t
 Sections: 
 "theme"
 
-- You can add the name of your hotel under the item "name". Please only edit inside of the "  " quotation marks, such as changing "The Horizon Hotel" to "The Adams Hotel". 
+You can add the name of your hotel under the item "name". Please only edit inside of the "  " quotation marks, such as changing "The Horizon Hotel" to "The Adams Hotel". 
     
-- Change website colors using Hex codes
+Change website colors using Hex codes
     
-- Each color of the website is editable using the items under the "colors" section. 
-    
-    
-- Each color of the website is editable using the items under the "colors" section.
+Each color of the website is editable using the items under the "colors" section. 
     
 - "primary": "#a46048",*not sure what this changes*
      
