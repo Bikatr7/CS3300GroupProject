@@ -30,36 +30,29 @@ Admin Page: Accessible only to hotel management and staff
 - From the admin page, staff can view and edit all bookings
 
 
-#### Theming
+#### Theming and Details
 
-- index.html
-- theme.ts
-<img width="604" alt="Screen Shot 2024-10-06 at 11 00 44 AM" src="https://github.com/user-attachments/assets/bd0e3c9a-4bd8-4c64-9655-e67825393ad0">
+Please use the edit_me.json file in order to change the details of your website. 
 
-- Color Scheme hex codes (from left to right)
-- #a46048
-- App background: #2e343c
-- #de7c47
-- #5c4b4a
-- Text color: #fbe9b4
-- #44545a
-- Header/footer color: #512316
-- #7d341b
-- #99837c
-- Nav bar drop down: #c18c6a
+Sections: 
+"theme"
+    -You can add the name of your hotel under the item "name". Please only edit inside of the "  " quotation marks, such as changing "The Horizon Hotel" to "The Adams Hotel". 
+    -change website colors using Hex codes
+    -Each color of the website is editable using the items under the "colors" section. 
+    -***********add what each color changes***********
+"config"
+    -choose light or dark theme as default
+"images"
+    -change whether the background image is fullscreen
+"amenities"
+    -under "items", you can change the title and description of each room type. Please only edit the information contained inside the "  " quotation marks, such as "Ocean View Suite" or "Our Ocean View Suite is designed for the height of luxury and relaxation, with panoramic ocean views. Sleeps up to two guests."
+    -to add another room type, please contact your developer.
+"facilities"
+    -Use the same rules as the "amenities" section, only change the title and description. To add another item to the facilities page, please contact your developer.
+"rooms"
+    -Use the same rules as the previous two sections. You can edit the items "name", "description", "price", "capacity", "quantity", "numbers" (room numbers), and "ids". 
+    -If you contact your developer to add an additional room type, it will also be added in this section.
 
-#### Routing
-
-- Router.tsx (this is where the routing is set up) (routes are how you navigate between pages)
-
-#### Components
-
-components/Navbar.tsx is the navigation bar. This is the top navigation bar that is present on every page.
-components/NavItem.tsx is the navigation bar item. Holds lists of navigation items for the navbar.
-
-components/Footer.tsx is the footer. This is the bottom navigation bar that is present on every page.
-
-components/Login.tsx is the login component. This is the login button that is on the navbar.
 
 
 ### Resources
