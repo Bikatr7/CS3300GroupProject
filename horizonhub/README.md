@@ -26,6 +26,7 @@ Please also see the `frontend/README.md` for information on the frontend, as wel
 - Python 3.11+
 - Node.js v20.13.1
 - NPM 10.8.1
+- Firefox (does not work in Chrome due to technical limitations, edge and other chromium based browsers have not been tested)
   
 ### **Setting Up A Local Build**<a name="setting-up-a-local-build"></a>
 

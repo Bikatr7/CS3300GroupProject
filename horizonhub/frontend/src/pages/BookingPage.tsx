@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getURL } from "../utils";
 import axios from "axios";
+import { isChrome } from "../utils/browserDetect";
 
 // chakra-ui
 import {
@@ -18,7 +19,8 @@ import {
     VStack,
     Text,
     Heading,
-    Box
+    Box,
+    Link
 } from "@chakra-ui/react";
 
 // date picker
@@ -140,6 +142,34 @@ function BookingPage()
     const [availableRooms, setAvailableRooms] = useState<Room[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+
+    if (isChrome()) {
+        return (
+            <Flex minHeight="calc(100vh - 100px)" alignItems="center" bg="brand.background">
+                <Container maxW="container.xl">
+                    <VStack spacing={8}>
+                        <Heading color="brand.cream">Browser Not Supported</Heading>
+                        <Text color="brand.cream" textAlign="center">
+                            Due to technical limitations, booking is not available in Chrome. 
+                            Please use Firefox to make your reservation.
+                        </Text>
+                        <Link 
+                            href="https://www.mozilla.org/firefox/new/" 
+                            isExternal
+                        >
+                            <Button
+                                bg="brand.accent1"
+                                color="brand.text"
+                                _hover={{ bg: 'brand.accent4' }}
+                            >
+                                Download Firefox
+                            </Button>
+                        </Link>
+                    </VStack>
+                </Container>
+            </Flex>
+        );
+    }
 
     const fetchAvailableRooms = async (checkIn:Date, checkOut:Date) =>
     {

@@ -25,6 +25,7 @@ import {
 // components
 import HomeHeader from "../components/HomeHeader";
 import HomeFooter from "../components/HomeFooter";
+import ChromeWarningBanner from "../components/ChromeWarningBanner";
 
 // Essentially the landing page of the website, feel free to edit the styling as you see fit.
 
@@ -69,69 +70,72 @@ function HomePage()
   }
 
   return (
-    <Box position="relative" minHeight="100vh" bg="brand.background">
-      <HomeHeader />
-      <Flex 
-        height="calc(100vh - 140px)" 
-        alignItems="center" 
-        justifyContent="center"
-      >
-        <Container 
-          maxW="800px" 
-          display="flex"     
+    <>
+      <ChromeWarningBanner />
+      <Box position="relative" minHeight="100vh" bg="brand.background">
+        <HomeHeader />
+        <Flex 
+          height="calc(100vh - 140px)" 
+          alignItems="center" 
           justifyContent="center"
-          alignItems="center"
         >
-          <VStack 
-            spacing={8} 
-            align="center"
-            width="100%"
+          <Container 
+            maxW="800px" 
+            display="flex"     
+            justifyContent="center"
+            alignItems="center"
           >
-            <Heading 
-              as="h1" 
-              className="mainHeader" 
-              size="2xl" 
-              textAlign="center"
-              color="brand.text"
+            <VStack 
+              spacing={8} 
+              align="center"
+              width="100%"
             >
-              Luxury, rest, and relaxation.
-            </Heading>
-            
-            <Text 
-              fontSize="xl" 
-              textAlign="center"
-              color="brand.text"
-            >
-              Plan your getaway today
-            </Text>
-            
-            <Center width="100%">
-              <HStack spacing={4}>
-                <Button 
-                  bg="brand.accent1"
-                  color="brand.text"
-                  size="lg"
-                  _hover={{ bg: 'brand.accent4' }}
-                  onClick={navigateToCustomerPortal}
-                >
-                  Customer Portal
-                </Button>
-                <Button 
-                  bg="brand.accent3"
-                  color="brand.text"
-                  size="lg"
-                  _hover={{ bg: 'brand.accent2' }}
-                  onClick={handleAdminClick}
-                >
-                  Admin Portal
-                </Button>
-              </HStack>
-            </Center>
-          </VStack>
-        </Container>
-      </Flex>
-      <HomeFooter />
-    </Box>
+              <Heading 
+                as="h1" 
+                className="mainHeader" 
+                size="2xl" 
+                textAlign="center"
+                color="brand.text"
+              >
+                Luxury, rest, and relaxation.
+              </Heading>
+              
+              <Text 
+                fontSize="xl" 
+                textAlign="center"
+                color="brand.text"
+              >
+                Plan your getaway today
+              </Text>
+              
+              <Center width="100%">
+                <HStack spacing={4}>
+                  <Button 
+                    bg="brand.accent1"
+                    color="brand.text"
+                    size="lg"
+                    _hover={{ bg: 'brand.accent4' }}
+                    onClick={navigateToCustomerPortal}
+                  >
+                    Customer Portal
+                  </Button>
+                  <Button 
+                    bg="brand.accent3"
+                    color="brand.text"
+                    size="lg"
+                    _hover={{ bg: 'brand.accent2' }}
+                    onClick={handleAdminClick}
+                  >
+                    Admin Portal
+                  </Button>
+                </HStack>
+              </Center>
+            </VStack>
+          </Container>
+        </Flex>
+        <HomeFooter />
+      </Box>
+    </>
   );
 }
 
