@@ -5,6 +5,8 @@
  Everyone is permitted to copy and distribute verbatim copies
  of this license document, but changing it is not allowed.
 
+ Copyright (C) 2024 Kaden Bilyeu, Cindy Kitners, Maddison Ratzlaff, Chris Garza, and Ethan Steiner
+
                             Preamble
 
   The GNU Affero General Public License is a free, copyleft license for
