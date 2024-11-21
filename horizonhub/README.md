@@ -77,4 +77,4 @@ When testing, use `https://docs.stripe.com/testing` for payment
 
 Once again, default login is `admin:password`.
 
-Check in/out times are set to 7am, this was chosen as these systems are designed to be automated and this is the standard check in time for most hotels.
+Check in/out times are set to 7am, this was chosen as these systems are designed to be automated and this is the standard check in time for most hotels and are not configurable.
